@@ -1,0 +1,10 @@
+#pragma once
+#include "framework.h"
+#include "detours.h"
+#include "functions.h"
+#include "objlist.h"
+#include "object.h"
+#include "offsets.h"
+#include "orbwalker.h"
+#include "utils.h"
+#include "vector.h"
