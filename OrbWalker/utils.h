@@ -11,6 +11,6 @@ ObjList* GetHeroList();
 ObjList* GetTurretList();
 ObjList* GetInhibitorList();
 ObjList* GetMinionList();
-float GetGameTime();
+long GetGameTimeTicks();
 Vector3 GetMouseWorldPosition();
 bool IsLeagueInForeground();

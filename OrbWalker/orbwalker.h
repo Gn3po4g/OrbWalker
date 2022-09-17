@@ -12,8 +12,8 @@ public:
 	std::unique_ptr<ObjList> inhibitors;
 	std::unique_ptr<ObjList> minions;
 private:
-	float lastAttackTime = 0.f;
-	float lastMoveTime = 0.f;
+	long lastAttackTime = 0;
+	long lastMoveTime = 0;
 	[[nodiscard]] Object* FindTarget(bool) const;
 	[[nodiscard]] Object* GetObjFromList(const ObjList*) const;
 };

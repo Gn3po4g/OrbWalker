@@ -16,6 +16,6 @@ public:
 
 	float DisTo(const Object*) const;
 	bool IsAlive();
-	float GetAttackDelay();
-	float GetAttackCastDelay();
+	int GetAttackDelayTicks();
+	int GetAttackCastDelayTicks();
 };

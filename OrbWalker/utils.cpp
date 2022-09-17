@@ -39,8 +39,8 @@ ObjList * GetMinionList() {
 	return *reinterpret_cast<ObjList **>(BASE + offsets::oMinionList);
 }
 
-float GetGameTime() {
-	return *reinterpret_cast<float*>(BASE + offsets::oGameTime) * 1000.f;
+long GetGameTimeTicks() {
+	return static_cast<long>(*reinterpret_cast<float*>(BASE + offsets::oGameTime) * 1000.f);
 }
 
 Vector3 GetMouseWorldPosition() {

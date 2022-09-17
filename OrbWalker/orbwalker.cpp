@@ -11,13 +11,13 @@ OrbWalker::OrbWalker() {
 void OrbWalker::AttackObject(const bool findHero) {
 	if (!IsLeagueInForeground())return;
 	Object* target = FindTarget(findHero);
-	if (target && GetGameTime() > lastAttackTime + me->GetAttackDelay() + 15.f) {
+	if (target && GetGameTimeTicks() > lastAttackTime + me->GetAttackDelayTicks()) {
 		functions->IssueOrder(me.get(), 3, &target->position, target, false, false, 0);
-		lastAttackTime = GetGameTime();
-	} else if (GetGameTime() > lastMoveTime && GetGameTime() > lastAttackTime + me->GetAttackCastDelay() + 30.f) {
+		lastAttackTime = GetGameTimeTicks();
+	} else if (GetGameTimeTicks() > lastMoveTime && GetGameTimeTicks() > lastAttackTime + me->GetAttackCastDelayTicks()) {
 		auto p = GetMouseWorldPosition();
 		functions->IssueOrder(me.get(), 2, &p, nullptr, false, false, 0);
-		lastMoveTime = GetGameTime() + 30.f;
+		lastMoveTime = GetGameTimeTicks() + 30;
 	}
 }
 
