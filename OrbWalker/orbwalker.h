@@ -7,9 +7,9 @@ class OrbWalker {
 public:
 	OrbWalker();
 	void AttackObject(bool);
-	std::unique_ptr<Renderer> renderer;
-	std::unique_ptr<Object> me;
-	std::unique_ptr<ObjList> heroes;
+	Renderer* renderer;
+	Object* me;
+	ObjList* heroes;
 	std::unique_ptr<ObjList> turrets;
 	std::unique_ptr<ObjList> inhibitors;
 	std::unique_ptr<ObjList> minions;

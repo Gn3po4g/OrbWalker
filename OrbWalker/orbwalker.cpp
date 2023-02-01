@@ -1,9 +1,9 @@
 #include "pch.h"
 
 OrbWalker::OrbWalker() {
-	renderer = std::unique_ptr<Renderer>((Renderer*)oViewProjMatrices);
-	me = std::unique_ptr<Object>(*(Object**)oLocalPlayer);
-	heroes = std::unique_ptr<ObjList>(*(ObjList**)oHeroList);
+	renderer = (Renderer*)oViewProjMatrices;
+	me = *(Object**)oLocalPlayer;
+	heroes = *(ObjList**)oHeroList;
 	turrets = std::unique_ptr<ObjList>(*(ObjList**)oTurretList);
 	inhibitors = std::unique_ptr<ObjList>(*(ObjList**)oInhibitorList);
 	minions = std::unique_ptr<ObjList>(*(ObjList**)oMinionList);
@@ -12,38 +12,39 @@ OrbWalker::OrbWalker() {
 void OrbWalker::AttackObject(bool findHero) {
 	//if (!IsLeagueInForeground())return;
 	Object* target = FindTarget(findHero);
-	//Print(std::format("{:#x}", oHeroList).c_str());
-	if (target && GetGameTime() > lastMoveTime && GetGameTime() > lastAttackTime + me->GetAttackDelay() + 0.03) {
+	//Print(std::format("{},{}", p.x, p.y).c_str());
+	if (target && GetTickCount64() >= lastAttackTime + me->GetAttackDelay() * 1000.f) {
 		Attack(renderer->WorldToScreen(target->position));
-		lastAttackTime = GetGameTime();
+		lastAttackTime = GetTickCount64();
 	}
-	else if (GetGameTime() > lastMoveTime && GetGameTime() > lastAttackTime + me->GetAttackCastDelay() + 0.05) {
+	else if (GetTickCount64() > lastMoveTime + 30 && GetTickCount64() >= lastAttackTime + me->GetAttackCastDelay() * 1000.f + 100) {
 		Click(renderer->WorldToScreen(GetMouseWorldPosition()));
-		lastMoveTime = GetGameTime() + 0.06f;
+		lastMoveTime = GetTickCount64();
 	}
 }
 
 
 Object* OrbWalker::FindTarget(bool findHero) const {
-	Object* target;
-	if (findHero)target = GetObjFromList(heroes.get());
+	if (findHero) return GetObjFromList(heroes);
 	else {
-		target = GetObjFromList(turrets.get());
+		Object* target = GetObjFromList(turrets.get());
 		if (!target) target = GetObjFromList(inhibitors.get());
 		if (!target) target = GetObjFromList(minions.get());
+		return target;
 	}
-	return target;
 }
 
 Object* OrbWalker::GetObjFromList(const ObjList* list) const {
 	Object* ret = nullptr;
 	for (int i = 0; i < list->size; i++) {
-		if (!list->list[i]->IsAlive()) continue;
-		if (!list->list[i]->visible) continue;
-		if (!list->list[i]->targetable) continue;
-		if (list->list[i]->team == me->team) continue;
-		if (list->list[i]->DisTo(me.get()) > me->attackRange) continue;
-		if (!ret || list->list[i]->DisTo(me.get()) < ret->DisTo(me.get())) ret = list->list[i];
+		if (list->list[i]->team != me->team
+			&& list->list[i]->IsAlive()
+			&& list->list[i]->visible
+			&& list->list[i]->targetable
+			&& list->list[i]->DisTo(me) <= me->attackRange) {
+			if (!ret) ret = list->list[i];
+			else if (list->list[i]->DisTo(me) < ret->DisTo(me))ret = list->list[i];
+		}
 	}
 	return ret;
 }

@@ -10,8 +10,7 @@ private:
 		DEFINE_MEMBER_N(int, width, 0x94);
 		DEFINE_MEMBER_N(int, height, 0x98);
 	};
-	D3DMATRIX viewProjMatrix;
 public:
-	void Init();
+	constexpr D3DMATRIX Get();
 	Vector2 WorldToScreen(Vector3);
 };

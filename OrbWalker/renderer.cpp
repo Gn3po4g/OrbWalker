@@ -1,20 +1,22 @@
 #include "pch.h"
 
-void Renderer::Init() {
+constexpr D3DMATRIX Renderer::Get() {
+	D3DMATRIX viewProjMatrix{};
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			float sum = 0.f;
 			for (int k = 0; k < 4; k++) {
-				sum = sum + viewMatrix.m[i][k] * projMatrix.m[k][j];
+				sum += viewMatrix.m[i][k] * projMatrix.m[k][j];
 			}
 			viewProjMatrix.m[i][j] = sum;
 		}
 	}
+	return viewProjMatrix;
 }
 
 Vector2 Renderer::WorldToScreen(Vector3 pos) {
 	Vector2 screen = { (float)width, (float)height };
-
+	D3DMATRIX viewProjMatrix = Get();
 	float x, y, z, w;
 	x = pos.x * viewProjMatrix._11 + pos.y * viewProjMatrix._21 + pos.z * viewProjMatrix._31 + viewProjMatrix._41;
 	y = pos.x * viewProjMatrix._12 + pos.y * viewProjMatrix._22 + pos.z * viewProjMatrix._32 + viewProjMatrix._42;
