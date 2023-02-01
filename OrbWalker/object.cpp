@@ -8,10 +8,10 @@ bool Object::IsAlive() {
 	return functions->IsAlive(this);
 }
 
-int Object::GetAttackDelayTicks() {
-	return static_cast<int>(functions->GetAttackDelay(this) * 1000.f);
+float Object::GetAttackDelay() {
+	return functions->GetAttackDelay(this);
 }
 
-int Object::GetAttackCastDelayTicks() {
-	return static_cast<int>(functions->GetAttackCastDelay(this) * 1000.f);
+float Object::GetAttackCastDelay() {
+	return functions->GetAttackCastDelay(this);
 }

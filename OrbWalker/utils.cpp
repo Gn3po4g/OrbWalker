@@ -1,53 +1,30 @@
 #include "pch.h"
 
-DWORD FindDevice(const DWORD len) {
-	const auto dwObjBase = reinterpret_cast<DWORD>(LoadLibrary("d3d9.dll"));
-	for (DWORD i = dwObjBase; i < dwObjBase + len; i++) {
-		if (i &&
-			*reinterpret_cast<WORD*>(i + 0x00) == 0x06C7 &&
-			*reinterpret_cast<WORD*>(i + 0x06) == 0x8689 &&
-			*reinterpret_cast<WORD*>(i + 0x0C) == 0x8689
-		)
-			return i + 2;
-	}
-	return dwObjBase;
-}
+void Print(const char* message) {
+	functions->PrintChat((DWORD*)oChatClient, message, 0);
+};
 
-DWORD GetDeviceAddress(const int vTableIndex) {
-	const PDWORD vTable = *reinterpret_cast<DWORD**>(FindDevice(0x128000));
-	return vTable[vTableIndex];
-}
-
-
-Object* GetLocalPlayer() {
-	return *reinterpret_cast<Object**>(BASE + offsets::oLocalPlayer);
-}
-
-ObjList* GetHeroList() {
-	return *reinterpret_cast<ObjList **>(BASE + offsets::oHeroList);
-}
-
-ObjList *GetTurretList() {
-	return *reinterpret_cast<ObjList **>(BASE + offsets::oTurretList);
-}
-
-ObjList *GetInhibitorList() {
-	return *reinterpret_cast<ObjList **>(BASE + offsets::oInhibitorList);
-}
-
-ObjList * GetMinionList() {
-	return *reinterpret_cast<ObjList **>(BASE + offsets::oMinionList);
-}
-
-long GetGameTimeTicks() {
-	return static_cast<long>(*reinterpret_cast<float*>(BASE + offsets::oGameTime) * 1000.f);
+float GetGameTime() {
+	return *(float*)oGameTime;
 }
 
 Vector3 GetMouseWorldPosition() {
-	const auto p = *reinterpret_cast<DWORD*>(BASE + offsets::oHudInstance) + 0x19C;
-	return *reinterpret_cast<Vector3*>(p);
+	DWORD MousePtr = *(DWORD*)(*(DWORD*)oHudInstance + 0x14);
+	return *(Vector3*)(MousePtr + 0x1C);
 }
 
 bool IsLeagueInForeground() {
-	return !*(*reinterpret_cast<bool**>(BASE + offsets::oHudInstance) + 0x69);
+	return !*(*reinterpret_cast<bool**>(BASE + oHudInstance) + 0x69);
 }
+
+void Click(Vector2 pos) {
+	DWORD HUDInput = *(DWORD*)(*(DWORD*)(oHudInstance)+0x24);
+	functions->IssueOrder(HUDInput, 0, 0, 0, (int)pos.x, (int)pos.y, 0);
+	functions->IssueOrder(HUDInput, 1, 0, 0, (int)pos.x, (int)pos.y, 0);
+}
+
+void Attack(Vector2 pos) {
+	DWORD HUDInput = *(DWORD*)(*(DWORD*)(oHudInstance)+0x24);
+	functions->IssueOrder(HUDInput, 0, 1, 0, (int)pos.x, (int)pos.y, 0);
+	functions->IssueOrder(HUDInput, 1, 1, 0, (int)pos.x, (int)pos.y, 0);
+};

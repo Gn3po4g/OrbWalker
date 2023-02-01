@@ -1,16 +1,9 @@
 #pragma once
-#include "objlist.h"
-#include "object.h"
+#include "vector.h"
 
-#define BASE (DWORD)GetModuleHandle(nullptr)
-
-DWORD FindDevice(DWORD);
-DWORD GetDeviceAddress(int);
-Object* GetLocalPlayer();
-ObjList* GetHeroList();
-ObjList* GetTurretList();
-ObjList* GetInhibitorList();
-ObjList* GetMinionList();
-long GetGameTimeTicks();
+void Print(const char*);
+float GetGameTime();
 Vector3 GetMouseWorldPosition();
 bool IsLeagueInForeground();
+void Click(Vector2);
+void Attack(Vector2);

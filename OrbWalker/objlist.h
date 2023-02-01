@@ -1,9 +1,12 @@
 #pragma once
+
 #include "object.h"
+#include "defines.h"
 
 class ObjList {
 public:
-	char pad_0x0000[0x4];
-	Object** list; //0x0004
-	int size; //0x0008
+	union {
+		DEFINE_MEMBER_N(Object**, list, 0x4);
+		DEFINE_MEMBER_N(int, size, 0x8);
+	};
 };

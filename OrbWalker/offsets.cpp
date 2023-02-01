@@ -1,65 +1,80 @@
 #include "pch.h"
 
-namespace offsets {
-	DWORD oGameTime;
-	DWORD oLocalPlayer;
-	DWORD oHudInstance;
-	DWORD oHeroList;
-	DWORD oTurretList;
-	DWORD oInhibitorList;
-	DWORD oMinionList;
+DWORD oGameTime;
+DWORD oChatClient;
+DWORD oLocalPlayer;
+DWORD oHudInstance;
+DWORD oViewProjMatrices;
+DWORD oHeroList;
+DWORD oTurretList;
+DWORD oInhibitorList;
+DWORD oMinionList;
 
-	DWORD oIssueOrder;
-	DWORD oIsAlive;
-	DWORD oGetAttackDelay;
-	DWORD oGetAttackCastDelay;
-}
+DWORD oPrintChat;
+DWORD oIssueOrder;
+DWORD oGetAttackDelay;
+DWORD oGetAttackCastDelay;
+DWORD oIsAlive;
 
-std::vector<OffsetSignature> signaturesToScan{
+OffsetSignature signaturesToScan[] = {
 	{
-		"F3 0F 11 05 ? ? ? ? 8B 49",
-		true, &offsets::oGameTime
+		"8B 0D ? ? ? ? 8A D8 85 C9",
+		true,&oChatClient
 	},
 	{
-		"A1 ? ? ? ? 8B 54 24 28",
-		true, &offsets::oLocalPlayer
+		"8B 3D ? ? ? ? 3B F7 75 09",
+		true, &oLocalPlayer
 	},
 	{
-		"8B 0D ? ? ? ? 6A 00 8B 49 34 E8 ? ? ? ? B0 01 C2",
-		true, &offsets::oHudInstance
+		"8B 0D ? ? ? ? 6A 00 8B 49 34",
+		true, &oHudInstance
+	},
+	{
+		"B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ?",
+		true,&oViewProjMatrices
 	},
 	{
 		"8B 15 ? ? ? ? 0F 44 C1",
-		true, &offsets::oHeroList
+		true, &oHeroList
 	},
 	{
 		"8B 35 ? ? ? ? 8B 76 18",
-		true, &offsets::oTurretList
+		true, &oTurretList
 	},
 	{
 		"A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08",
-		true, &offsets::oInhibitorList
+		true, &oInhibitorList
 	},
 	{
 		"A3 ? ? ? ? E8 ? ? ? ? 83 C4 04 85 C0 74 32",
-		true, &offsets::oMinionList
+		true, &oMinionList
 	},
 	{
-		"E8 ? ? ? ? 85 FF 5F",
-		false, &offsets::oIssueOrder
+		"E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01",
+		false,&oPrintChat
 	},
 	{
-		"56 8B F1 8B 06 8B 80 ? ? ? ? FF D0 84 C0 74 19",
-		false, &offsets::oIsAlive
+		"83 EC 3C 53 8B 1D ? ? ? ?",
+		false, &oIssueOrder
 	},
 	{
 		"8B 44 24 04 51 F3",
-		false, &offsets::oGetAttackDelay
+		false, &oGetAttackDelay
 	},
 	{
 		"83 EC 0C 53 8B 5C 24 14 8B CB 56 57 8B 03 FF 90",
-		false, &offsets::oGetAttackCastDelay
+		false, &oGetAttackCastDelay
+	},
+	{
+		"56 8B F1 8B 06 8B 80 8C 00 00 00 FF D0 84 C0 74 19",
+		false, &oIsAlive
 	}
+	/*,
+	,
+
+	,
+	,
+	*/
 };
 
 BYTE* FindAddress(const std::string& pattern) {
@@ -71,7 +86,8 @@ BYTE* FindAddress(const std::string& pattern) {
 		if (strByte == "?") {
 			bytes.push_back(0x00);
 			mask.push_back(false);
-		} else {
+		}
+		else {
 			bytes.push_back(std::stoi(strByte, nullptr, 16));
 			mask.push_back(true);
 		}
@@ -105,15 +121,27 @@ BYTE* FindAddress(const std::string& pattern) {
 	return nullptr;
 }
 
-void Scan() {
-	for (const auto& [pattern, read, offset] : signaturesToScan) {
-		if (auto address = FindAddress(pattern); !address)
-			MessageBoxA(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
+void Scan(bool init) {
+	if (init) {
+		std::string pattern = "F3 0F 11 05 ? ? ? ? 8B 49 08";
+		if (auto address = FindAddress(pattern); !address) {
+			MessageBox(nullptr, "Failed to find GameTime", "WARN", MB_OK | MB_ICONWARNING);
+		}
 		else {
-			if (read) address = *reinterpret_cast<BYTE**>(address + pattern.find_first_of('?') / 3);
-			else if (address[0] == 0xE8) address = address + *reinterpret_cast<DWORD*>(address + 1) + 5;
-			address -= reinterpret_cast<DWORD>(GetModuleHandle(nullptr));
-			*offset = reinterpret_cast<DWORD>(address);
+			address = *reinterpret_cast<BYTE**>(address + pattern.find_first_of('?') / 3);
+			oGameTime = reinterpret_cast<DWORD>(address);
+		}
+	}
+	else {
+		for (const auto& [pattern, read, offset] : signaturesToScan) {
+			if (auto address = FindAddress(pattern); !address) {
+				MessageBoxA(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
+			}
+			else {
+				if (read) address = *reinterpret_cast<BYTE**>(address + pattern.find_first_of('?') / 3);
+				else if (address[0] == 0xE8) address = address + *reinterpret_cast<DWORD*>(address + 1) + 5;
+				*offset = reinterpret_cast<DWORD>(address);
+			}
 		}
 	}
 }

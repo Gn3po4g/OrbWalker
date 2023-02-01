@@ -9,16 +9,10 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Detours">
-      <UniqueIdentifier>{9fec32a6-e011-423b-be50-8042ae515edd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="detours.h">
-      <Filter>Detours</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>头文件</Filter>
@@ -42,6 +36,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -70,10 +70,8 @@
     <ClCompile Include="vector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="detours.lib">
-      <Filter>Detours</Filter>
-    </Library>
+    <ClCompile Include="renderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
