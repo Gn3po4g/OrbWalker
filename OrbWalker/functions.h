@@ -1,5 +1,6 @@
 #pragma once
 #include "object.h"
+#include "offsets.h"
 
 namespace funcTypes {
 	using fnPrintChat = void(__thiscall*)(DWORD*, const char*, int);
@@ -9,14 +10,17 @@ namespace funcTypes {
 	using fnIsAlive = bool(__thiscall*)(Object* pObj);
 }
 
-class Functions {
-public:
-	Functions();
-	funcTypes::fnPrintChat PrintChat;
-	funcTypes::fnIssueOrder IssueOrder;
-	funcTypes::fnGetAttackCastDelay GetAttackCastDelay;
-	funcTypes::fnGetAttackDelay GetAttackDelay;
-	funcTypes::fnIsAlive IsAlive;
-};
+inline funcTypes::fnPrintChat PrintChat;
+inline funcTypes::fnIssueOrder IssueOrder;
+inline funcTypes::fnGetAttackCastDelay GetAttackCastDelay;
+inline funcTypes::fnGetAttackDelay GetAttackDelay;
+inline funcTypes::fnIsAlive IsAlive;
 
-extern std::unique_ptr<Functions> functions;
+inline void InitFunctions()
+{
+	PrintChat = static_cast<funcTypes::fnPrintChat>(oPrintChat);
+	IssueOrder = static_cast<funcTypes::fnIssueOrder>(oIssueOrder);
+	GetAttackCastDelay = static_cast<funcTypes::fnGetAttackCastDelay>(oGetAttackCastDelay);
+	GetAttackDelay = static_cast<funcTypes::fnGetAttackDelay>(oGetAttackDelay);
+	IsAlive = static_cast<funcTypes::fnIsAlive>(oIsAlive);
+};

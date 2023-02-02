@@ -49,28 +49,7 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="orbwalker.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="offsets.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="functions.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

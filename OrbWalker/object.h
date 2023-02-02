@@ -14,8 +14,8 @@ public:
 		DEFINE_MEMBER_N(float, attackRange, 0x13A4);
 	};
 
-	float DisTo(const Object*) const;
-	bool IsAlive();
-	float GetAttackDelay();
-	float GetAttackCastDelay();
+	float DistanceTo(const Object* other) const
+	{
+		return position.DistanceTo(other->position);
+	}
 };
