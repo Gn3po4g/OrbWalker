@@ -1,21 +1,20 @@
 #pragma once
 
-#include "defines.h"
-#include "object.h"
-#include "vector.h"
+#include "pad.h"
 
 class Object {
-public:
-	union {
-		DEFINE_MEMBER_N(short, team, 0x34);
-		DEFINE_MEMBER_N(Vector3, position, 0x1DC);
-		DEFINE_MEMBER_N(bool, visible, 0x274); 
-		DEFINE_MEMBER_N(bool, targetable, 0xD04);
-		DEFINE_MEMBER_N(float, attackRange, 0x13A4);
-	};
+	PAD(0x34);
+	int team;										//0x34
+	PAD(0x1A4);
+	DirectX::XMFLOAT3 position;	//0x1DC
+	PAD(0x8C);
+	bool visible;								//0x274
+	PAD(0xA8F);
+	bool targetable;						//0xD04
+	PAD(0x177);
+	float health;								//0xE7C
+	PAD(0x524);
+	float attack_range;					//0x13A4
 
-	float DistanceTo(const Object* other) const
-	{
-		return position.DistanceTo(other->position);
-	}
+	float operator-(const Object&) const;
 };

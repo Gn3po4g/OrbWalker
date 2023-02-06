@@ -1,9 +1,14 @@
 #pragma once
+
+#define WIN32_LEAN_AND_MEAN
+
+#include <DirectXMath.h>
 #include <Windows.h>
-#include <d3d9.h>
-#include <cmath>
-#include <string>
-#include <vector>
+#include <algorithm>
+#include <array>
+#include <cstddef>
+#include <memory>
 #include <sstream>
-#include <iostream>
-#include <format>
+#include <string>
+#include <tuple>
+#include <vector>
