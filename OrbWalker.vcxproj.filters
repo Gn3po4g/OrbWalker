@@ -9,59 +9,63 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="functions.h">
+    <ClInclude Include="src\framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="orbwalker.h">
+    <ClInclude Include="src\functions.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="memory.h">
+    <ClInclude Include="src\memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
+    <ClInclude Include="src\object.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="objlist.h">
+    <ClInclude Include="src\objlist.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="src\orbwalker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="pad.h">
+    <ClInclude Include="src\pad.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="renderer.h">
+    <ClInclude Include="src\pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="src\renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="src\dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="src\functions.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="object.cpp">
+    <ClCompile Include="src\memory.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="objlist.cpp">
+    <ClCompile Include="src\object.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="orbwalker.cpp">
+    <ClCompile Include="src\objlist.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="functions.cpp">
+    <ClCompile Include="src\orbwalker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="renderer.cpp">
+    <ClCompile Include="src\pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="memory.cpp">
+    <ClCompile Include="src\renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

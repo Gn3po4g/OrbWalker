@@ -2,8 +2,8 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#include <DirectXMath.h>
-#include <Windows.h>
+#include <directxmath.h>
+#include <windows.h>
 #include <algorithm>
 #include <array>
 #include <cstddef>
