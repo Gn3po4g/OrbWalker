@@ -9,7 +9,7 @@ Object* ObjList::GetBestTargetFor(const Object* obj) const {
 			&& cur->team != obj->team
 			&& cur->visible
 			&& cur->targetable
-			&& *cur - *obj <= obj->attack_range
+			&& *cur - *obj <= obj->attack_range + 25.f
 			&& (!ret || cur->health < ret->health)) {
 			ret = cur;
 		}

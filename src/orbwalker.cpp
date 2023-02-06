@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <format>
 
 extern std::unique_ptr<Functions> f;
 
@@ -9,7 +10,7 @@ OrbWalker::OrbWalker() :
 	turrets{ *(ObjList**)offsets.oTurretList },
 	inhibitors{ *(ObjList**)offsets.oInhibitorList },
 	minions{ *(ObjList**)offsets.oMinionList } {
-	f->PrintChat((PDWORD)offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0);
+	f->PrintChat((PDWORD)offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0x2019C9);
 }
 
 Object* OrbWalker::FindTarget(const bool& findHero) {
@@ -22,11 +23,11 @@ Object* OrbWalker::FindTarget(const bool& findHero) {
 
 void OrbWalker::AttackObject(const bool& findHero) {
 	if(const Object* target = FindTarget(findHero); target &&
-		f->GetGameTime() >= lastAttackTime + f->GetAttackDelay(me)) {
+		f->GetGameTime() >= lastAttackTime + f->GetAttackDelay(me) + .02f) {
 		f->Attack(renderer->WorldToScreen(target->position));
 		lastAttackTime = f->GetGameTime();
 	} else if(f->GetGameTime() > lastMoveTime + .03f &&
-		f->GetGameTime() >= lastAttackTime + f->GetAttackCastDelay(me) * 1.1f) {
+		f->GetGameTime() >= lastAttackTime + f->GetAttackCastDelay(me) + .04f) {
 		f->Click(renderer->WorldToScreen(f->GetMouseWorldPosition()));
 		lastMoveTime = f->GetGameTime();
 	}
