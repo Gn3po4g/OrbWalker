@@ -5,7 +5,8 @@ Functions::Functions() :
 	IssueOrder{ (fnIssueOrder)offsets.oIssueOrder },
 	GetAttackCastDelay{ (fnGetAttackCastDelay)offsets.oGetAttackCastDelay },
 	GetAttackDelay{ (fnGetAttackDelay)offsets.oGetAttackDelay },
-	IsAlive{ (fnIsAlive)offsets.oIsAlive } {
+	IsAlive{ (fnIsAlive)offsets.oIsAlive },
+	GetRadius{(fnGetRadius)offsets.oGetRadius} {
 }
 
 float Functions::GetGameTime() const {

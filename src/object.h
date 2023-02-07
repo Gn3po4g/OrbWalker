@@ -16,5 +16,5 @@ class Object {
 	PAD(0x524);
 	float attack_range;					//0x13A4
 
-	float operator-(const Object&) const;
+	float DistanceTo(const Object*) const;
 };

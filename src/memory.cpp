@@ -14,7 +14,8 @@ Memory::Memory() : sig_to_scan{ {
 	{&offsets.oIssueOrder, "83 EC 3C 53 8B 1D ? ? ? ?", false},
 	{&offsets.oGetAttackDelay, "E8 ? ? ? ? D8 44 24 14 83 C4 04", false},
 	{&offsets.oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57", false},
-	{&offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false}
+	{&offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false},
+	{&offsets.oGetRadius, "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18 ", false}
 } } {
 	do {
 		Sleep(500);

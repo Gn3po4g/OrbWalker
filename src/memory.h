@@ -16,10 +16,11 @@ inline struct Offsets {
 	PBYTE oGetAttackDelay;
 	PBYTE oGetAttackCastDelay;
 	PBYTE oIsAlive;
+	PBYTE oGetRadius;
 } offsets;
 
 class Memory {
-	std::array<std::tuple<PBYTE*, std::string, bool>, 14> sig_to_scan;
+	std::array<std::tuple<PBYTE*, std::string, bool>, 15> sig_to_scan;
 
 	PBYTE FindAddress(const std::string&);
 public:
