@@ -4,16 +4,17 @@
 
 
 class OrbWalker {
-	Renderer* renderer;
-	Object* me;
-	ObjList* heroes;
-	ObjList* turrets;
-	ObjList* inhibitors;
-	ObjList* minions;
-	float lastAttackTime = 0;
-	float lastMoveTime = 0;
+	const Renderer* renderer;
+	const Object* me;
+	const ObjList* heroes;
+	const ObjList* turrets;
+	const ObjList* inhibitors;
+	const ObjList* minions;
+	const DWORD HUDInput;
+	const XMFLOAT3* MousePos;
+	ULONGLONG lastAttackTime{};
 
-	Object* FindTarget(const bool&);
+	Object* FindTarget(const bool&) const;
 public:
 	OrbWalker();
 	void AttackObject(const bool&);

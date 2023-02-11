@@ -2,13 +2,11 @@
 
 #include "pad.h"
 
-using namespace DirectX;
-
 class Renderer {
-	XMMATRIX viewMatrix;
-	XMMATRIX projMatrix;
-	PAD(0x14);
 private:
+	XMFLOAT4X4 view_matrix;
+	XMFLOAT4X4 proj_matrix;
+	PAD(0x14);
 	int width;
 	int height;
 

@@ -2,7 +2,7 @@
 
 inline struct Offsets {
 	PBYTE oGameState;
-	PBYTE oGameTime;
+
 	PBYTE oChatClient;
 	PBYTE oLocalPlayer;
 	PBYTE oHudInstance;
@@ -20,10 +20,10 @@ inline struct Offsets {
 } offsets;
 
 class Memory {
-	std::array<std::tuple<PBYTE*, std::string, bool>, 15> sig_to_scan;
+	std::tuple<PBYTE*, std::string, bool > sig_to_scan[14]{};
 
-	PBYTE FindAddress(const std::string&);
+	PBYTE FindAddress(const std::string&) const;
+	void Scan(const bool);
 public:
 	Memory();
-	void Scan(const bool);
 };
