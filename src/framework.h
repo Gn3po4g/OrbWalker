@@ -5,12 +5,14 @@
 #include <directxmath.h>
 #include <windows.h>
 #include <algorithm>
-#include <array>
+#include <chrono>
 #include <cstddef>
 #include <memory>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <tuple>
 #include <vector>
 
+using namespace std::chrono_literals;
 using namespace DirectX;

@@ -1,8 +1,6 @@
 #include "pch.h"
-#include <thread>
-#include <chrono>
 
-Memory::Memory() :sig_to_scan{
+std::tuple<PDWORD_PTR, std::string, bool > sig_to_scan[] = {
 	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true},
 	{ &offsets.oLocalPlayer, "8B 3D ? ? ? ? 3B F7 75 09", true },
 	{ &offsets.oHudInstance, "8B 0D ? ? ? ? FF 77 08 8B 49 14", true },
@@ -17,8 +15,9 @@ Memory::Memory() :sig_to_scan{
 	{ &offsets.oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57", false },
 	{ &offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false },
 	{ &offsets.oGetRadius, "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18 ", false }
-} {
-	using namespace std::chrono_literals;
+};
+
+void Memory::Initialize() {
 	extern const int* GameState;
 	std::this_thread::sleep_for(1s);
 	Scan(true);
@@ -27,7 +26,7 @@ Memory::Memory() :sig_to_scan{
 			std::this_thread::sleep_for(1s);
 			Scan(true);
 		} else {
-			GameState = (int*)(*(PBYTE*)offsets.oGameState + 0x8);
+			GameState = (int*)(*(PDWORD_PTR)offsets.oGameState + 0x8);
 			break;
 		}
 	}
@@ -36,14 +35,13 @@ Memory::Memory() :sig_to_scan{
 	Scan(false);
 }
 
-PBYTE Memory::FindAddress(const std::string& pattern) const {
+PBYTE Memory::FindAddress(const std::string& pattern) {
 	using namespace std;
 	vector<BYTE> bytes;
 	vector<bool> mask;
 	istringstream iss(pattern);
 	for_each(istream_iterator<string>(iss), istream_iterator<string>(),
-		[&](const string& byte_str)
-		{
+		[&](const string& byte_str) {
 			if(byte_str == "?") {
 				bytes.push_back(0x00);
 				mask.push_back(false);
@@ -52,6 +50,7 @@ PBYTE Memory::FindAddress(const std::string& pattern) const {
 				mask.push_back(true);
 			}
 		});
+
 	const auto module = GetModuleHandle(nullptr);
 	const auto ntHeaders = (PIMAGE_NT_HEADERS)((PBYTE)module + ((PIMAGE_DOS_HEADER)module)->e_lfanew);
 	const auto textSection = IMAGE_FIRST_SECTION(ntHeaders);
@@ -67,8 +66,8 @@ PBYTE Memory::FindAddress(const std::string& pattern) const {
 		page_end = page_start + mbi.RegionSize;
 		if(mbi.Protect != PAGE_NOACCESS) {
 			for(auto address = page_start; address < page_end - bytes.size(); address++) {
-				if(all_of(address, address + bytes.size(), [&](const auto& byte)
-					{
+				if(all_of(address, address + bytes.size(),
+					[&](const auto& byte) {
 						return !mask[&byte - address] || bytes[&byte - address] == byte;
 					})) {
 					return address;
@@ -85,7 +84,7 @@ void Memory::Scan(const bool init) {
 		if(const auto address = FindAddress(pattern); !address) {
 			MessageBox(nullptr, "Failed to find GameState", "WARN", MB_OK | MB_ICONWARNING);
 		} else {
-			offsets.oGameState = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
+			offsets.oGameState = *(PDWORD_PTR)(address + pattern.find_first_of('?') / 3);
 		}
 	} else {
 		for(const auto& [offset, pattern, read] : sig_to_scan) {
@@ -94,7 +93,7 @@ void Memory::Scan(const bool init) {
 			} else {
 				if(read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
 				else if(address[0] == 0xE8) address = address + *(PDWORD)(address + 1) + 5;
-				*offset = address;
+				*offset = (DWORD_PTR)address;
 			}
 		}
 	}

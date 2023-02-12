@@ -1,29 +1,27 @@
 #pragma once
 
 inline struct Offsets {
-	PBYTE oGameState;
+	DWORD_PTR oGameState;
 
-	PBYTE oChatClient;
-	PBYTE oLocalPlayer;
-	PBYTE oHudInstance;
-	PBYTE oViewProjMatrices;
-	PBYTE oHeroList;
-	PBYTE oTurretList;
-	PBYTE oInhibitorList;
-	PBYTE oMinionList;
-	PBYTE oPrintChat;
-	PBYTE oIssueOrder;
-	PBYTE oGetAttackDelay;
-	PBYTE oGetAttackCastDelay;
-	PBYTE oIsAlive;
-	PBYTE oGetRadius;
+	DWORD_PTR oChatClient;
+	DWORD_PTR oLocalPlayer;
+	DWORD_PTR oHudInstance;
+	DWORD_PTR oViewProjMatrices;
+	DWORD_PTR oHeroList;
+	DWORD_PTR oTurretList;
+	DWORD_PTR oInhibitorList;
+	DWORD_PTR oMinionList;
+	DWORD_PTR oPrintChat;
+	DWORD_PTR oIssueOrder;
+	DWORD_PTR oGetAttackDelay;
+	DWORD_PTR oGetAttackCastDelay;
+	DWORD_PTR oIsAlive;
+	DWORD_PTR oGetRadius;
 } offsets;
 
 class Memory {
-	std::tuple<PBYTE*, std::string, bool > sig_to_scan[14]{};
-
-	PBYTE FindAddress(const std::string&) const;
-	void Scan(const bool);
+	static PBYTE FindAddress(const std::string&);
+	static void Scan(const bool);
 public:
-	Memory();
+	static void Initialize();
 };

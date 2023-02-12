@@ -8,11 +8,9 @@ float Object::DistanceTo(const Object* other) const {
 }
 
 UINT Object::GetACD() const {
-	extern std::unique_ptr<Functions> f;
-	return (UINT)(f->GetAttackCastDelay(this) * 1000) + 30;
+	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 30;
 }
 
 UINT Object::GetAD() const {
-	extern std::unique_ptr<Functions> f;
-	return (UINT)(f->GetAttackDelay(this) * 1000) + 10;
+	return (UINT)(Functions::GetAttackDelay(this) * 1000) + 10;
 }

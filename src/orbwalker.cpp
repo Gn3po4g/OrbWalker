@@ -1,21 +1,28 @@
 #include "pch.h"
-#include <format>
 
-extern std::unique_ptr<Functions> f;
+Renderer* OrbWalker::renderer{};
+Object* OrbWalker::me{};
+ObjList* OrbWalker::heroes{};
+ObjList* OrbWalker::turrets{};
+ObjList* OrbWalker::inhibitors{};
+ObjList* OrbWalker::minions{};
+DWORD_PTR OrbWalker::HUDInput{};
+XMFLOAT3* OrbWalker::MousePos{};
+ULONGLONG OrbWalker::lastAttackTime{};
 
-OrbWalker::OrbWalker() :
-	renderer((Renderer*)offsets.oViewProjMatrices),
-	me(*(Object**)offsets.oLocalPlayer),
-	heroes(*(ObjList**)offsets.oHeroList),
-	turrets(*(ObjList**)offsets.oTurretList),
-	inhibitors(*(ObjList**)offsets.oInhibitorList),
-	minions(*(ObjList**)offsets.oMinionList),
-	HUDInput(*(PDWORD)(*(PDWORD)offsets.oHudInstance + 0x24)),
-	MousePos((XMFLOAT3*)(*(PDWORD)(*(PDWORD)offsets.oHudInstance + 0x14) + 0x1C)) {
-	f->PrintChat((PDWORD)offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
+void OrbWalker::Initialize() {
+	renderer = (Renderer*)offsets.oViewProjMatrices;
+	me = *(Object**)offsets.oLocalPlayer;
+	heroes = *(ObjList**)offsets.oHeroList;
+	turrets = *(ObjList**)offsets.oTurretList;
+	inhibitors = *(ObjList**)offsets.oInhibitorList;
+	minions = *(ObjList**)offsets.oMinionList;
+	HUDInput = *(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x24);
+	MousePos = (XMFLOAT3*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x14) + 0x1C);
+	Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
 }
 
-Object* OrbWalker::FindTarget(const bool& findHero) const {
+Object* OrbWalker::FindTarget(const bool& findHero) {
 	if(findHero) return heroes->GetBestTargetFor(me);
 	Object* target = turrets->GetBestTargetFor(me);
 	if(!target) target = inhibitors->GetBestTargetFor(me);
@@ -28,11 +35,11 @@ void OrbWalker::AttackObject(const bool& findHero) {
 		GetTickCount64() >= lastAttackTime + me->GetAD()) {
 		lastAttackTime = GetTickCount64();
 		const auto pos = renderer->WorldToScreen(target->position);
-		f->IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
-		f->IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
+		Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
+		Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
 	} else if(GetTickCount64() >= lastAttackTime + me->GetACD()) {
 		const auto pos = renderer->WorldToScreen(*MousePos);
-		f->IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
-		f->IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);
+		Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
+		Functions::IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);
 	}
 }

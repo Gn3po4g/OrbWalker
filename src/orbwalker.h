@@ -2,20 +2,19 @@
 
 #include "renderer.h"
 
-
 class OrbWalker {
-	const Renderer* renderer;
-	const Object* me;
-	const ObjList* heroes;
-	const ObjList* turrets;
-	const ObjList* inhibitors;
-	const ObjList* minions;
-	const DWORD HUDInput;
-	const XMFLOAT3* MousePos;
-	ULONGLONG lastAttackTime{};
+	static Renderer* renderer;
+	static Object* me;
+	static ObjList* heroes;
+	static ObjList* turrets;
+	static ObjList* inhibitors;
+	static ObjList* minions;
+	static DWORD_PTR HUDInput;
+	static XMFLOAT3* MousePos;
+	static ULONGLONG lastAttackTime;
 
-	Object* FindTarget(const bool&) const;
+	static Object* FindTarget(const bool&);
 public:
-	OrbWalker();
-	void AttackObject(const bool&);
+	static void Initialize();
+	static void AttackObject(const bool&);
 };
