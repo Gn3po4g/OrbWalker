@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include <process.h>
 
-const int* GameState{};
+const int* GameState = nullptr;
 
 unsigned int __stdcall Start(void*) {
 	Memory::Initialize();
@@ -11,7 +11,7 @@ unsigned int __stdcall Start(void*) {
 		if(Functions::IsChatOpen() || Functions::IsLeagueInBackground()) continue;
 		if((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::AttackObject(true);
 		else if((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::AttackObject(false);
-		std::this_thread::sleep_for(50ms);
+		std::this_thread::sleep_for(30ms);
 	}
 	return 0;
 }

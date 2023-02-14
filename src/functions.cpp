@@ -23,3 +23,7 @@ bool Functions::IsChatOpen() {
 bool Functions::IsLeagueInBackground() {
 	return *(bool*)(*(PDWORD)offsets.oHudInstance + 0x69);
 }
+
+ULONGLONG Functions::GetGameTime() {
+	return (ULONGLONG)(*(float*)offsets.oGameTime * 1000);
+}

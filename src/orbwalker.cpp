@@ -32,12 +32,12 @@ Object* OrbWalker::FindTarget(const bool& findHero) {
 
 void OrbWalker::AttackObject(const bool& findHero) {
 	if(const auto target = FindTarget(findHero); target &&
-		GetTickCount64() >= lastAttackTime + me->GetAD()) {
-		lastAttackTime = GetTickCount64();
+		Functions::GetGameTime() >= lastAttackTime + me->GetAD()) {
+		lastAttackTime = Functions::GetGameTime();
 		const auto pos = renderer->WorldToScreen(target->position);
 		Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
 		Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
-	} else if(GetTickCount64() >= lastAttackTime + me->GetACD()) {
+	} else if(Functions::GetGameTime() >= lastAttackTime + me->GetACD()) {
 		const auto pos = renderer->WorldToScreen(*MousePos);
 		Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
 		Functions::IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);

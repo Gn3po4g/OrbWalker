@@ -1,7 +1,8 @@
 #include "pch.h"
 
 std::tuple<PDWORD_PTR, std::string, bool > sig_to_scan[] = {
-	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true},
+	{ &offsets.oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true },
+	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true },
 	{ &offsets.oLocalPlayer, "8B 3D ? ? ? ? 3B F7 75 09", true },
 	{ &offsets.oHudInstance, "8B 0D ? ? ? ? FF 77 08 8B 49 14", true },
 	{ &offsets.oViewProjMatrices, "B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ?", true },
@@ -19,20 +20,18 @@ std::tuple<PDWORD_PTR, std::string, bool > sig_to_scan[] = {
 
 void Memory::Initialize() {
 	extern const int* GameState;
-	std::this_thread::sleep_for(1s);
-	Scan(true);
-	while(true) {
-		if(!offsets.oGameState) {
+	while (true) {
+		if (!GameState) {
 			std::this_thread::sleep_for(1s);
 			Scan(true);
+		} else if (*GameState != 2) {
+			std::this_thread::sleep_for(500ms);
 		} else {
-			GameState = (int*)(*(PDWORD_PTR)offsets.oGameState + 0x8);
+			std::this_thread::sleep_for(500ms);
+			Scan(false);
 			break;
 		}
 	}
-	while(*GameState != 2) std::this_thread::sleep_for(500ms);
-	std::this_thread::sleep_for(500ms);
-	Scan(false);
 }
 
 PBYTE Memory::FindAddress(const std::string& pattern) {
@@ -42,7 +41,7 @@ PBYTE Memory::FindAddress(const std::string& pattern) {
 	istringstream iss(pattern);
 	for_each(istream_iterator<string>(iss), istream_iterator<string>(),
 		[&](const string& byte_str) {
-			if(byte_str == "?") {
+			if (byte_str == "?") {
 				bytes.push_back(0x00);
 				mask.push_back(false);
 			} else {
@@ -59,14 +58,14 @@ PBYTE Memory::FindAddress(const std::string& pattern) {
 	const auto endAddress = startAddress + size - bytes.size();
 
 	MEMORY_BASIC_INFORMATION mbi;
-	for(PBYTE page_start = startAddress, page_end;
+	for (PBYTE page_start = startAddress, page_end;
 		page_start < endAddress && VirtualQuery(page_start, &mbi, sizeof(mbi));
 		page_start = page_end) {
 		page_start = (PBYTE)mbi.BaseAddress;
 		page_end = page_start + mbi.RegionSize;
-		if(mbi.Protect != PAGE_NOACCESS) {
-			for(auto address = page_start; address < page_end - bytes.size(); address++) {
-				if(all_of(address, address + bytes.size(),
+		if (mbi.Protect != PAGE_NOACCESS) {
+			for (auto address = page_start; address < page_end - bytes.size(); address++) {
+				if (all_of(address, address + bytes.size(),
 					[&](const auto& byte) {
 						return !mask[&byte - address] || bytes[&byte - address] == byte;
 					})) {
@@ -79,20 +78,22 @@ PBYTE Memory::FindAddress(const std::string& pattern) {
 }
 
 void Memory::Scan(const bool init) {
-	if(init) {
+	if (init) {
 		const std::string pattern = "A1 ? ? ? ? 68 ? ? ? ? 8B 70 08 E8 ? ? ? ?";
-		if(const auto address = FindAddress(pattern); !address) {
+		if (const auto address = FindAddress(pattern); !address) {
 			MessageBox(nullptr, "Failed to find GameState", "WARN", MB_OK | MB_ICONWARNING);
 		} else {
-			offsets.oGameState = *(PDWORD_PTR)(address + pattern.find_first_of('?') / 3);
+			extern const int* GameState;
+			auto oGameState = *(PDWORD_PTR)(address + pattern.find_first_of('?') / 3);
+			GameState = (int*)(*(PDWORD_PTR)oGameState + 0x8);
 		}
 	} else {
-		for(const auto& [offset, pattern, read] : sig_to_scan) {
-			if(auto address = FindAddress(pattern); !address) {
+		for (const auto& [offset, pattern, read] : sig_to_scan) {
+			if (auto address = FindAddress(pattern); !address) {
 				MessageBoxA(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
 			} else {
-				if(read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
-				else if(address[0] == 0xE8) address = address + *(PDWORD)(address + 1) + 5;
+				if (read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
+				else if (address[0] == 0xE8) address = address + *(PDWORD)(address + 1) + 5;
 				*offset = (DWORD_PTR)address;
 			}
 		}

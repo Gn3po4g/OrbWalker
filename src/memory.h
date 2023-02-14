@@ -1,8 +1,7 @@
 #pragma once
 
 inline struct Offsets {
-	DWORD_PTR oGameState;
-
+	DWORD_PTR oGameTime;
 	DWORD_PTR oChatClient;
 	DWORD_PTR oLocalPlayer;
 	DWORD_PTR oHudInstance;

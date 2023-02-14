@@ -19,4 +19,5 @@ public:
 	static void Initialize();
 	static bool IsChatOpen();
 	static bool IsLeagueInBackground();
+	static ULONGLONG GetGameTime();
 };
