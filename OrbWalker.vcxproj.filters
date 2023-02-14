@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\framework.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\functions.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -23,19 +20,22 @@
     <ClInclude Include="src\object.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\objlist.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\orbwalker.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\pad.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\pch.h">
+    <ClInclude Include="src\renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer.h">
+    <ClInclude Include="src\objlist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -52,16 +52,16 @@
     <ClCompile Include="src\object.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\objlist.cpp">
+    <ClCompile Include="src\orbwalker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\orbwalker.cpp">
+    <ClCompile Include="src\renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer.cpp">
+    <ClCompile Include="src\objlist.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,7 +14,11 @@ public:
 	bool targetable;		//0xD04
 	PAD(0x177);
 	float health;				//0xE7C
-	PAD(0x524);
+	PAD(0x454);
+	float bonus_attack;	//0x12D4
+	PAD(0x84);
+	float base_attack;	//0x135C
+	PAD(0x44);
 	float attack_range;	//0x13A4
 
 	float DistanceTo(const Object*) const;
