@@ -9,11 +9,11 @@ public:
 
 class HeroList : public ObjList {
 public:
-	Object* GetLowestHealth(const Object*) const;
+	Object* GetLowestHealth(const Object*);
 };
 
 class MinionList : public ObjList {
 public:
-	Object* GetLowestHealth(const Object*) const;
-	Object* GetLastHit(const Object*) const;
+	Object* GetLowestHealth(const Object*);
+	Object* GetLastHit(const Object*);
 };
