@@ -29,20 +29,20 @@ Object* OrbWalker::FindTarget(const Type& type) {
 	case x: return minions->GetLastHit(me);
 	default: return nullptr;
 	}
-	//if (findHero) return heroes->GetBestTargetFor(me);
-	//Object* target = turrets->GetBestTargetFor(me);
-	//if (!target) target = inhibitors->GetBestTargetFor(me);
-	//if (!target) target = minions->GetBestTargetFor(me);
-	//return target;
 }
 
 void OrbWalker::AttackObject(const Type& type) {
-	if (const auto target = FindTarget(type); target &&
-		Functions::GetGameTime() >= lastAttackTime + me->GetAD()) {
-		lastAttackTime = Functions::GetGameTime();
-		const auto pos = renderer->WorldToScreen(target->position);
-		Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
-		Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
+	if (Functions::GetGameTime() >= lastAttackTime + me->GetAD()) {
+		if (const auto target = FindTarget(type); target) {
+			lastAttackTime = Functions::GetGameTime();
+			const auto pos = renderer->WorldToScreen(target->position);
+			Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
+			Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
+		} else {
+			const auto pos = renderer->WorldToScreen(*MousePos);
+			Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
+			Functions::IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);
+		}
 	} else if (Functions::GetGameTime() >= lastAttackTime + me->GetACD()) {
 		const auto pos = renderer->WorldToScreen(*MousePos);
 		Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);

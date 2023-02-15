@@ -19,8 +19,9 @@ inline struct Offsets {
 } offsets;
 
 class Memory {
-	static PBYTE FindAddress(const std::string&);
+	static PBYTE FindAddress(const string&);
 	static void Scan(const bool);
 public:
+	static int* GameState;
 	static void Initialize();
 };

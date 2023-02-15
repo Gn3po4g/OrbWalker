@@ -1,6 +1,6 @@
 #include "pch.h"
 
-std::tuple<PDWORD_PTR, std::string, bool > sig_to_scan[] = {
+tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
 	{ &offsets.oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true },
 	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true },
 	{ &offsets.oLocalPlayer, "8B 3D ? ? ? ? 3B F7 75 09", true },
@@ -18,24 +18,24 @@ std::tuple<PDWORD_PTR, std::string, bool > sig_to_scan[] = {
 	{ &offsets.oGetRadius, "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18 ", false }
 };
 
+int* Memory::GameState{};
+
 void Memory::Initialize() {
-	extern const int* GameState;
 	while (true) {
 		if (!GameState) {
-			std::this_thread::sleep_for(1s);
+			this_thread::sleep_for(1s);
 			Scan(true);
 		} else if (*GameState != 2) {
-			std::this_thread::sleep_for(500ms);
+			this_thread::sleep_for(500ms);
 		} else {
-			std::this_thread::sleep_for(500ms);
+			this_thread::sleep_for(500ms);
 			Scan(false);
 			break;
 		}
 	}
 }
 
-PBYTE Memory::FindAddress(const std::string& pattern) {
-	using namespace std;
+PBYTE Memory::FindAddress(const string& pattern) {
 	vector<BYTE> bytes;
 	vector<bool> mask;
 	istringstream iss(pattern);
@@ -79,11 +79,10 @@ PBYTE Memory::FindAddress(const std::string& pattern) {
 
 void Memory::Scan(const bool init) {
 	if (init) {
-		const std::string pattern = "A1 ? ? ? ? 68 ? ? ? ? 8B 70 08 E8 ? ? ? ?";
+		const string pattern = "A1 ? ? ? ? 68 ? ? ? ? 8B 70 08 E8 ? ? ? ?";
 		if (const auto address = FindAddress(pattern); !address) {
 			MessageBox(nullptr, "Failed to find GameState", "WARN", MB_OK | MB_ICONWARNING);
 		} else {
-			extern const int* GameState;
 			auto oGameState = *(PDWORD_PTR)(address + pattern.find_first_of('?') / 3);
 			GameState = (int*)(*(PDWORD_PTR)oGameState + 0x8);
 		}
