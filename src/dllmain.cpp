@@ -7,8 +7,10 @@ unsigned int __stdcall Start(void*) {
 	Memory::Initialize();
 	Functions::Initialize();
 	OrbWalker::Initialize();
+	const auto aco = (bool*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0xC0) + 0x80);
 	while (*GameState == 2) {
 		if (Functions::IsChatOpen() || Functions::IsLeagueInBackground()) continue;
+		*aco = GetAsyncKeyState(VK_SPACE) & 0x8000;
 		if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::AttackObject(Type::space);
 		else if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::AttackObject(Type::v);
 		else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::AttackObject(Type::x);
