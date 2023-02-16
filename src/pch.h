@@ -9,5 +9,6 @@
 #include "orbwalker.h"
 #include "pad.h"
 #include "renderer.h"
+#include "../Kiero/kiero.h"
 
 #endif //PCH_H

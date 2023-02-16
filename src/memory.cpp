@@ -1,5 +1,7 @@
 #include "pch.h"
 
+using namespace std;
+
 tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
 	{ &offsets.oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true },
 	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true },

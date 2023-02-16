@@ -14,6 +14,7 @@ class OrbWalker {
 	static DWORD_PTR HUDInput;
 	static XMFLOAT3* MousePos;
 	static ULONGLONG lastAttackTime;
+	static ULONGLONG lastMoveTime;
 
 	static Object* FindTarget(const Type&);
 public:

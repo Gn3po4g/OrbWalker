@@ -1,19 +1,36 @@
 ﻿#include "pch.h"
 #include <process.h>
+#include <dxgi.h>
 
-unsigned int __stdcall Start(void*) {
-	Memory::Initialize();
-	Functions::Initialize();
-	OrbWalker::Initialize();
-	const auto aco = (bool*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x30) + 0x20);
-	while (Memory::GameState && *Memory::GameState == 2) {
-		if (Functions::IsChatOpen() || Functions::IsLeagueInBackground()) continue;
+using Present_t = HRESULT(WINAPI*)(IDXGISwapChain*, UINT, UINT);
+Present_t OriginPresent = NULL;
+bool* aco{};
+
+int hooked = false;
+
+HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
+	if (!Functions::IsChatOpen() && !Functions::IsLeagueInBackground()) {
 		*aco = GetAsyncKeyState(VK_SPACE) & 0x8000;
 		if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::AttackObject(Type::space);
 		else if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::AttackObject(Type::v);
 		else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::AttackObject(Type::x);
-		this_thread::sleep_for(50ms);
 	}
+	return OriginPresent(pSwapChain, SyncInterval, Flags);
+}
+
+
+
+unsigned __stdcall Start(void*) {
+	Memory::Initialize();
+	Functions::Initialize();
+	OrbWalker::Initialize();
+	aco = (bool*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x30) + 0x20);
+	Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
+	do {
+		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
+			kiero::bind(8, (void**)&OriginPresent, HKPresent);
+		}
+	} while (true);
 	return 0;
 }
 

@@ -8,9 +8,9 @@ float Object::DistanceTo(const Object* other) const {
 }
 
 UINT Object::GetACD() const {
-	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 30;
+	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 50;
 }
 
 UINT Object::GetAD() const {
-	return (UINT)(Functions::GetAttackDelay(this) * 1000) + 5;
+	return (UINT)(Functions::GetAttackDelay(this) * 1000) + 10;
 }

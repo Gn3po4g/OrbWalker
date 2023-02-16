@@ -9,6 +9,7 @@ MinionList* OrbWalker::minions{};
 DWORD_PTR OrbWalker::HUDInput{};
 XMFLOAT3* OrbWalker::MousePos{};
 ULONGLONG OrbWalker::lastAttackTime{};
+ULONGLONG OrbWalker::lastMoveTime{};
 
 void OrbWalker::Initialize() {
 	renderer = (Renderer*)offsets.oViewProjMatrices;
@@ -19,7 +20,6 @@ void OrbWalker::Initialize() {
 	minions = *(MinionList**)offsets.oMinionList;
 	HUDInput = *(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x24);
 	MousePos = (XMFLOAT3*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x14) + 0x1C);
-	Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
 }
 
 Object* OrbWalker::FindTarget(const Type& type) {
@@ -32,18 +32,15 @@ Object* OrbWalker::FindTarget(const Type& type) {
 }
 
 void OrbWalker::AttackObject(const Type& type) {
-	if (Functions::GetGameTime() >= lastAttackTime + me->GetAD()) {
-		if (const auto target = FindTarget(type); target) {
-			lastAttackTime = Functions::GetGameTime();
-			const auto pos = renderer->WorldToScreen(target->position);
-			Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
-			Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
-		} else {
-			const auto pos = renderer->WorldToScreen(*MousePos);
-			Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
-			Functions::IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);
-		}
-	} else if (Functions::GetGameTime() >= lastAttackTime + me->GetACD()) {
+	if (auto target = FindTarget(type); target &&
+		Functions::GetGameTime() >= lastAttackTime + me->GetAD()) {
+		lastAttackTime = Functions::GetGameTime();
+		const auto pos = renderer->WorldToScreen(target->position);
+		Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 0);
+		Functions::IssueOrder(HUDInput, 1, 1, 0, pos.x, pos.y, 0);
+	} else if (Functions::GetGameTime() >= lastAttackTime + me->GetACD() &&
+		Functions::GetGameTime() >= lastMoveTime + 50) {
+		lastMoveTime = Functions::GetGameTime();
 		const auto pos = renderer->WorldToScreen(*MousePos);
 		Functions::IssueOrder(HUDInput, 0, 0, 0, pos.x, pos.y, 0);
 		Functions::IssueOrder(HUDInput, 1, 0, 0, pos.x, pos.y, 0);

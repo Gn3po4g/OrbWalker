@@ -19,6 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Kiero\kiero.h" />
+    <ClInclude Include="Kiero\MinHook\include\MinHook.h" />
+    <ClInclude Include="Kiero\MinHook\src\buffer.h" />
+    <ClInclude Include="Kiero\MinHook\src\hde\hde32.h" />
+    <ClInclude Include="Kiero\MinHook\src\hde\hde64.h" />
+    <ClInclude Include="Kiero\MinHook\src\hde\pstdint.h" />
+    <ClInclude Include="Kiero\MinHook\src\hde\table32.h" />
+    <ClInclude Include="Kiero\MinHook\src\hde\table64.h" />
+    <ClInclude Include="Kiero\MinHook\src\trampoline.h" />
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\functions.h" />
     <ClInclude Include="src\memory.h" />
@@ -30,6 +39,12 @@
     <ClInclude Include="src\renderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Kiero\kiero.cpp" />
+    <ClCompile Include="Kiero\MinHook\src\buffer.c" />
+    <ClCompile Include="Kiero\MinHook\src\hde\hde32.c" />
+    <ClCompile Include="Kiero\MinHook\src\hde\hde64.c" />
+    <ClCompile Include="Kiero\MinHook\src\hook.c" />
+    <ClCompile Include="Kiero\MinHook\src\trampoline.c" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\functions.cpp" />
     <ClCompile Include="src\memory.cpp" />
@@ -40,6 +55,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Kiero\MinHook\dll_resources\MinHook.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Kiero\MinHook\dll_resources\MinHook.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -121,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;ORBWALKER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions />
