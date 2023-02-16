@@ -6,8 +6,6 @@ using Present_t = HRESULT(WINAPI*)(IDXGISwapChain*, UINT, UINT);
 Present_t OriginPresent = NULL;
 bool* aco{};
 
-int hooked = false;
-
 HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
 	if (!Functions::IsChatOpen() && !Functions::IsLeagueInBackground()) {
 		*aco = GetAsyncKeyState(VK_SPACE) & 0x8000;
@@ -26,11 +24,9 @@ unsigned __stdcall Start(void*) {
 	OrbWalker::Initialize();
 	aco = (bool*)(*(PDWORD_PTR)(*(PDWORD_PTR)offsets.oHudInstance + 0x30) + 0x20);
 	Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
-	do {
-		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
-			kiero::bind(8, (void**)&OriginPresent, HKPresent);
-		}
-	} while (true);
+	while (
+		kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success ||
+		kiero::bind(8, (void**)&OriginPresent, HKPresent) != kiero::Status::UnknownError);
 	return 0;
 }
 

@@ -91,9 +91,6 @@
     <ClCompile Include="src\renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\objlist.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

@@ -51,9 +51,6 @@
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\objlist.cpp" />
     <ClCompile Include="src\orbwalker.cpp" />
-    <ClCompile Include="src\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="src\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
