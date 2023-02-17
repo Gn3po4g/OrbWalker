@@ -7,8 +7,12 @@ float Object::DistanceTo(const Object* other) const {
 	return sqrtf(dx * dx + dy * dy + dz * dz);
 }
 
+double Object::GetBR() const {
+	return Functions::GetRadius(this);
+}
+
 UINT Object::GetACD() const {
-	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 45;
+	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 60;
 }
 
 UINT Object::GetAD() const {

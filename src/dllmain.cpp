@@ -16,8 +16,6 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
 	return OriginPresent(pSwapChain, SyncInterval, Flags);
 }
 
-
-
 unsigned __stdcall Start(void*) {
 	Memory::Initialize();
 	Functions::Initialize();

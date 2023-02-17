@@ -22,6 +22,7 @@ public:
 	float attack_range;	//0x13A4
 
 	float DistanceTo(const Object*) const;
+	double GetBR() const;
 	UINT GetACD() const;
 	UINT GetAD() const;
 };
