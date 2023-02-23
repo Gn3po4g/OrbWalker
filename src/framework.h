@@ -8,6 +8,7 @@
 #include <chrono>
 #include <cstddef>
 #include <memory>
+#include <ranges>
 #include <sstream>
 #include <string>
 #include <thread>

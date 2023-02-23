@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include <process.h>
 #include <dxgi.h>
+#include <commctrl.h>
 
 using Present_t = HRESULT(WINAPI*)(IDXGISwapChain*, UINT, UINT);
 Present_t OriginPresent = NULL;
@@ -8,10 +9,14 @@ bool* aco{};
 
 HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
 	if (!Functions::IsChatOpen() && !Functions::IsLeagueInBackground()) {
-		*aco = GetAsyncKeyState(VK_SPACE) & 0x8000;
-		if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::AttackObject(Type::space);
-		else if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::AttackObject(Type::v);
-		else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::AttackObject(Type::x);
+		if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) {
+			*aco = 1;
+			OrbWalker::AttackChampion();
+		} else {
+			*aco = 0;
+			if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::CleanLane();
+			else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::LastHit();
+		}
 	}
 	return OriginPresent(pSwapChain, SyncInterval, Flags);
 }

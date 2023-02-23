@@ -10,6 +10,8 @@ inline struct Offsets {
 	DWORD_PTR oTurretList;
 	DWORD_PTR oInhibitorList;
 	DWORD_PTR oMinionList;
+	DWORD_PTR oAttackableList;
+
 	DWORD_PTR oPrintChat;
 	DWORD_PTR oIssueOrder;
 	DWORD_PTR oGetAttackDelay;

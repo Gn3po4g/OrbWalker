@@ -25,5 +25,5 @@ bool Functions::IsLeagueInBackground() {
 }
 
 ULONGLONG Functions::GetGameTime() {
-	return (ULONGLONG)(*(float*)offsets.oGameTime * 1000);
+	return static_cast<ULONGLONG>(*(float*)offsets.oGameTime * 1000);
 }

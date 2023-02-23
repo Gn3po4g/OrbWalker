@@ -9,9 +9,11 @@ tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
 	{ &offsets.oHudInstance, "8B 0D ? ? ? ? FF 77 08 8B 49 14", true },
 	{ &offsets.oViewProjMatrices, "B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ?", true },
 	{ &offsets.oHeroList, "A1 ? ? ? ? 53 55 33 DB", true },
-	{ &offsets.oTurretList, "8B 35 ? ? ? ? 8B 76 18", true },
-	{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
+	//{ &offsets.oTurretList, "8B 35 ? ? ? ? 8B 76 18", true },
+	//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
 	{ &offsets.oMinionList, "8B 0D ? ? ? ? E8 ? ? ? ? EB 09", true },
+	//{ &offsets.oAttackableList, "8B 15 ? ? ? ? 56 57 8B 7A 04", true },
+
 	{ &offsets.oPrintChat, "E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01", false },
 	{ &offsets.oIssueOrder, "83 EC 24 53 8B 1D ? ? ? ? 55", false },
 	{ &offsets.oGetAttackDelay, "E8 ? ? ? ? D8 44 24 14 83 C4 04", false },
@@ -67,12 +69,10 @@ PBYTE Memory::FindAddress(const string& pattern) {
 		page_end = page_start + mbi.RegionSize;
 		if (mbi.Protect != PAGE_NOACCESS) {
 			for (auto address = page_start; address < page_end - bytes.size(); address++) {
-				if (all_of(address, address + bytes.size(),
-					[&](const auto& byte) {
-						return !mask[&byte - address] || bytes[&byte - address] == byte;
-					})) {
-					return address;
-				}
+				if (ranges::all_of(views::iota(address, address + bytes.size()), [&](PBYTE addr) {
+					int index = addr - address;
+					return !mask[index] || bytes[index] == *addr;
+					})) return address;
 			}
 		}
 	}
@@ -91,7 +91,7 @@ void Memory::Scan(const bool init) {
 	} else {
 		for (const auto& [offset, pattern, read] : sig_to_scan) {
 			if (auto address = FindAddress(pattern); !address) {
-				MessageBoxA(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
+				MessageBox(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
 			} else {
 				if (read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
 				else if (address[0] == 0xE8) address = address + *(PDWORD)(address + 1) + 5;
