@@ -15,7 +15,7 @@ tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
 	//{ &offsets.oAttackableList, "8B 15 ? ? ? ? 56 57 8B 7A 04", true },
 
 	{ &offsets.oPrintChat, "E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01", false },
-	{ &offsets.oIssueOrder, "83 EC 24 53 8B 1D ? ? ? ? 55", false },
+	{ &offsets.oIssueOrder, "E8 ? ? ? ? 84 C0 74 0B F3 0F 10", false },
 	{ &offsets.oGetAttackDelay, "E8 ? ? ? ? D8 44 24 14 83 C4 04", false },
 	{ &offsets.oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57", false },
 	{ &offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false },
