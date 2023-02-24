@@ -94,7 +94,7 @@ void Memory::Scan(const bool init) {
 				MessageBox(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
 			} else {
 				if (read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
-				else if (address[0] == 0xE8) address = address + *(PDWORD)(address + 1) + 5;
+				else /*if (address[0] == 0xE8)*/ address = address + *(PDWORD)(address + 1) + 5;
 				*offset = (DWORD_PTR)address;
 			}
 		}
