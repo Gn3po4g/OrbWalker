@@ -1,12 +1,5 @@
 #include "pch.h"
 
-Functions::fnPrintChat Functions::PrintChat{};
-Functions::fnIssueOrder Functions::IssueOrder{};
-Functions::fnGetAttackCastDelay Functions::GetAttackCastDelay{};
-Functions::fnGetAttackDelay Functions::GetAttackDelay{};
-Functions::fnIsAlive Functions::IsAlive{};
-Functions::fnGetRadius Functions::GetRadius{};
-
 void Functions::Initialize() {
 	PrintChat = (fnPrintChat)offsets.oPrintChat;
 	IssueOrder = (fnIssueOrder)offsets.oIssueOrder;

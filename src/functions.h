@@ -10,12 +10,12 @@ class Functions {
 	using fnIsAlive = bool(__thiscall*)(const Object*);
 	using fnGetRadius = double(__thiscall*)(const Object*);
 public:
-	static fnPrintChat PrintChat;
-	static fnIssueOrder IssueOrder;
-	static fnGetAttackCastDelay GetAttackCastDelay;
-	static fnGetAttackDelay GetAttackDelay;
-	static fnIsAlive IsAlive;
-	static fnGetRadius GetRadius;
+	static inline fnPrintChat PrintChat{};
+	static inline fnIssueOrder IssueOrder{};
+	static inline fnGetAttackCastDelay GetAttackCastDelay{};
+	static inline fnGetAttackDelay GetAttackDelay{};
+	static inline fnIsAlive IsAlive{};
+	static inline fnGetRadius GetRadius{};
 	static void Initialize();
 	static bool IsChatOpen();
 	static bool IsLeagueInBackground();

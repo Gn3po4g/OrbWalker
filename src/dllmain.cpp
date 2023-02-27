@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include <process.h>
 #include <dxgi.h>
-#include <commctrl.h>
 
 using Present_t = HRESULT(WINAPI*)(IDXGISwapChain*, UINT, UINT);
 Present_t OriginPresent = NULL;

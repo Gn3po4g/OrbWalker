@@ -12,17 +12,15 @@ tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
 	//{ &offsets.oTurretList, "8B 35 ? ? ? ? 8B 76 18", true },
 	//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
 	{ &offsets.oMinionList, "8B 0D ? ? ? ? E8 ? ? ? ? EB 09", true },
-	//{ &offsets.oAttackableList, "8B 15 ? ? ? ? 56 57 8B 7A 04", true },
+	{ &offsets.oAttackableList, "8B 15 ? ? ? ? 56 57 8B 7A 04", true },
 
 	{ &offsets.oPrintChat, "E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01", false },
-	{ &offsets.oIssueOrder, "E8 ? ? ? ? 84 C0 74 0B F3 0F 10", false },
+	{ &offsets.oIssueOrder, "E8 ? ? ? ? 84 C0 74 0B F3 0F 10 44 24 ?", false },
 	{ &offsets.oGetAttackDelay, "E8 ? ? ? ? D8 44 24 14 83 C4 04", false },
 	{ &offsets.oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57", false },
 	{ &offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false },
 	{ &offsets.oGetRadius, "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18 ", false }
 };
-
-int* Memory::GameState{};
 
 void Memory::Initialize() {
 	while (true) {
@@ -40,38 +38,35 @@ void Memory::Initialize() {
 }
 
 PBYTE Memory::FindAddress(const string& pattern) {
-	vector<BYTE> bytes;
+	vector<uint8_t> bytes;
 	vector<bool> mask;
 	istringstream iss(pattern);
-	for_each(istream_iterator<string>(iss), istream_iterator<string>(),
-		[&](const string& byte_str) {
-			if (byte_str == "?") {
-				bytes.push_back(0x00);
-				mask.push_back(false);
-			} else {
-				bytes.push_back(stoi(byte_str, nullptr, 16));
-				mask.push_back(true);
-			}
+	ranges::istream_view<string> iv(iss);
+	ranges::for_each(iv, [&](const string& byte_str) {
+		apply([&](uint8_t first, bool second) {
+			bytes.push_back(first);
+			mask.push_back(second);
+			}, byte_str == "?" ? tuple{ 0x00, false } : tuple{ stoi(byte_str, nullptr, 16), true });
 		});
 
 	const auto module = GetModuleHandle(nullptr);
 	const auto ntHeaders = (PIMAGE_NT_HEADERS)((PBYTE)module + ((PIMAGE_DOS_HEADER)module)->e_lfanew);
 	const auto textSection = IMAGE_FIRST_SECTION(ntHeaders);
 	const auto startAddress = (PBYTE)module + textSection->VirtualAddress;
-	const DWORD size = textSection->SizeOfRawData;
+	const auto size = textSection->SizeOfRawData;
 	const auto endAddress = startAddress + size - bytes.size();
 
 	MEMORY_BASIC_INFORMATION mbi;
-	for (PBYTE page_start = startAddress, page_end;
+	for (PBYTE page_start = startAddress, page_end{};
 		page_start < endAddress && VirtualQuery(page_start, &mbi, sizeof(mbi));
 		page_start = page_end) {
 		page_start = (PBYTE)mbi.BaseAddress;
 		page_end = page_start + mbi.RegionSize;
 		if (mbi.Protect != PAGE_NOACCESS) {
 			for (auto address = page_start; address < page_end - bytes.size(); address++) {
-				if (ranges::all_of(views::iota(address, address + bytes.size()), [&](PBYTE addr) {
-					int index = addr - address;
-					return !mask[index] || bytes[index] == *addr;
+				if (all_of(address, address + bytes.size(), [&](BYTE byte) {
+					size_t index = distance(address, &byte);
+					return !mask[index] || bytes[index] == byte;
 					})) return address;
 			}
 		}
@@ -94,7 +89,7 @@ void Memory::Scan(const bool init) {
 				MessageBox(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
 			} else {
 				if (read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
-				else /*if (address[0] == 0xE8)*/ address = address + *(PDWORD)(address + 1) + 5;
+				else address = address + *(PDWORD)(address + 1) + 5;
 				*offset = (DWORD_PTR)address;
 			}
 		}

@@ -24,6 +24,6 @@ class Memory {
 	static PBYTE FindAddress(const std::string&);
 	static void Scan(const bool);
 public:
-	static int* GameState;
+	static inline int* GameState{};
 	static void Initialize();
 };

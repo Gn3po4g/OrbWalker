@@ -12,9 +12,9 @@ double Object::GetBR() const {
 }
 
 UINT Object::GetACD() const {
-	return (UINT)(Functions::GetAttackCastDelay(this) * 1000) + 60;
+	return (UINT)(Functions::GetAttackCastDelay(this) * 1050);
 }
 
 UINT Object::GetAD() const {
-	return (UINT)(Functions::GetAttackDelay(this) * 1000) + 15;
+	return (UINT)(Functions::GetAttackDelay(this) * 1050);
 }
