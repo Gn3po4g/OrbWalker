@@ -1,3 +1,5 @@
-﻿file(GLOB_RECURSE minhook minhook/*.c)
+﻿project(kiero)
 
-add_library(kiero STATIC kiero.cpp ${minhook})
+file(GLOB_RECURSE MINHOOK *.cpp *.c)
+
+add_library(${PROJECT_NAME} STATIC kiero.cpp ${MINHOOK})
