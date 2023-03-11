@@ -51,7 +51,7 @@ namespace OrbWalker {
                 Functions::IssueOrder(HUDInput, 0, 1, 1, pos.x, pos.y, 0);
             } else */{
                 const auto pos = Renderer::WorldToScreen(target->position);
-                Functions::IssueOrder(HUDInput, 0, 1, 1, pos.x, pos.y, 0);
+                Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 1);
             }
         } else if (Functions::GetGameTime() >= lastAttackTime + me->GetACD() &&
                    Functions::GetGameTime() >= lastMoveTime + 50) {

@@ -10,9 +10,9 @@ double Object::GetBR() const {
 }
 
 uint32_t Object::GetACD() const {
-    return static_cast<uint32_t>(Functions::GetAttackCastDelay(this) * 1000) + 75;
+    return static_cast<uint32_t>(Functions::GetAttackCastDelay(this) * 1000) + 100;
 }
 
 uint32_t Object::GetAD() const {
-    return static_cast<uint32_t>(Functions::GetAttackDelay(this) * 1000) + 15;
+    return static_cast<uint32_t>(Functions::GetAttackDelay(this) * 1000) + 20;
 }

@@ -1,5 +1,4 @@
 ﻿#include "kiero.h"
-#include "libmem.h"
 #include <dxgi.h>
 #include <thread>
 
@@ -27,7 +26,6 @@ unsigned __stdcall Start(void *) {
     Functions::PrintChat(Offsets::oChatClient, "Noroby's League of Legends Orbwalker", 0xFFFFFF);
     while (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success ||
            kiero::bind(8, (void **) &oPresent, (void *) HKPresent) != kiero::Status::UnknownError);
-//    LM_HookCode(kiero::getMethodsTable()[8], (lm_address_t)HKPresent, (lm_address_t *)&oPresent);
     return 0;
 }
 
