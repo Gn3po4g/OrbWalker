@@ -1,22 +1,35 @@
-#include "pch.h"
+namespace Functions {
+    fnPrintChat PrintChat{};
+    fnIssueOrder IssueOrder{};
+    fnGetAttackCastDelay GetAttackCastDelay{};
+    fnGetAttackDelay GetAttackDelay{};
+    fnIsAlive IsAlive{};
+    fnGetRadius GetRadius{};
 
-void Functions::Initialize() {
-	PrintChat = (fnPrintChat)offsets.oPrintChat;
-	IssueOrder = (fnIssueOrder)offsets.oIssueOrder;
-	GetAttackCastDelay = (fnGetAttackCastDelay)offsets.oGetAttackCastDelay;
-	GetAttackDelay = (fnGetAttackDelay)offsets.oGetAttackDelay;
-	IsAlive = (fnIsAlive)offsets.oIsAlive;
-	GetRadius = (fnGetRadius)offsets.oGetRadius;
-}
+    void Initialize() {
+        PrintChat = (fnPrintChat) Offsets::oPrintChat;
+        IssueOrder = (fnIssueOrder) Offsets::oIssueOrder;
+        GetAttackCastDelay = (fnGetAttackCastDelay) Offsets::oGetAttackCastDelay;
+        GetAttackDelay = (fnGetAttackDelay) Offsets::oGetAttackDelay;
+        IsAlive = (fnIsAlive) Offsets::oIsAlive;
+        GetRadius = (fnGetRadius) Offsets::oGetRadius;
+    }
 
-bool Functions::IsChatOpen() {
-	return *(bool*)(*(PDWORD)offsets.oChatClient + 0x820);
-}
+    bool IsChatOpen() {
+        return *(bool *) (*(uintptr_t *) Offsets::oChatClient + 0x820);
+    }
 
-bool Functions::IsLeagueInBackground() {
-	return *(bool*)(*(PDWORD)offsets.oHudInstance + 0x69);
-}
+    bool IsLeagueInBackground() {
+        return *(bool *) (*(uintptr_t *) Offsets::oHudInstance + 0x69);
+    }
 
-ULONGLONG Functions::GetGameTime() {
-	return static_cast<ULONGLONG>(*(float*)offsets.oGameTime * 1000);
+    uint64_t GetGameTime() {
+        static const auto start_time = std::chrono::steady_clock::now();
+        const auto elapsed_time = std::chrono::steady_clock::now() - start_time;
+        return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count();
+//        return std::chrono::system_clock::now().
+        //return GetTickCount64();
+        //return static_cast<uint64_t>(*(float *) Offsets::oGameTime * 1000);
+    }
+
 }

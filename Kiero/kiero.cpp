@@ -31,7 +31,7 @@
 #endif
 
 #if KIERO_USE_MINHOOK
-# include "MinHook/include/MinHook.h"
+# include "minhook/include/MinHook.h"
 #endif
 
 #ifdef _UNICODE

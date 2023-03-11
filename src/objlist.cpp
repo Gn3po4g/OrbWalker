@@ -1,29 +1,22 @@
-#include "pch.h"
+using namespace std;
 
-Object* ObjList::GetLowestHealth(const Object* me) {
-	Object* ret = nullptr;
-	for (int i = 0; i < size; i++) {
-		Object* obj = *(list + i);
-		if (Functions::IsAlive(obj) && obj->team != me->team && obj->visible && obj->targetable
-			&& obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR()
-			&& (!ret || obj->health < ret->health)) {
-			ret = obj;
-		}
-	}
-	return ret;
+Object *ObjList::GetLowestHealth(Object *me) const {
+    span<Object *> obj_list(list, size);
+    auto filtered = obj_list | views::filter([&me](Object *obj) {
+        return Functions::IsAlive(obj) && obj->team != me->team && obj->visible && obj->targetable
+               && obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR();
+    }) | ranges::to<vector>();
+    ranges::sort(filtered, ranges::less{}, &Object::health);
+    return filtered.empty() ? nullptr : *filtered.begin();
 }
 
-Object* ObjList::GetLastHit(const Object* me) {
-	Object* ret = nullptr;
-	for (int i = 0; i < size; i++) {
-		Object* obj = *(list + i);
-		if (Functions::IsAlive(obj)
-			&& obj->health <= me->base_attack + me->bonus_attack
-			&& obj->team != me->team && obj->visible && obj->targetable
-			&& obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR()
-			&& (!ret || obj->health < ret->health)) {
-			ret = obj;
-		}
-	}
-	return ret;
+Object *ObjList::GetLastHit(Object *me) const{
+    span<Object *> obj_list(list, size);
+    auto filtered = obj_list | views::filter([&me](Object *obj) {
+        return Functions::IsAlive(obj) && obj->health <= me->base_attack + me->bonus_attack && obj->team != me->team
+               && obj->visible && obj->targetable &&
+               obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR();
+    }) | ranges::to<vector>();
+    ranges::sort(filtered, ranges::less{}, &Object::health);
+    return filtered.empty() ? nullptr : *filtered.begin();
 }

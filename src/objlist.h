@@ -2,10 +2,11 @@
 
 class ObjList {
 public:
-	PAD(0x4);
-	Object** list;
-	int size;
+    PAD(0x4);
+    Object **list;
+    int size;
 
-	Object* GetLowestHealth(const Object*);
-	Object* GetLastHit(const Object*);
+    Object *GetLowestHealth(Object *) const;
+
+    Object *GetLastHit(Object *) const;
 };

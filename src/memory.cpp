@@ -1,97 +1,102 @@
-#include "pch.h"
+#include "libmem.hpp"
 
 using namespace std;
 
-tuple<PDWORD_PTR, string, bool > sig_to_scan[] = {
-	{ &offsets.oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true },
-	{ &offsets.oChatClient, "8B 0D ? ? ? ? 8A D8 85 C9", true },
-	{ &offsets.oLocalPlayer, "8B 3D ? ? ? ? 3B F7 75 09", true },
-	{ &offsets.oHudInstance, "8B 0D ? ? ? ? FF 77 08 8B 49 14", true },
-	{ &offsets.oViewProjMatrices, "B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ?", true },
-	{ &offsets.oHeroList, "A1 ? ? ? ? 53 55 33 DB", true },
-	//{ &offsets.oTurretList, "8B 35 ? ? ? ? 8B 76 18", true },
-	//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
-	{ &offsets.oMinionList, "8B 0D ? ? ? ? E8 ? ? ? ? EB 09", true },
-	{ &offsets.oAttackableList, "8B 15 ? ? ? ? 56 57 8B 7A 04", true },
+namespace Offsets {
+//    uintptr_t oGameTime{};
+    uintptr_t oChatClient{};
+    uintptr_t oNetClient{};
+    uintptr_t oLocalPlayer{};
+    uintptr_t oHudInstance{};
+    uintptr_t oViewProjMatrices{};
+    uintptr_t oHeroList{};
+    uintptr_t oTurretList;
+    uintptr_t oInhibitorList;
+    uintptr_t oMinionList{};
+    uintptr_t oAttackableList;
 
-	{ &offsets.oPrintChat, "E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01", false },
-	{ &offsets.oIssueOrder, "E8 ? ? ? ? 84 C0 74 0B F3 0F 10 44 24 ?", false },
-	{ &offsets.oGetAttackDelay, "E8 ? ? ? ? D8 44 24 14 83 C4 04", false },
-	{ &offsets.oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57", false },
-	{ &offsets.oIsAlive, "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?", false },
-	{ &offsets.oGetRadius, "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18 ", false }
-};
-
-void Memory::Initialize() {
-	while (true) {
-		if (!GameState) {
-			this_thread::sleep_for(1s);
-			Scan(true);
-		} else if (*GameState != 2) {
-			this_thread::sleep_for(500ms);
-		} else {
-			this_thread::sleep_for(500ms);
-			Scan(false);
-			break;
-		}
-	}
+    uintptr_t oGetPing{};
+    uintptr_t oPrintChat{};
+    uintptr_t oIssueOrder{};
+    uintptr_t oGetAttackDelay{};
+    uintptr_t oGetAttackCastDelay{};
+    uintptr_t oIsAlive{};
+    uintptr_t oGetRadius{};
 }
 
-PBYTE Memory::FindAddress(const string& pattern) {
-	vector<uint8_t> bytes;
-	vector<bool> mask;
-	istringstream iss(pattern);
-	ranges::istream_view<string> iv(iss);
-	ranges::for_each(iv, [&](const string& byte_str) {
-		apply([&](uint8_t first, bool second) {
-			bytes.push_back(first);
-			mask.push_back(second);
-			}, byte_str == "?" ? tuple{ 0x00, false } : tuple{ stoi(byte_str, nullptr, 16), true });
-		});
+namespace Memory {
+    tuple<uintptr_t *, string, bool> sig_to_scan[] = {
+//            {&Offsets::oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true},
+            {&Offsets::oChatClient,         "8B 0D ? ? ? ? 8A D8 85 C9",                              true},
+            {&Offsets::oLocalPlayer,        "8B 3D ? ? ? ? 3B F7 75 09",                              true},
+            {&Offsets::oHudInstance,        "8B 0D ? ? ? ? FF 77 08 8B 49 14",                        true},
+            {&Offsets::oViewProjMatrices,   "B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ?", true},
+            {&Offsets::oHeroList,           "A1 ? ? ? ? 53 55 33 DB",                                 true},
+            {&Offsets::oTurretList,         "8B 35 ? ? ? ? 8B 76 18",                                 true},
+            //{ &Offsets::oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
+            {&Offsets::oMinionList,         "8B 0D ? ? ? ? E8 ? ? ? ? EB 09",                         true},
+//            {&Offsets::oAttackableList,     "8B 15 ? ? ? ? 56 57 8B 7A 04",                           true},
 
-	const auto module = GetModuleHandle(nullptr);
-	const auto ntHeaders = (PIMAGE_NT_HEADERS)((PBYTE)module + ((PIMAGE_DOS_HEADER)module)->e_lfanew);
-	const auto textSection = IMAGE_FIRST_SECTION(ntHeaders);
-	const auto startAddress = (PBYTE)module + textSection->VirtualAddress;
-	const auto size = textSection->SizeOfRawData;
-	const auto endAddress = startAddress + size - bytes.size();
+            {&Offsets::oPrintChat,          "E8 ? ? ? ? 8B 4C 24 20 C6 47 0D 01",                     false},
+            {&Offsets::oIssueOrder,         "E8 ? ? ? ? 84 C0 74 0B F3 0F 10 44 24 ?",                false},
+            {&Offsets::oGetAttackDelay,     "E8 ? ? ? ? D8 44 24 14 83 C4 04",                        false},
+            {&Offsets::oGetAttackCastDelay, "E8 ? ? ? ? D9 9E ? ? ? ? 57",                            false},
+            {&Offsets::oIsAlive,            "E8 ? ? ? ? 84 C0 74 2A 8D 8F ? ? ? ?",                   false},
+            {&Offsets::oGetRadius,          "E8 ? ? ? ? D8 44 24 0C 8B 7C 24 18",                     false}
+    };
 
-	MEMORY_BASIC_INFORMATION mbi;
-	for (PBYTE page_start = startAddress, page_end{};
-		page_start < endAddress && VirtualQuery(page_start, &mbi, sizeof(mbi));
-		page_start = page_end) {
-		page_start = (PBYTE)mbi.BaseAddress;
-		page_end = page_start + mbi.RegionSize;
-		if (mbi.Protect != PAGE_NOACCESS) {
-			for (auto address = page_start; address < page_end - bytes.size(); address++) {
-				if (all_of(address, address + bytes.size(), [&](BYTE byte) {
-					size_t index = distance(address, &byte);
-					return !mask[index] || bytes[index] == byte;
-					})) return address;
-			}
-		}
-	}
-	return nullptr;
-}
+    lm_module_t GameModule{};
+    int *GameState{};
 
-void Memory::Scan(const bool init) {
-	if (init) {
-		const string pattern = "A1 ? ? ? ? 68 ? ? ? ? 8B 70 08 E8 ? ? ? ?";
-		if (const auto address = FindAddress(pattern); !address) {
-			MessageBox(nullptr, "Failed to find GameState", "WARN", MB_OK | MB_ICONWARNING);
-		} else {
-			auto oGameState = *(PDWORD_PTR)(address + pattern.find_first_of('?') / 3);
-			GameState = (int*)(*(PDWORD_PTR)oGameState + 0x8);
-		}
-	} else {
-		for (const auto& [offset, pattern, read] : sig_to_scan) {
-			if (auto address = FindAddress(pattern); !address) {
-				MessageBox(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
-			} else {
-				if (read) address = *(PBYTE*)(address + pattern.find_first_of('?') / 3);
-				else address = address + *(PDWORD)(address + 1) + 5;
-				*offset = (DWORD_PTR)address;
-			}
-		}
-	}
+    uintptr_t FindAddress(string &pattern) {
+        lm_page_t page;
+        page.end = GameModule.base;
+        while (page.end < GameModule.end && LM_GetPage(page.end, &page)) {
+            if (page.prot & LM_PROT_R) {
+                auto scansize = page.size - ranges::distance(pattern | views::split(' '));
+                if (auto address = LM_SigScan(pattern.data(), page.base, scansize);
+                        address != LM_ADDRESS_BAD) {
+                    return address;
+                }
+            }
+        }
+        return LM_ADDRESS_BAD;
+    }
+
+    void Initialize() {
+        LM_FindModule(string("League of Legends.exe").data(), &GameModule);
+        while (true) {
+            if (!GameState) {
+                this_thread::sleep_for(1s);
+                Scan(true);
+            } else if (*GameState != 2) {
+                this_thread::sleep_for(500ms);
+            } else {
+                this_thread::sleep_for(500ms);
+                Scan(false);
+                break;
+            }
+        }
+    }
+
+    void Scan(const bool init) {
+        if (init) {
+            string pattern = "A1 ? ? ? ? 68 ? ? ? ? 8B 70 08 E8 ? ? ? ?";
+            if (auto address = FindAddress(pattern); address == LM_ADDRESS_BAD) {
+                MessageBox(nullptr, "Failed to find GameState", "WARN", MB_OK | MB_ICONWARNING);
+            } else {
+                auto oGameState = *(uintptr_t *) (address + pattern.find_first_of('?') / 3);
+                GameState = (int *) (*(uintptr_t *) oGameState + 0x8);
+            }
+        } else {
+            for (auto &[offset, pattern, read]: sig_to_scan) {
+                if (auto address = FindAddress(pattern); address == LM_ADDRESS_BAD) {
+                    MessageBox(nullptr, ("Failed to find pattern: " + pattern).c_str(), "WARN", MB_OK | MB_ICONWARNING);
+                } else {
+                    *offset = read ? *(uintptr_t *) (address + pattern.find_first_of('?') / 3)
+                                   : address + *(uintptr_t *) (address + 1) + 5;
+                }
+            }
+        }
+    }
 }

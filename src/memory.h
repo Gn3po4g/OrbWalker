@@ -1,29 +1,27 @@
 #pragma once
 
-inline struct Offsets {
-	DWORD_PTR oGameTime;
-	DWORD_PTR oChatClient;
-	DWORD_PTR oLocalPlayer;
-	DWORD_PTR oHudInstance;
-	DWORD_PTR oViewProjMatrices;
-	DWORD_PTR oHeroList;
-	DWORD_PTR oTurretList;
-	DWORD_PTR oInhibitorList;
-	DWORD_PTR oMinionList;
-	DWORD_PTR oAttackableList;
+namespace Offsets {
+//    extern uintptr_t oGameTime;
+    extern uintptr_t oChatClient;
+    extern uintptr_t oLocalPlayer;
+    extern uintptr_t oHudInstance;
+    extern uintptr_t oViewProjMatrices;
+    extern uintptr_t oHeroList;
+    extern uintptr_t oTurretList;
+    extern uintptr_t oInhibitorList;
+    extern uintptr_t oMinionList;
+    extern uintptr_t oAttackableList;
 
-	DWORD_PTR oPrintChat;
-	DWORD_PTR oIssueOrder;
-	DWORD_PTR oGetAttackDelay;
-	DWORD_PTR oGetAttackCastDelay;
-	DWORD_PTR oIsAlive;
-	DWORD_PTR oGetRadius;
-} offsets;
+    extern uintptr_t oPrintChat;
+    extern uintptr_t oIssueOrder;
+    extern uintptr_t oGetAttackDelay;
+    extern uintptr_t oGetAttackCastDelay;
+    extern uintptr_t oIsAlive;
+    extern uintptr_t oGetRadius;
+}
 
-class Memory {
-	static PBYTE FindAddress(const std::string&);
-	static void Scan(const bool);
-public:
-	static inline int* GameState{};
-	static void Initialize();
+namespace Memory {
+    void Initialize();
+
+    void Scan(bool);
 };
