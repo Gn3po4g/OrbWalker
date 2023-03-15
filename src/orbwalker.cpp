@@ -28,12 +28,11 @@ namespace OrbWalker {
         switch (type) {
             case Type::AutoKite:
                 return heroes->GetLowestHealth(me);
-            case Type::CleanLane:
-                if (auto target = minions->GetLowestHealth(me);target) {
-                    return target;
-                } else {
-                    return turrets->GetLowestHealth(me);
-                }
+            case Type::CleanLane: {
+                auto target = minions->GetLowestHealth(me);
+                if (!target) target = turrets->GetLowestHealth(me);
+                return target;
+            }
             case Type::LastHit:
                 return minions->GetLastHit(me);
             default:
@@ -51,7 +50,7 @@ namespace OrbWalker {
                 Functions::IssueOrder(HUDInput, 0, 1, 1, pos.x, pos.y, 0);
             } else */{
                 const auto pos = Renderer::WorldToScreen(target->position);
-                Functions::IssueOrder(HUDInput, 0, 1, 0, pos.x, pos.y, 1);
+                Functions::IssueOrder(HUDInput, 0, 1, 1, pos.x, pos.y, 0);
             }
         } else if (Functions::GetGameTime() >= lastAttackTime + me->GetACD() &&
                    Functions::GetGameTime() >= lastMoveTime + 50) {

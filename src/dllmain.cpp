@@ -1,4 +1,5 @@
 ﻿#include "kiero.h"
+#include "libmem.h"
 #include <dxgi.h>
 #include <thread>
 
@@ -19,6 +20,7 @@ HRESULT WINAPI HKPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Fla
 }
 
 unsigned __stdcall Start(void *) {
+    LM_LoadModule(std::string("R3nzSkin.dll").data(),LM_NULL);
     Memory::Initialize();
     Functions::Initialize();
     Renderer::Initialize();
