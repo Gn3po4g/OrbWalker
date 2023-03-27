@@ -1,3 +1,5 @@
+#include "pch.h"
+
 namespace OrbWalker {
     ObjList *turrets{};
     ObjList *inhibitors{};

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 namespace Functions {
     fnPrintChat PrintChat{};
     fnIssueOrder IssueOrder{};

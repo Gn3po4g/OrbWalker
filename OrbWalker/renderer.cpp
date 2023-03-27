@@ -1,3 +1,5 @@
+#include "pch.h"
+
 namespace Renderer {
     XMFLOAT4X4 *view_matrix;
     XMFLOAT4X4 *proj_matrix;

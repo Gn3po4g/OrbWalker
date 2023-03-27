@@ -7,3 +7,6 @@
 #include "objlist.h"
 #include "orbwalker.h"
 #include "renderer.h"
+
+#include "../Kiero/kiero.h"
+#include "../Libmem/libmem.hpp"

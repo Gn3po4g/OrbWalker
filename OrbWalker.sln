@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OrbWalker", "OrbWalker\OrbWalker.vcxproj", "{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Debug|x64.ActiveCfg = Debug|x64
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Debug|x64.Build.0 = Debug|x64
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Debug|x86.ActiveCfg = Debug|Win32
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Debug|x86.Build.0 = Debug|Win32
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Release|x64.ActiveCfg = Release|x64
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Release|x64.Build.0 = Release|x64
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Release|x86.ActiveCfg = Release|Win32
+		{E53DE4C8-DB57-455C-B7BF-2BEB632ED59B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0193D7C7-C6BD-4FFF-8D41-39E2F69BE7C4}
+	EndGlobalSection
+EndGlobal

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 using namespace std;
 
 Object *ObjList::GetLowestHealth(Object *me) const {

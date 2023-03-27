@@ -1,3 +1,5 @@
+#include "pch.h"
+
 float Object::DistanceTo(const Object *other) const {
     float dx = position.x - other->position.x;
     float dy = position.y - other->position.y;

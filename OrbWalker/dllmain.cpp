@@ -1,5 +1,4 @@
-﻿#include "kiero.h"
-#include "libmem.h"
+﻿#include "pch.h"
 #include <dxgi.h>
 #include <thread>
 
