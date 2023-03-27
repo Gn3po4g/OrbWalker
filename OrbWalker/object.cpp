@@ -8,7 +8,7 @@ float Object::DistanceTo(const Object *other) const {
 }
 
 double Object::GetBR() const {
-    return Functions::GetRadius(this);
+    return Functions::GetRadius(this) - 1.0;
 }
 
 uint32_t Object::GetACD() const {
