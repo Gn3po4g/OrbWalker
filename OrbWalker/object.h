@@ -18,8 +18,12 @@ public:
     float base_attack;    //0x135C
     PAD(0x44);
     float attack_range;   //0x13A4
+    PAD(0x864);
+    XMFLOAT3 direction;   //0x1C0C
 
-    float DistanceTo(const Object *) const;
+    float DistanceTo(Object *) const;
+
+    bool IsFacing(Object*) const;
 
     double GetBR() const;
 

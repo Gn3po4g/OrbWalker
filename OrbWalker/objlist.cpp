@@ -9,7 +9,7 @@ Object *ObjList::GetLowestHealth(Object *me) const {
     float min_health = FLT_MAX;
     for (auto obj : obj_list) {
       if (Functions::IsAlive(obj) && obj->team != me->team && obj->visible && obj->targetable
-        && obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR() && obj != previous) {
+        && obj->DistanceTo(me) <= me->attack_range + obj->GetBR() + me->GetBR() /*&& obj != previous*/) {
         if (obj->health < min_health) {
           min_health = obj->health;
           current = obj;

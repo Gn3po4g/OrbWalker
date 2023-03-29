@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Offsets {
-//    extern uintptr_t oGameTime;
+    extern uintptr_t oGameTime;
     extern uintptr_t oChatClient;
     extern uintptr_t oLocalPlayer;
     extern uintptr_t oHudInstance;

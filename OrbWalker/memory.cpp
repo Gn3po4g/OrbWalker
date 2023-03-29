@@ -1,10 +1,9 @@
-#include "libmem.hpp"
 #include "pch.h"
 
 using namespace std;
 
 namespace Offsets {
-//    uintptr_t oGameTime{};
+    uintptr_t oGameTime{};
     uintptr_t oChatClient{};
     uintptr_t oNetClient{};
     uintptr_t oLocalPlayer{};
@@ -27,7 +26,7 @@ namespace Offsets {
 
 namespace Memory {
     tuple<uintptr_t *, string, bool> sig_to_scan[] = {
-//            {&Offsets::oGameTime, "F3 0F 11 05 ? ? ? ? 8B 49 08", true},
+            {&Offsets::oGameTime,           "F3 0F 11 05 ? ? ? ? 8B 49 08",                           true},
             {&Offsets::oChatClient,         "8B 0D ? ? ? ? 8A D8 85 C9",                              true},
             {&Offsets::oLocalPlayer,        "8B 3D ? ? ? ? 3B F7 75 09",                              true},
             {&Offsets::oHudInstance,        "8B 0D ? ? ? ? FF 77 08 8B 49 14",                        true},
