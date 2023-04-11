@@ -3,5 +3,5 @@
 namespace Renderer {
     void Initialize();
 
-    XMINT2 WorldToScreen(const XMFLOAT3 &);
+    XMINT2 WorldToScreen(XMFLOAT3);
 };

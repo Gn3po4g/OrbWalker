@@ -1,32 +1,31 @@
 #include "pch.h"
 
 namespace Functions {
-    fnPrintChat PrintChat{};
-    fnIssueOrder IssueOrder{};
-    fnGetAttackCastDelay GetAttackCastDelay{};
-    fnGetAttackDelay GetAttackDelay{};
-    fnIsAlive IsAlive{};
-    fnGetRadius GetRadius{};
+	fnPrintChat PrintChat;
+	fnIssueOrder IssueOrder;
+	fnGetAttackCastDelay GetAttackCastDelay;
+	fnGetAttackDelay GetAttackDelay;
+	fnIsAlive IsAlive;
+	fnGetRadius GetRadius;
 
-    void Initialize() {
-        PrintChat = (fnPrintChat) Offsets::oPrintChat;
-        IssueOrder = (fnIssueOrder) Offsets::oIssueOrder;
-        GetAttackCastDelay = (fnGetAttackCastDelay) Offsets::oGetAttackCastDelay;
-        GetAttackDelay = (fnGetAttackDelay) Offsets::oGetAttackDelay;
-        IsAlive = (fnIsAlive) Offsets::oIsAlive;
-        GetRadius = (fnGetRadius) Offsets::oGetRadius;
-    }
+	void Initialize() {
+		PrintChat = (fnPrintChat)offsets.oPrintChat;
+		IssueOrder = (fnIssueOrder)offsets.oIssueOrder;
+		GetAttackCastDelay = (fnGetAttackCastDelay)offsets.oGetAttackCastDelay;
+		GetAttackDelay = (fnGetAttackDelay)offsets.oGetAttackDelay;
+		IsAlive = (fnIsAlive)offsets.oIsAlive;
+		GetRadius = (fnGetRadius)offsets.oGetRadius;
+	}
 
-    bool IsChatOpen() {
-        return *(bool *) (*(uintptr_t *) Offsets::oChatClient + 0x820);
-    }
+	bool IsChatOpen() {
+		return *(bool*)(*(uintptr_t*)offsets.oChatClient + 0xC90);
+	}
 
-    bool IsLeagueInBackground() {
-        return *(bool *) (*(uintptr_t *) Offsets::oHudInstance + 0x69);
-    }
+	bool IsLeagueInBackground() {
+		return *(bool*)(*(uintptr_t*)offsets.oHudInstance + 0xB9);
+	}
 
-    uint64_t GetGameTime() {
-        return static_cast<uint64_t>(*(float *) Offsets::oGameTime * 1000);
-    }
-
+	uint64_t GetGameTime() {
+		return static_cast<uint64_t>(*(float*)offsets.oGameTime * 1000);
+	}
 }

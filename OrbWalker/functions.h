@@ -2,11 +2,11 @@
 
 namespace Functions {
 	using fnPrintChat = void(__thiscall*)(uintptr_t, const char*, int);
-	using fnIssueOrder = int(__thiscall*)(uintptr_t, int, int, int, int, int, char);
-	using fnGetAttackCastDelay = double(__cdecl*)(const Object*);
-	using fnGetAttackDelay = double(__cdecl*)(const Object*);
+	using fnIssueOrder = int(__thiscall*)(uintptr_t, int, int, int, int, int, int);
+	using fnGetAttackCastDelay = float(__cdecl*)(const Object*);
+	using fnGetAttackDelay = float(__cdecl*)(const Object*);
 	using fnIsAlive = bool(__thiscall*)(const Object*);
-	using fnGetRadius = double(__thiscall*)(const Object*);
+	using fnGetRadius = float(__thiscall*)(const Object*);
 	extern fnPrintChat PrintChat;
 	extern fnIssueOrder IssueOrder;
 	extern fnGetAttackCastDelay GetAttackCastDelay;
