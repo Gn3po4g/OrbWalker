@@ -34,17 +34,16 @@ float Object::attack_range()
 	return *(float*)((uintptr_t)this + 0x169C);
 }
 
-float Object::BR() {
-	return 64.f;
-	//return Functions::GetRadius(this) - 1.0;
+float Object::br() const{
+	return Functions::GetRadius(this) - 1.f;
 }
 
-uint32_t Object::ACD() {
-	return (uint32_t)(Functions::GetAttackCastDelay(this) * 1000) + 10;
+float Object::acd() const{
+	return Functions::GetAttackCastDelay(this) + 0.01f;
 }
 
-uint32_t Object::AD() {
-	return (uint32_t)(Functions::GetAttackDelay(this) * 1000) + 10;
+float Object::ad() const{
+	return Functions::GetAttackDelay(this) + 0.01f;
 }
 
 
@@ -58,5 +57,5 @@ float Object::DistanceTo(Object* other) {
 bool Object::IsFacing(Object* other) {
 	auto v1 = XMLoadFloat3(new XMFLOAT3(other->position().x - position().x, 0.f, other->position().z - position().z));
 	auto v2 = XMLoadFloat3((XMFLOAT3*)((uintptr_t)this + 0x2190));
-	return XMVectorGetX(XMVector3AngleBetweenVectors(v1, v2)) < 1.5708f;
+	return XMVectorGetX(XMVector3AngleBetweenVectors(v1, v2)) < 1.96349f;
 }

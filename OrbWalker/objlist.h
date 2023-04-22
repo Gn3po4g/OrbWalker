@@ -2,7 +2,7 @@
 
 class ObjList {
 public:
-    Object *GetLowestHealth(Object *) const;
+    Object *get_lowest_health(Object *) const;
 
-    Object *GetLastHit(Object *) const;
+    Object *get_last_hit(Object *) const;
 };

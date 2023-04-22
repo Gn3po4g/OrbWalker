@@ -25,7 +25,7 @@ namespace Functions {
 		return *(bool*)(*(uintptr_t*)offsets.oHudInstance + 0xB9);
 	}
 
-	uint64_t GetGameTime() {
-		return static_cast<uint64_t>(*(float*)offsets.oGameTime * 1000);
+	float GetGameTime() {
+		return *(float*)offsets.oGameTime;
 	}
 }

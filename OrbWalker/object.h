@@ -10,9 +10,9 @@ public:
     float base_attack();
     float bonus_attack();
     float attack_range();
-    float BR();
-    uint32_t ACD();
-    uint32_t AD();
+    float br() const;
+    float acd() const;
+    float ad() const;
 
     float DistanceTo(Object *);
     bool IsFacing(Object*);
