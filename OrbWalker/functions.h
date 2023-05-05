@@ -1,12 +1,12 @@
 #pragma once
 
 namespace Functions {
-	using fnPrintChat = void(__thiscall*)(uintptr_t, const char*, int);
-	using fnIssueOrder = int(__thiscall*)(uintptr_t, int, int, int, int, int, int);
-	using fnGetAttackCastDelay = float(__cdecl*)(const Object*);
-	using fnGetAttackDelay = float(__cdecl*)(const Object*);
-	using fnIsAlive = bool(__thiscall*)(const Object*);
-	using fnGetRadius = float(__thiscall*)(const Object*);
+	using fnPrintChat = void(__fastcall*)(uintptr_t, const char*, int);
+	using fnIssueOrder = int(__fastcall*)(uintptr_t, int, int, int, int, int, int);
+	using fnGetAttackCastDelay = float(__fastcall*)(const Object* const);
+	using fnGetAttackDelay = float(__fastcall*)(const Object* const);
+	using fnIsAlive = bool(__fastcall*)(const Object* const);
+	using fnGetRadius = float(__fastcall*)(const Object* const);
 	extern fnPrintChat PrintChat;
 	extern fnIssueOrder IssueOrder;
 	extern fnGetAttackCastDelay GetAttackCastDelay;

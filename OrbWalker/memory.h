@@ -6,7 +6,7 @@ struct Offsets {
   uintptr_t oViewProjMatrices;
   uintptr_t oHeroList;
   uintptr_t oTurretList;
-  uintptr_t oInhibitorList;
+  //uintptr_t oInhibitorList;
   uintptr_t oMinionList;
   uintptr_t oChatClient;
   uintptr_t oHudInstance;
