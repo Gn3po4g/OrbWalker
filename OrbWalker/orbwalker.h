@@ -3,6 +3,7 @@
 enum class Type { AutoKite, CleanLane, LastHit };
 
 namespace OrbWalker {
+	extern bool* p_aco;
 	void Initialize();
 	void execute(const Type&);
 }

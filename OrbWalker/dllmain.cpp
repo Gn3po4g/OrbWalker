@@ -7,10 +7,19 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
   if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::execute(Type::AutoKite);
   else if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::execute(Type::CleanLane);
   else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::execute(Type::LastHit);
+
+  static bool lastState = false;
+  static bool currentState = false;
+  currentState = GetAsyncKeyState(VK_SPACE) & 0x8000;
+  if (currentState) *(OrbWalker::p_aco) = true;
+  else if (lastState) *(OrbWalker::p_aco) = false;
+  lastState = currentState;
+
   return oPresent(pSwapChain, SyncInterval, Flags);
 }
 
 void Start(void*) {
+  LM_LoadModule(std::string("R3nzSkin.dll").data(), LM_NULL);
   Memory::Initialize();
   Functions::Initialize();
   Renderer::Initialize();
