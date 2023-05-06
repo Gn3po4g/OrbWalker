@@ -52,7 +52,7 @@ namespace OrbWalker {
       || Functions::IsLeagueInBackground()
       || now < timer.last_act_time + 0.033f) return;
     timer.last_act_time = now;
-    if (type == Type::AutoKite) *p_aco = true;
+    *p_aco = (type == Type::AutoKite ? true : false);
     if (const auto target = get_target(type); target &&
       (now >= timer.last_attack_time + me->ad() || is_turning_around))    {
       if (!is_turning_around) timer.last_attack_time = now;
