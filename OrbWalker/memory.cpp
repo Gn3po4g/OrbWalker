@@ -9,8 +9,8 @@ namespace Memory
   tuple<uintptr_t*, string, uintptr_t> sig_to_scan[] = {
       {&offsets.oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4}, //ok
       {&offsets.oLocalPlayer, "48 8B 3D ? ? ? ? 48 3B CF", 3}, //ok
-      {&offsets.oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 3}, //ok
-      {&offsets.oHeroList, "48 8B 05 ? ? ? ? 45 33 E4 0F 57 C0", 3}, //ok
+      {&offsets.oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 11 45 13", 3}, //ok
+      {&offsets.oHeroList, "48 8B 0D ? ? ? ? 48 8D 54 24 ? 33 C0 89 44 24 24", 3}, //ok
       {&offsets.oTurretList, "48 8B 1D ? ? ? ? 48 8B 5B 28", 3}, //ok
       //{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
       {&offsets.oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3}, //ok
@@ -51,6 +51,7 @@ namespace Memory
     for (auto& [what, pattern, offset] : sig_to_scan) {
       uintptr_t address = FindAddress(pattern);
       while (address == LM_ADDRESS_BAD) {
+        //MessageBox(nullptr, (string("unable to find") + pattern).data(), "", MB_OK);
         this_thread::sleep_for(500ms);
         address = FindAddress(pattern);
       }

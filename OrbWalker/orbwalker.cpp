@@ -25,6 +25,8 @@ namespace OrbWalker {
     hud_input = *(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x48);
     mouse_pos = (XMFLOAT3*)(*(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x28) + 0x20);
     p_aco = (bool*)(*(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x60) + 0x30);
+    while (Functions::GetGameTime() < 0.5f);
+    Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends OrbWalker", 0xFFFFFF);
   }
 
   Object* get_target(const Type type) {

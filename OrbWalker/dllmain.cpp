@@ -24,7 +24,6 @@ void Start(void*) {
   Functions::Initialize();
   Renderer::Initialize();
   OrbWalker::Initialize();
-  Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends OrbWalker", 0xFFFFFF);
   while (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success ||
     kiero::bind(8, (void**)&oPresent, (void*)HKPresent) != kiero::Status::UnknownError);
 }
