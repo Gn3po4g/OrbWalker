@@ -29,7 +29,7 @@ bool Object::InRangeOf(Object* const other) const {
 }
 
 float Object::acd() const {
-	return Functions::GetAttackCastDelay(this) / 10;
+	return Functions::GetAttackCastDelay(this) / 8;
 }
 
 float Object::ad() const {
@@ -39,5 +39,5 @@ float Object::ad() const {
 bool Object::IsFacing(Object* const other) const {
 	auto v1 = XMLoadFloat3(new XMFLOAT3(other->position().x - position().x, 0.f, other->position().z - position().z));
 	auto v2 = XMLoadFloat3((XMFLOAT3*)((uintptr_t)this + 0x2190));
-	return XMVectorGetX(XMVector3AngleBetweenVectors(v1, v2)) < 0.087266f;
+	return XMVectorGetX(XMVector3AngleBetweenVectors(v1, v2)) < 0.174533f;
 }
