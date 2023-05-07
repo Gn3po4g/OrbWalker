@@ -2,8 +2,7 @@
 
 struct Timer {
   float last_attack_time{};
-  float last_act_time{};
-  float last_move_time{};
+  float next_move_time{};
 };
 
 namespace OrbWalker {
@@ -25,6 +24,7 @@ namespace OrbWalker {
     hud_input = *(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x48);
     mouse_pos = (XMFLOAT3*)(*(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x28) + 0x20);
     p_aco = (bool*)(*(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x60) + 0x30);
+    while (Functions::GetGameTime() < 1.f) {}
     Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends OrbWalker", 0xFFFFFF);
   }
 
@@ -45,34 +45,44 @@ namespace OrbWalker {
     return target;
   }
 
-  void execute(const Type& type) {
+  void Attack(Object const* obj) {
+    static float next = 0.f;
+    const float now = Functions::GetGameTime();
+    if (now < next) return;
+    next = now + .033f;
+    const auto pos = Renderer::WorldToScreen(obj->position());
+    Functions::IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 1);
+  }
+  void Move() {
+    static float next = 0.f;
+    const float now = Functions::GetGameTime();
+    if (now < next) return;
+    next = now + .033f;
+    const auto pos = Renderer::WorldToScreen(*mouse_pos);
+    INPUT input = {};
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_VIRTUALDESK | MOUSEEVENTF_ABSOLUTE;
+    SendInput(1, &input, sizeof(INPUT));
+    input.mi.dwFlags = MOUSEEVENTF_RIGHTUP | MOUSEEVENTF_VIRTUALDESK | MOUSEEVENTF_ABSOLUTE;
+    SendInput(1, &input, sizeof(input));
+  }
+
+  void Execute(const Type& type) {
     static Timer timer{};
     static bool is_turning_around = false;
-    static Object* target = nullptr;
     const float now = Functions::GetGameTime();
-    if (Functions::IsChatOpen()
-      || Functions::IsLeagueInBackground()
-      || now < timer.last_act_time + 0.033f) return;
-    timer.last_act_time = now;
-    if (const auto obj = GetTarget(type); obj && now >= timer.last_attack_time + me->ad()) {
-      timer.last_attack_time = now;
+    if (Functions::IsChatOpen() || Functions::IsLeagueInBackground()) return;
+    if (const auto target = GetTarget(type); target && (now >= timer.last_attack_time + me->ad() || is_turning_around))    {
+      if (!is_turning_around) timer.last_attack_time = now;
       is_turning_around = true;
-      target = obj;
-      const auto pos = Renderer::WorldToScreen(target->position());
-      Functions::IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 1);
-    }
-    else if (target && is_turning_around) {
-      const auto pos = Renderer::WorldToScreen(target->position());
-      Functions::IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 1);
+      Attack(target);
       if (me->IsFacing(target)) {
-        timer.last_move_time = now + me->acd();
         is_turning_around = false;
-        target = nullptr;
+        timer.next_move_time = now + me->acd();
       }
     }
-    else if (now >= timer.last_move_time) {
-      const auto pos = Renderer::WorldToScreen(*mouse_pos);
-      Functions::IssueOrder(hud_input, 0, 0, 0, pos.x, pos.y, 0);
+    else if (now >= timer.next_move_time) {
+      Move();
     }
   }
 }

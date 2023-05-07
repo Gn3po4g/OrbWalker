@@ -25,15 +25,15 @@ bool Object::InRangeOf(Object* const other) const {
 	float dz = position().z - other->position().z;
 	return sqrtf(dx * dx + dy * dy + dz * dz) 
 		<= *(float*)((uintptr_t)other + 0x169C) //attack_range
-		+ Functions::GetRadius(this) + Functions::GetRadius(other);
+		+ Functions::GetRadius(this) + Functions::GetRadius(other) - 1.f;
 }
 
 float Object::acd() const {
-	return Functions::GetAttackCastDelay(this) / 8;
+	return Functions::GetAttackCastDelay(this) / 7;
 }
 
 float Object::ad() const {
-	return Functions::GetAttackDelay(this) + 0.01f;
+	return Functions::GetAttackDelay(this) + 0.025f;
 }
 
 bool Object::IsFacing(Object* const other) const {
