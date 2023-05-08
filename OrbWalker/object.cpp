@@ -5,7 +5,7 @@ XMFLOAT3 Object::position() const {
 }
 
 bool Object::AttackableFor(Object* const other) const {
-	return *(int32_t*)((uintptr_t)this + 0x3C) != *(int32_t*)((uintptr_t)other + 0x3C)
+	return *(int32_t*)((uintptr_t)this + 0x3C) != *(int32_t*)((uintptr_t)other + 0x3C) //team
 		&& *(bool*)((uintptr_t)this + 0x310) //visible
 		&& *(bool*)((uintptr_t)this + 0xEB0) //targetable
 		&& Functions::IsAlive(this);
@@ -16,7 +16,7 @@ float Object::health() const {
 }
 
 float Object::attack() const {
-	return *(float*)((uintptr_t)this + 0x1654) + *(float*)((uintptr_t)this + 0x15C0);
+	return *(float*)((uintptr_t)this + 0x1654) + *(float*)((uintptr_t)this + 0x15C0); //base + bonus
 }
 
 bool Object::InRangeOf(Object* const other) const {
@@ -25,15 +25,15 @@ bool Object::InRangeOf(Object* const other) const {
 	float dz = position().z - other->position().z;
 	return sqrtf(dx * dx + dy * dy + dz * dz) 
 		<= *(float*)((uintptr_t)other + 0x169C) //attack_range
-		+ Functions::GetRadius(this) + Functions::GetRadius(other) - 1.f;
+		+ Functions::GetRadius(this) + Functions::GetRadius(other);
 }
 
-float Object::acd() const {
-	return Functions::GetAttackCastDelay(this) / 7;
+duration<float> Object::acd() const {
+	return duration<float>(Functions::GetAttackCastDelay(this) * 1.1f);
 }
 
-float Object::ad() const {
-	return Functions::GetAttackDelay(this) + 0.025f;
+duration<float> Object::ad() const {
+	return duration<float>(Functions::GetAttackDelay(this) + 0.01f);
 }
 
 bool Object::IsFacing(Object* const other) const {

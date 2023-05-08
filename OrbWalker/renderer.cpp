@@ -18,10 +18,9 @@ namespace Renderer
         FXMVECTOR V = XMVectorSetW(XMLoadFloat3(&pos), 1.f);
         FXMMATRIX M = XMLoadFloat4x4(view_matrix) * XMLoadFloat4x4(proj_matrix);
         FXMVECTOR coord = XMVector3TransformCoord(V, M);
-        const auto w = (float)*width, h = (float)*height;
         return {
-            (int)(.5f * w + .5f * w * XMVectorGetX(coord)),
-            (int)(.5f * h - .5f * h * XMVectorGetY(coord))
+          (int)((1 + XMVectorGetX(coord)) / 2 * *width),
+          (int)((1 - XMVectorGetY(coord)) / 2 * *height)
         };
     }
 }

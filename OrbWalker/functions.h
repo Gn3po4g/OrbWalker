@@ -16,5 +16,4 @@ namespace Functions {
 	void Initialize();
 	bool IsChatOpen();
 	bool IsLeagueInBackground();
-	float GetGameTime();
 };

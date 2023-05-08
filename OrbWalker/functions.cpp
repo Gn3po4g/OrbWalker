@@ -24,8 +24,4 @@ namespace Functions {
 	bool IsLeagueInBackground() {
 		return *(bool*)(*(uintptr_t*)offsets.oHudInstance + 0xB9);
 	}
-
-	float GetGameTime() {
-		return *(float*)offsets.oGameTime;
-	}
 }

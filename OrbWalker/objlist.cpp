@@ -1,32 +1,29 @@
 #include "pch.h"
 
+Object* last_object = nullptr;
+
 using namespace std;
 
 auto GetObjectList(const ObjList* const list) {
   return span(*(Object***)((uintptr_t)list + 0x8), *(int*)((uintptr_t)list + 0x10));
 }
 
-Object* ObjList::get_lowest_health(Object* const me) const {
-  Object* current = nullptr;
-  float min_health = FLT_MAX;
-  for (const auto obj : GetObjectList(this)) {
-    if (obj->AttackableFor(me) && obj->InRangeOf(me)) {
-      if (obj->health() < min_health) {
-        min_health = obj->health();
-        current = obj;
-      }
-    }
+Object* ObjList::GetLowestHealth(Object* const me, const bool diff) const {
+  auto filtered = GetObjectList(this) | views::filter([&](Object* obj) {return obj->AttackableFor(me) && obj->InRangeOf(me); }) | ranges::to<vector>();
+  if (filtered.size() == 1) return filtered[0];
+  ranges::sort(filtered, [](Object* o1, Object* o2) {return o1->health() < o2->health(); });
+  if (diff) {
+    auto ret = ranges::find_if(filtered, [](Object* obj) {return obj != last_object; });
+    return ret != filtered.end() ? *ret : nullptr;
   }
-  return current;
+  else {
+    return filtered.empty() ? nullptr : filtered[0];
+  }
 }
 
-Object* ObjList::get_last_hit(Object* const me) const {
-  for (const auto obj : GetObjectList(this)) {
-    if (obj->AttackableFor(me) && obj->InRangeOf(me)) {
-      if (obj->health() < me->attack()) {
-        return obj;
-      }
-    }
-  }
-  return nullptr;
+Object* ObjList::GetLastHit(Object* const me) const {
+  auto filtered = GetObjectList(this) | views::filter([&](Object* obj) {return obj->AttackableFor(me) && obj->InRangeOf(me); }) | ranges::to<vector>();
+  if (filtered.size() == 1) return filtered[0];
+  auto ret = ranges::find_if(filtered, [&](Object* obj) {return obj != last_object && obj->health() <= me->attack(); });
+  return ret != filtered.end() ? *ret : nullptr;
 }

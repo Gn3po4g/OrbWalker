@@ -1,7 +1,9 @@
 #pragma once
 
+extern Object* last_object;
+
 class ObjList {
 public:
-  Object* get_lowest_health(Object* const) const;
-  Object* get_last_hit(Object* const) const;
+  Object* GetLowestHealth(Object* const, const bool) const;
+  Object* GetLastHit(Object* const) const;
 };

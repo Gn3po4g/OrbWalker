@@ -21,8 +21,6 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
 void Start(void*) {
   LM_LoadModule(std::string("R3nzSkin.dll").data(), LM_NULL);
   Memory::Initialize();
-  Functions::Initialize();
-  Renderer::Initialize();
   OrbWalker::Initialize();
   while (kiero::init(kiero::RenderType::D3D11) != kiero::Status::Success ||
     kiero::bind(8, (void**)&oPresent, (void*)HKPresent) != kiero::Status::UnknownError);
