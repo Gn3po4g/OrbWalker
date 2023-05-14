@@ -6,7 +6,6 @@ HRESULT (WINAPI*oPresent)(IDXGISwapChain*, UINT, UINT);
 HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
   if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) OrbWalker::Execute(Type::AutoKite);
   else if ((GetAsyncKeyState('V') & 0x8000) != 0) OrbWalker::Execute(Type::CleanLane);
-  else if ((GetAsyncKeyState('X') & 0x8000) != 0) OrbWalker::Execute(Type::LastHit);
 
   static bool lastState = false;
   static bool currentState = false;

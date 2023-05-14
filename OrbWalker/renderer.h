@@ -1,8 +1,6 @@
 #pragma once
 
-namespace Renderer
-{
-    void Initialize();
-
-    XMINT2 WorldToScreen(XMFLOAT3);
-};
+namespace Renderer {
+  void Initialize();
+  XMINT2 WorldToScreen(const XMFLOAT3);
+}

@@ -10,20 +10,16 @@ auto GetObjectList(const ObjList* const list) {
 
 Object* ObjList::GetLowestHealth(Object* const me, const bool diff) const {
   auto filtered = GetObjectList(this) | views::filter([&](Object* obj) {return obj->AttackableFor(me) && obj->InRangeOf(me); }) | ranges::to<vector>();
+  if (filtered.empty()) return nullptr;
   if (filtered.size() == 1) return filtered[0];
-  ranges::sort(filtered, [](Object* o1, Object* o2) {return o1->health() < o2->health(); });
   if (diff) {
-    auto ret = ranges::find_if(filtered, [](Object* obj) {return obj != last_object; });
-    return ret != filtered.end() ? *ret : nullptr;
+    return *ranges::min_element(filtered, [](Object* o, Object* smallest) {
+      if (o == last_object) return false;
+      else if (smallest == last_object) return true;
+      else return o->health() < smallest->health();
+      });
   }
   else {
-    return filtered.empty() ? nullptr : filtered[0];
+    return *ranges::min_element(filtered);
   }
-}
-
-Object* ObjList::GetLastHit(Object* const me) const {
-  auto filtered = GetObjectList(this) | views::filter([&](Object* obj) {return obj->AttackableFor(me) && obj->InRangeOf(me); }) | ranges::to<vector>();
-  if (filtered.size() == 1) return filtered[0];
-  auto ret = ranges::find_if(filtered, [&](Object* obj) {return obj != last_object && obj->health() <= me->attack(); });
-  return ret != filtered.end() ? *ret : nullptr;
 }

@@ -1,13 +1,10 @@
 #pragma once
 
-#include <directxmath.h>
-#include <windows.h>
-#include <algorithm>
+#include <DirectXMath.h>
+#include <Windows.h>
 #include <chrono>
-#include <cstddef>
 #include <memory>
 #include <ranges>
-#include <sstream>
 #include <string>
 #include <thread>
 #include <tuple>

@@ -24,6 +24,7 @@ namespace OrbWalker {
     minions = *(ObjList**)offsets.oMinionList;
     hud_input = *(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x48);
     p_aco = (bool*)(*(uintptr_t*)(*(uintptr_t*)offsets.oHudInstance + 0x60) + 0x30);
+    while (*(float*)offsets.oGameTime < .5f) std::this_thread::sleep_for(250ms);
     Functions::PrintChat(offsets.oChatClient, "Noroby's League of Legends OrbWalker", 0xFFFFFF);
   }
 
@@ -32,14 +33,11 @@ namespace OrbWalker {
     if (type == Type::AutoKite) {
       target = heroes->GetLowestHealth(me, false);
     }
-    else if (type == Type::CleanLane) {
+    if (type == Type::CleanLane) {
       target = minions->GetLowestHealth(me, true);
       if (target == nullptr) {
         target = turrets->GetLowestHealth(me, false);
       }
-    }
-    else if (type == Type::LastHit) {
-      target = minions->GetLastHit(me);
     }
     return target;
   }
@@ -60,7 +58,7 @@ namespace OrbWalker {
     const auto now = duration<float>(*(float*)offsets.oGameTime);
     if (Functions::IsChatOpen() || Functions::IsLeagueInBackground() || now < next) return;
     next = now + milliseconds(33);
-    if (const auto target = GetTarget(type); target && now >= timer.last_attack_time + me->ad())    {
+    if (const auto target = GetTarget(type); target && now >= timer.last_attack_time + me->ad()) {
       timer.last_attack_time = now;
       timer.next_move_time = now + me->acd();
       last_object = target;

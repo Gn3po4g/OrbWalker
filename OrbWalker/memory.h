@@ -22,6 +22,6 @@ struct Offsets {
 extern Offsets offsets;
 
 namespace Memory {
-    void Initialize();
-    void Scan();
-};
+  void Initialize();
+  void Scan();
+}

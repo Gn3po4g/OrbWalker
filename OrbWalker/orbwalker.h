@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Type { AutoKite, CleanLane, LastHit };
+enum class Type { AutoKite, CleanLane };
 
 namespace OrbWalker {
 	extern bool* p_aco;
