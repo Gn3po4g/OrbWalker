@@ -6,10 +6,10 @@ import Object;
 
 using fnPrintChat = void(__fastcall*)(uintptr_t, const char*, int);
 using fnIssueOrder = int(__fastcall*)(uintptr_t, int, int, int, int, int, int);
-using fnGetAttackCastDelay = float(__fastcall*)(const Object*);
-using fnGetAttackDelay = float(__fastcall*)(const Object*);
-using fnIsAlive = bool(__fastcall*)(const Object*);
-using fnGetRadius = float(__fastcall*)(const Object*);
+using fnGetAttackCastDelay = float(__fastcall*)(Object*);
+using fnGetAttackDelay = float(__fastcall*)(Object*);
+using fnIsAlive = bool(__fastcall*)(Object*);
+using fnGetRadius = float(__fastcall*)(Object*);
 
 export {
 	using DirectX::XMINT2;

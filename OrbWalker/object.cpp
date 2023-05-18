@@ -11,7 +11,6 @@ XMFLOAT3 Object::position() {
 	return *(XMFLOAT3*)((uintptr_t)this + 0x220);
 }
 
-
 float Object::health() {
 	return *(float*)((uintptr_t)this + 0x1068);
 }
@@ -27,8 +26,8 @@ duration<float> Object::ad() {
 bool Object::AttackableFor(Object* other) {
 	return *(int32_t*)((uintptr_t)this + 0x3C) != *(int32_t*)((uintptr_t)other + 0x3C) //team
 		&& *(bool*)((uintptr_t)this + 0x310) //visible
-		&& *(bool*)((uintptr_t)this + 0xEB0) //targetable
-		&& IsAlive(this);
+		&& *(bool*)((uintptr_t)this + 0xEB0); //targetable
+	//&& IsAlive(this);
 }
 
 bool Object::InRangeOf(Object* other) {
@@ -45,8 +44,8 @@ using namespace std;
 auto dif_cmp = [](Object* o, Object* smallest) { return o->health() < smallest->health() && o != last_object || smallest == last_object; };
 
 Object* ObjList::GetLowestHealth(Object* me, bool diff) {
-	auto list = span(*(Object***)((uintptr_t)this + 0x8), *(int*)((uintptr_t)this + 0x10));
-	auto filtered = list | views::filter([me](Object* obj) { return obj->AttackableFor(me) && obj->InRangeOf(me); });
+	auto filtered = span(*(Object***)((uintptr_t)this + 0x8), *(int*)((uintptr_t)this + 0x10))
+		| views::filter([me](Object* obj) { return obj->AttackableFor(me) && obj->InRangeOf(me); });
 	auto size = ranges::distance(filtered);
 	if (size == 0) return nullptr;
 	else if (size == 1) return filtered.front();

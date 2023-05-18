@@ -16,7 +16,7 @@ struct {
 		{&offset.oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4}, //ok
 		{&offset.oLocalPlayer, "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3}, //ok
 		{&offset.oViewProjMatrices, "48 83 EC 28 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 48 83 C4 28", 7}, //ok
-		{&offset.oHeroList, "48 8B 0D ? ? ? ? 48 8D 54 24 ? 33 C0 89 44 24 24", 3}, //ok
+		{&offset.oHeroList, "48 8B 05 ? ? ? ? 45 33 E4 0F 57 C0", 3}, //ok
 		{&offset.oTurretList, "48 89 0D ? ? ? ? 33 C9", 3}, //ok
 		//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
 		{&offset.oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3}, //ok
