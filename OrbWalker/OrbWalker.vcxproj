@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -136,9 +136,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;ORBWALKER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
+      <BuildStlModules>true</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,29 +158,17 @@
     <ClInclude Include="..\Kiero\kiero.h" />
     <ClInclude Include="..\Libmem\libmem.h" />
     <ClInclude Include="..\Libmem\libmem.hpp" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="functions.h" />
-    <ClInclude Include="memory.h" />
-    <ClInclude Include="object.h" />
-    <ClInclude Include="objlist.h" />
-    <ClInclude Include="orbwalker.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Function.ixx" />
     <ClCompile Include="functions.cpp" />
-    <ClCompile Include="memory.cpp" />
     <ClCompile Include="object.cpp" />
-    <ClCompile Include="objlist.cpp" />
+    <ClCompile Include="Object.ixx" />
+    <ClCompile Include="Offset.cpp" />
+    <ClCompile Include="Offset.ixx" />
     <ClCompile Include="orbwalker.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="OrbWalker.ixx" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Kiero\kiero.lib" />
