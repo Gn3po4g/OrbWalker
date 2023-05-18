@@ -9,18 +9,18 @@ export {
 
 	class Object {
 	public:
-		XMFLOAT3 position() const;
-		float health() const;
-		duration<float> acd() const;
-		duration<float> ad() const;
-		bool AttackableFor(Object* const) const;
-		bool InRangeOf(Object* const) const;
+		XMFLOAT3 position();
+		float health();
+		duration<float> acd();
+		duration<float> ad();
+		bool AttackableFor(Object*);
+		bool InRangeOf(Object*);
 	};
 
-	Object* last_object;
+	Object* last_object = nullptr;
 
 	class ObjList {
 	public:
-		Object* GetLowestHealth(Object* const, const bool) const;
+		Object* GetLowestHealth(Object*, bool);
 	};
 }

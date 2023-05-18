@@ -20,15 +20,15 @@ struct {
 		{&offset.oTurretList, "48 89 0D ? ? ? ? 33 C9", 3}, //ok
 		//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
 		{&offset.oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3}, //ok
-		{&offset.oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6}, //ok
+		{&offset.oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6}, 
 		{&offset.oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3}, //ok
 
-		//{&offset.oPrintChat, "48 8B CB E8 ? ? ? ? E9 ? ? ? ? 48 8D 8F ? ? ? ?", 4}, //
+		{&offset.oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
 		{&offset.oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4}, //ok
 		{&offset.oGetAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1}, //ok
 		{&offset.oGetAttackCastDelay, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7}, //ok
 		{&offset.oIsAlive, "48 8B D8 E8 ? ? ? ? 84 C0 74 35", 4}, //ok
-		{&offset.oGetRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1}//
+		{&offset.oGetRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1} //ok
 };
 
 lm_module_t GameModule{};
@@ -50,13 +50,13 @@ uintptr_t FindAddress(string& pattern) {
 
 void InitOffest() {
 	LM_FindModule(string("League of Legends.exe").data(), &GameModule);
-	for (auto& [what, pattern, offset] : sig_to_scan) {
+	for (auto& [what, pattern, addition] : sig_to_scan) {
 		uintptr_t address = FindAddress(pattern);
 		while (address == LM_ADDRESS_BAD) {
 			//MessageBox(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
 			this_thread::sleep_for(100ms);
 			address = FindAddress(pattern);
 		}
-		*what = address + offset + 4 + *(int32_t*)(address + offset);
+		*what = address + addition + 4 + *(int32_t*)(address + addition);
 	}
 }

@@ -31,10 +31,10 @@ bool IsLeagueInBackground() {
 	return *(bool*)(*(uintptr_t*)offset.oHudInstance + 0xB9);
 }
 
-XMINT2 WorldToScreen(const XMFLOAT3 pos) {
-	FXMVECTOR V = XMVectorSetW(XMLoadFloat3(&pos), 1.f);
-	FXMMATRIX M = XMLoadFloat4x4(view_matrix) * XMLoadFloat4x4(proj_matrix);
-	FXMVECTOR coord = XMVector3TransformCoord(V, M);
+XMINT2 WorldToScreen(XMFLOAT3 pos) {
+	auto V = XMVectorSetW(XMLoadFloat3(&pos), 1.f);
+	auto M = XMLoadFloat4x4(view_matrix) * XMLoadFloat4x4(proj_matrix);
+	auto coord = XMVector3TransformCoord(V, M);
 	return {
 		(int)((1 + XMVectorGetX(coord)) / 2 * *width),
 		(int)((1 - XMVectorGetY(coord)) / 2 * *height)

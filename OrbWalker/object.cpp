@@ -7,22 +7,31 @@ module;
 module Object;
 import Function;
 
-XMFLOAT3 Object::position() const {
+XMFLOAT3 Object::position() {
 	return *(XMFLOAT3*)((uintptr_t)this + 0x220);
 }
 
-bool Object::AttackableFor(Object* const other) const {
+
+float Object::health() {
+	return *(float*)((uintptr_t)this + 0x1068);
+}
+
+duration<float> Object::acd() {
+	return duration<float>(GetAttackCastDelay(this) * 1.1f);
+}
+
+duration<float> Object::ad() {
+	return duration<float>(GetAttackDelay(this) + 0.015f);
+}
+
+bool Object::AttackableFor(Object* other) {
 	return *(int32_t*)((uintptr_t)this + 0x3C) != *(int32_t*)((uintptr_t)other + 0x3C) //team
 		&& *(bool*)((uintptr_t)this + 0x310) //visible
 		&& *(bool*)((uintptr_t)this + 0xEB0) //targetable
 		&& IsAlive(this);
 }
 
-float Object::health() const {
-	return *(float*)((uintptr_t)this + 0x1068);
-}
-
-bool Object::InRangeOf(Object* const other) const {
+bool Object::InRangeOf(Object* other) {
 	float dx = position().x - other->position().x;
 	float dy = position().y - other->position().y;
 	float dz = position().z - other->position().z;
@@ -31,21 +40,13 @@ bool Object::InRangeOf(Object* const other) const {
 		+ GetRadius(this) / 2 + GetRadius(other);
 }
 
-duration<float> Object::acd() const {
-	return duration<float>(GetAttackCastDelay(this) * 1.1f);
-}
-
-duration<float> Object::ad() const {
-	return duration<float>(GetAttackDelay(this) + 0.015f);
-}
-
 using namespace std;
 
 auto dif_cmp = [](Object* o, Object* smallest) { return o->health() < smallest->health() && o != last_object || smallest == last_object; };
 
-Object* ObjList::GetLowestHealth(Object* const me, const bool diff) const {
-	auto filtered = span(*(Object***)((uintptr_t)this + 0x8), *(int*)((uintptr_t)this + 0x10))
-		| views::filter([&](Object* obj) {return obj->AttackableFor(me) && obj->InRangeOf(me); });
+Object* ObjList::GetLowestHealth(Object* me, bool diff) {
+	auto list = span(*(Object***)((uintptr_t)this + 0x8), *(int*)((uintptr_t)this + 0x10));
+	auto filtered = list | views::filter([me](Object* obj) { return obj->AttackableFor(me) && obj->InRangeOf(me); });
 	auto size = ranges::distance(filtered);
 	if (size == 0) return nullptr;
 	else if (size == 1) return filtered.front();

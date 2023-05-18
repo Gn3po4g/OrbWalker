@@ -8,11 +8,6 @@ import Offset;
 
 using namespace std::chrono;
 
-struct Timer {
-	duration<float> last_attack_time{};
-	duration<float> next_move_time{};
-};
-
 Object* me{};
 ObjList* heroes{};
 ObjList* minions{};
@@ -31,7 +26,7 @@ void InitOrb() {
 	hud_input = *(uintptr_t*)(*(uintptr_t*)offset.oHudInstance + 0x48);
 	p_aco = (bool*)(*(uintptr_t*)(*(uintptr_t*)offset.oHudInstance + 0x60) + 0x30);
 	while (*(float*)offset.oGameTime < .5f) std::this_thread::sleep_for(250ms);
-	//PrintChat(offset.oChatClient, "Noroby's League of Legends OrbWalker", 0xFFFFFF);
+	PrintChat(offset.oChatClient, "Noroby's League of Legends OrbWalker", 0xFF);
 }
 
 Object* GetTarget(const Type type) {
@@ -48,7 +43,7 @@ Object* GetTarget(const Type type) {
 	return target;
 }
 
-void Attack(Object const* obj) {
+void Attack(Object* obj) {
 	const auto pos = WorldToScreen(obj->position());
 	IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 0);
 }
@@ -58,13 +53,18 @@ void Move() {
 	mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
 }
 
-void Execute(const Type& type) {
-	static Timer timer{};
-	static auto next = duration<float>(*(float*)offset.oGameTime);
+struct Timer {
+	duration<float> last_attack_time{};
+	duration<float> next_move_time{};
+	duration<float> next_action_time{};
+} timer;
+
+void Execute(Type type) {
 	const auto now = duration<float>(*(float*)offset.oGameTime);
-	if (IsChatOpen() || IsLeagueInBackground() || now < next) return;
-	next = now + milliseconds(33);
-	if (const auto target = GetTarget(type); target && now >= timer.last_attack_time + me->ad()) {
+	if (IsChatOpen() || IsLeagueInBackground() || now < timer.next_action_time) return;
+	timer.next_action_time = now + milliseconds(33);
+	if (const auto target = GetTarget(type); target  
+		&& now >= timer.last_attack_time + me->ad()) {
 		timer.last_attack_time = now;
 		timer.next_move_time = now + me->acd();
 		last_object = target;
