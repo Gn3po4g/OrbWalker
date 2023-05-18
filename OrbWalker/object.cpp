@@ -16,18 +16,18 @@ float Object::health() {
 }
 
 duration<float> Object::acd() {
-	return duration<float>(GetAttackCastDelay(this) * 1.1f);
+	return duration<float>(AttackCastDelay(this) * 1.1f);
 }
 
 duration<float> Object::ad() {
-	return duration<float>(GetAttackDelay(this) + 0.015f);
+	return duration<float>(AttackDelay(this) + 0.015f);
 }
 
 bool Object::AttackableFor(Object* other) {
 	return *(int32_t*)((uintptr_t)this + 0x3C) != *(int32_t*)((uintptr_t)other + 0x3C) //team
 		&& *(bool*)((uintptr_t)this + 0x310) //visible
-		&& *(bool*)((uintptr_t)this + 0xEB0); //targetable
-	//&& IsAlive(this);
+		&& *(bool*)((uintptr_t)this + 0xEB0) //targetable
+		&& IsAlive(this);
 }
 
 bool Object::InRangeOf(Object* other) {
@@ -36,7 +36,7 @@ bool Object::InRangeOf(Object* other) {
 	float dz = position().z - other->position().z;
 	return sqrtf(dx * dx + dy * dy + dz * dz)
 		<= *(float*)((uintptr_t)other + 0x16C4) //attack_range
-		+ GetRadius(this) / 2 + GetRadius(other);
+		+ BonusRadius(this) / 2 + BonusRadius(other);
 }
 
 using namespace std;

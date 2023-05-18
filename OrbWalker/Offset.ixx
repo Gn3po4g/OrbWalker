@@ -15,10 +15,10 @@ export struct Offset {
 
   uintptr_t oPrintChat;
   uintptr_t oIssueOrder;
-  uintptr_t oGetAttackDelay;
-  uintptr_t oGetAttackCastDelay;
+  uintptr_t oAttackDelay;
+  uintptr_t oAttackCastDelay;
   uintptr_t oIsAlive;
-  uintptr_t oGetRadius;
+  uintptr_t oBonusRadius;
 } offset;
 
 export void InitOffest();

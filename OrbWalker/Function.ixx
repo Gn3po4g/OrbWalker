@@ -6,20 +6,20 @@ import Object;
 
 using fnPrintChat = void(__fastcall*)(uintptr_t, const char*, int);
 using fnIssueOrder = int(__fastcall*)(uintptr_t, int, int, int, int, int, int);
-using fnGetAttackCastDelay = float(__fastcall*)(Object*);
-using fnGetAttackDelay = float(__fastcall*)(Object*);
+using fnAttackCastDelay = float(__fastcall*)(Object*);
+using fnAttackDelay = float(__fastcall*)(Object*);
 using fnIsAlive = bool(__fastcall*)(Object*);
-using fnGetRadius = float(__fastcall*)(Object*);
+using fnBonusRadius = float(__fastcall*)(Object*);
 
 export {
 	using DirectX::XMINT2;
 	using DirectX::XMFLOAT3;
 	fnPrintChat PrintChat;
 	fnIssueOrder IssueOrder;
-	fnGetAttackCastDelay GetAttackCastDelay;
-	fnGetAttackDelay GetAttackDelay;
+	fnAttackCastDelay AttackCastDelay;
+	fnAttackDelay AttackDelay;
 	fnIsAlive IsAlive;
-	fnGetRadius GetRadius;
+	fnBonusRadius BonusRadius;
 	void InitFunction();
 	bool IsChatOpen();
 	bool IsLeagueInBackground();

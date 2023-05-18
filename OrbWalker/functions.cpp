@@ -13,10 +13,10 @@ int* height;
 void InitFunction() {
 	PrintChat = (fnPrintChat)offset.oPrintChat;
 	IssueOrder = (fnIssueOrder)offset.oIssueOrder;
-	GetAttackCastDelay = (fnGetAttackCastDelay)offset.oGetAttackCastDelay;
-	GetAttackDelay = (fnGetAttackDelay)offset.oGetAttackDelay;
+	AttackCastDelay = (fnAttackCastDelay)offset.oAttackCastDelay;
+	AttackDelay = (fnAttackDelay)offset.oAttackDelay;
 	IsAlive = (fnIsAlive)offset.oIsAlive;
-	GetRadius = (fnGetRadius)offset.oGetRadius;
+	BonusRadius = (fnBonusRadius)offset.oBonusRadius;
 	view_matrix = (XMFLOAT4X4*)(offset.oViewProjMatrices + 0x00);
 	proj_matrix = (XMFLOAT4X4*)(offset.oViewProjMatrices + 0x40);
 	width = (int*)(offset.oViewProjMatrices + 0x94);
