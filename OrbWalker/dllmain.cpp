@@ -1,6 +1,8 @@
 ﻿#include <dxgi.h>
 #include <thread>
 #include "../Kiero/kiero.h"
+#include "../Libmem/libmem.hpp"
+#include <string>
 import OrbWalker;
 
 HRESULT(WINAPI* oPresent)(IDXGISwapChain*, UINT, UINT);
@@ -20,7 +22,7 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
 }
 
 void Start(void*) {
-	//LM_LoadModule(std::string("R3nzSkin.dll").data(), LM_NULL);
+	LM_LoadModule(std::string("R3nzSkin.dll").data(), LM_NULL);
 	InitOrb();
 	using namespace kiero;
 	while (init(RenderType::D3D11) != Status::Success || bind(8, (void**)&oPresent, (void*)HKPresent) != Status::UnknownError);
