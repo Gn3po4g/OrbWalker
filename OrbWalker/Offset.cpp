@@ -15,7 +15,7 @@ struct {
 } sig_to_scan[] = {
 		{&offset.oGameTime,					"F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4}, //ok
 		{&offset.oLocalPlayer,			"48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3}, //ok
-		{&offset.oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 7}, //ok
+		{&offset.oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 3}, //ok
 		{&offset.oHeroList,					"48 8B 05 ? ? ? ? 4C 8B 78 08", 3}, //ok
 		{&offset.oTurretList,				"48 8B 1D ? ? ? ? 48 8B 5B 28 48 85 DB", 3}, //ok
 		//{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },

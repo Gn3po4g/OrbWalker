@@ -45,7 +45,7 @@ Object* GetTarget(const Type type) {
 
 void Attack(Object* obj) {
 	const auto pos = WorldToScreen(obj->position());
-	IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 0);
+	IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 1);
 }
 
 void Move() {
@@ -63,7 +63,7 @@ void Execute(Type type) {
 	const auto now = duration<float>(*(float*)offset.oGameTime);
 	if (IsChatOpen() || IsLeagueInBackground() || now < timer.next_action_time) return;
 	timer.next_action_time = now + milliseconds(33);
-	if (const auto target = GetTarget(type); target  
+	if (const auto target = GetTarget(type); target
 		&& now >= timer.last_attack_time + me->ad()) {
 		timer.last_attack_time = now;
 		timer.next_move_time = now + me->acd();
