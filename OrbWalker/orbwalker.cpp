@@ -44,13 +44,14 @@ Object* GetTarget(const Type type) {
 }
 
 void Attack(Object* obj) {
-	const auto pos = WorldToScreen(obj->position());
+	const auto pos = WorldToScreen(obj->position);
 	IssueOrder(hud_input, 0, 0, 1, pos.x, pos.y, 1);
 }
 
 void Move() {
-	mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
-	mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
+	if (POINT pos; GetCursorPos(&pos)) {
+		IssueOrder(hud_input, 0, 0, 0, pos.x, pos.y, 0);
+	}
 }
 
 struct Timer {
