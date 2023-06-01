@@ -21,8 +21,7 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
 	return oPresent(pSwapChain, SyncInterval, Flags);
 }
 
-void Start(void*) {
-	LM_LoadModule(std::string("R3nzSkin.dll").data(), LM_NULL);
+void Start() {
 	InitOrb();
 	using namespace kiero;
 	while (init(RenderType::D3D11) != Status::Success || bind(8, (void**)&oPresent, (void*)HKPresent) != Status::UnknownError);
@@ -30,7 +29,7 @@ void Start(void*) {
 
 BOOL APIENTRY DllMain(HMODULE, DWORD dwReason, LPVOID) {
 	if (dwReason == DLL_PROCESS_ATTACH) {
-		_beginthread(Start, 0, nullptr);
+		std::thread(Start).detach();
 	}
 	return TRUE;
 }

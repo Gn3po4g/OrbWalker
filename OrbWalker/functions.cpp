@@ -9,7 +9,9 @@ using namespace DirectX;
 struct W2S {
 	XMFLOAT4X4 view_matrix;
 	XMFLOAT4X4 proj_matrix;
+private:
 	std::byte pad[0x14];
+public:
 	int width;
 	int height;
 } *w2s;
