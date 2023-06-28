@@ -1,11 +1,11 @@
 <h1 align=center>
-	Supported Version: 13.12
+	Supported Version: 13.13
 </h1>
 
 # Build:
 **You should:**
-  + Using Visual Studio 2022 v17.6.2(for module support).
-  + Confirm comliper is msvc v143 and that c++ language standard is  /std:c++latest.
+  + Using Visual Studio 2022 v17.6.*.
+  + Confirm comliper is msvc v143 and that c++ language standard is /std:c++latest.
   + Build the project with Release instead of Debug.
 # Usage:
 **Use in any of the following ways：**
