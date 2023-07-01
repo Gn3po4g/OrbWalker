@@ -1,13 +1,11 @@
-﻿#include <dxgi.h>
-#include <thread>
-#include "../Kiero/kiero.h"
-#include "../Libmem/libmem.hpp"
-#include <string>
+#include <dxgi.h>
+#include "kiero/kiero.h"
 import OrbWalker;
+import std.threading;
 
-HRESULT(WINAPI* oPresent)(IDXGISwapChain*, UINT, UINT);
+HRESULT (WINAPI *oPresent)(IDXGISwapChain *, UINT, UINT);
 
-HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
+HRESULT WINAPI HKPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags) {
 	if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) Execute(Type::AutoKite);
 	else if ((GetAsyncKeyState('V') & 0x8000) != 0) Execute(Type::CleanLane);
 
@@ -22,9 +20,11 @@ HRESULT WINAPI HKPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Fla
 }
 
 void Start() {
+	LoadLibrary("R3nzSkin.dll");
 	InitOrb();
 	using namespace kiero;
-	while (init(RenderType::D3D11) != Status::Success || bind(8, (void**)&oPresent, (void*)HKPresent) != Status::UnknownError);
+	while (init(RenderType::D3D11) != Status::Success ||
+	       bind(8, (void **) &oPresent, (void *) HKPresent) != Status::UnknownError);
 }
 
 BOOL APIENTRY DllMain(HMODULE, DWORD dwReason, LPVOID) {

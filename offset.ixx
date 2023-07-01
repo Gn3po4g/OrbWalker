@@ -21,4 +21,4 @@ export struct Offset {
   uintptr_t oBonusRadius;
 } offset;
 
-export void InitOffest();
+export void InitOffset();

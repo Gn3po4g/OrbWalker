@@ -1,10 +1,10 @@
 module;
 #include <Windows.h>
-#include <chrono>
 module OrbWalker;
 import Object;
 import Function;
 import Offset;
+import std.threading;
 
 using namespace std::chrono;
 
@@ -16,7 +16,7 @@ ObjList* turrets{};
 uintptr_t hud_input{};
 
 void InitOrb() {
-	InitOffest();
+	InitOffset();
 	InitFunction();
 	me = *(Object**)offset.oLocalPlayer;
 	heroes = *(ObjList**)offset.oHeroList;

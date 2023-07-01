@@ -9,22 +9,21 @@ export {
 	using std::byte;
 
 	class Object {
-	private:
-		byte pad13[60];
+		byte pad12[60];
 		int32_t team; //0x003C
-		byte pad15[480];
+		byte pad14[480];
 	public:
 		XMFLOAT3 position; //0x0220
 	private:
-		byte pad19[228];
+		byte pad18[228];
 		bool visible; //0x0310
-		byte pad21[2975];
+		byte pad20[2975];
 		bool targetable; //0x0EB0
-		byte pad23[443];
+		byte pad22[443];
 	public:
 		float health; //0x106C
 	private:
-		byte pad27[1620];
+		byte pad26[1620];
 		float attackrange; //0x16C4
 
 	public:
@@ -37,8 +36,7 @@ export {
 	Object* last_object = nullptr;
 
 	class ObjList {
-	private:
-		byte pad41[0x8];
+		byte pad39[0x8];
 		Object** list;
 		int size;
 	public:

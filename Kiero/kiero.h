@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __KIERO_H__
+#define __KIERO_H__
 
 #include <stdint.h>
 
@@ -13,7 +14,7 @@
 #define KIERO_USE_MINHOOK    1 // 1 if you will use kiero::bind function
 
 #define KIERO_ARCH_X64 0
-#define KIERO_ARCH_X86 1
+#define KIERO_ARCH_X86 0
 
 #if defined(_M_X64)	
 # undef  KIERO_ARCH_X64
@@ -73,3 +74,5 @@ namespace kiero
 	RenderType::Enum getRenderType();
 	uint150_t* getMethodsTable();
 }
+
+#endif // __KIERO_H__

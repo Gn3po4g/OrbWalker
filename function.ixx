@@ -1,5 +1,4 @@
 module;
-#include <cstdint>
 #include <DirectXMath.h>
 export module Function;
 import Object;
