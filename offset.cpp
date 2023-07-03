@@ -9,9 +9,9 @@ import std.core;
 using namespace std;
 
 struct {
-		uintptr_t *what;
-		string pattern;
-		uintptr_t addition;
+	uintptr_t *what;
+	string pattern;
+	uintptr_t addition;
 } sig_to_scan[] = {
 		{&offset.oGameTime,         "F3 0F 5C 35 ? ? ? ? 0F 28 F8",          4}, //ok
 		{&offset.oLocalPlayer,      "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1",    3}, //ok
@@ -46,17 +46,17 @@ vector <pair<uint8_t, bool>> convertStringToVector(const string &input) {
 	return result;
 }
 
-uintptr_t FindAddress(string &pattern) {
+uintptr_t FindAddress(const string &pattern) {
 	auto moduleAddr = GetModuleHandle(nullptr);
 	MEMORY_BASIC_INFORMATION memInfo;
 	auto *baseAddress = (uint8_t *) moduleAddr;
 	auto patternArr = convertStringToVector(pattern);
-	while (VirtualQuery(baseAddress, &memInfo, sizeof(memInfo)) != 0) {
+	while (VirtualQuery(baseAddress, &memInfo, sizeof(memInfo))) {
 		if (memInfo.Protect != PAGE_NOACCESS) {
 			auto startAddr = (uint8_t *) memInfo.BaseAddress, endAddr = startAddr + memInfo.RegionSize;
 			auto result = search(startAddr, endAddr, patternArr.begin(), patternArr.end(),
 			                     [](uint8_t a, pair<uint8_t, bool> b) {
-					                     return !b.second || a == b.first;
+				                     return !b.second || a == b.first;
 			                     });
 			if (result != endAddr) {
 				return (uintptr_t) result;
@@ -69,12 +69,13 @@ uintptr_t FindAddress(string &pattern) {
 
 void InitOffset() {
 	for (auto &[what, pattern, addition]: sig_to_scan) {
-		uintptr_t address = FindAddress(pattern);
+		auto address = FindAddress(pattern);
 		while (!address) {
 			//MessageBox(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
 			this_thread::sleep_for(100ms);
 			address = FindAddress(pattern);
 		}
-		*what = address + addition + 4 + *(int32_t * )(address + addition);
+		address += addition;
+		*what = address + 4 + *(int32_t *) address;
 	}
 }

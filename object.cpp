@@ -1,9 +1,6 @@
-module;
 module Object;
 
 import Function;
-import std.core;
-import std.threading;
 
 duration<float> Object::acd() {
 	return duration<float>(AttackCastDelay(this) * 1.1f);
@@ -28,13 +25,13 @@ bool Object::InRangeOf(Object *other) {
 using namespace std;
 
 auto dif_cmp = [](Object *o, Object *smallest) {
-		return o->health < smallest->health && o != last_object || smallest == last_object;
+	return o->health < smallest->health && o != last_object || smallest == last_object;
 };
 
 Object *ObjList::GetLowestHealth(Object *me, bool diff) {
 	auto filtered = span(list, size) |
 	                views::filter([me](Object *obj) {
-			                return obj->AttackableFor(me) && obj->InRangeOf(me);
+		                return obj->AttackableFor(me) && obj->InRangeOf(me);
 	                });
 	auto num = ranges::distance(filtered);
 	if (num == 0) return nullptr;

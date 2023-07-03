@@ -1,7 +1,10 @@
 module;
+
 #include <DirectXMath.h>
-#include <chrono>
+
 export module Object;
+
+import std.core;
 
 export {
 	using DirectX::XMFLOAT3;
@@ -28,18 +31,21 @@ export {
 
 	public:
 		duration<float> acd();
+
 		duration<float> ad();
-		bool AttackableFor(Object*);
-		bool InRangeOf(Object*);
+
+		bool AttackableFor(Object *);
+
+		bool InRangeOf(Object *);
 	};
 
-	Object* last_object = nullptr;
+	Object *last_object = nullptr;
 
 	class ObjList {
 		byte pad39[0x8];
-		Object** list;
+		Object **list;
 		int size;
 	public:
-		Object* GetLowestHealth(Object*, bool);
+		Object *GetLowestHealth(Object *, bool);
 	};
 }
