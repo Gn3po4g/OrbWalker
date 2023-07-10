@@ -3,7 +3,8 @@ module Object;
 import Function;
 
 duration<float> Object::acd() {
-	return duration<float>(AttackCastDelay(this) * 1.1f);
+	auto origin = AttackCastDelay(this);
+	return duration<float>(fmin(origin * 1.5f, origin + 0.05f));
 }
 
 duration<float> Object::ad() {
