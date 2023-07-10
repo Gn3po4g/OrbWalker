@@ -10,3 +10,11 @@ add_library(OrbWalker SHARED ${ORBWALKER_SRC})
 set_property(TARGET OrbWalker PROPERTY CXX_STANDARD 23)
 target_compile_options(OrbWalker PRIVATE "/experimental:module")
 target_link_libraries(OrbWalker PRIVATE Kiero)
+
+#Set you game installation directory here
+set(GAME_DIRECTORY "D:\\Riot Games\\League of Legends")
+
+add_custom_command(
+        TARGET OrbWalker POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:OrbWalker> ${GAME_DIRECTORY}\\Game\\Hid.dll
+)
