@@ -28,18 +28,18 @@ void InitOrb() {
 	minions = *(ObjList **) offset.oMinionList;
 	hud_input = *(uintptr_t *) (*(uintptr_t *) offset.oHudInstance + 0x48);
 	p_aco = (bool *) (*(uintptr_t *) (*(uintptr_t *) offset.oHudInstance + 0x60) + 0x30);
-	while(*(float *) offset.oGameTime < .5f) std::this_thread::sleep_for(250ms);
+	while (*(float *) offset.oGameTime < .5f) std::this_thread::sleep_for(250ms);
 	PrintChat(offset.oChatClient, "Noroby's League of Legends OrbWalker", 0xFF);
 }
 
 Object *GetTarget(const Type type) {
 	Object *target = nullptr;
-	if(type == Type::AutoKite) {
+	if (type == Type::AutoKite) {
 		target = heroes->GetLowestHealth(me, false);
 	}
-	if(type == Type::CleanLane) {
+	if (type == Type::CleanLane) {
 		target = minions->GetLowestHealth(me, true);
-		if(target == nullptr) {
+		if (target == nullptr) {
 			target = turrets->GetLowestHealth(me, false);
 		}
 	}
@@ -52,7 +52,7 @@ void Attack(Object *obj) {
 }
 
 void Move() {
-	if(POINT pos; GetCursorPos(&pos)) {
+	if (POINT pos; GetCursorPos(&pos)) {
 		IssueOrder(hud_input, 0, 0, 0, pos.x, pos.y, 0);
 	}
 }
@@ -64,15 +64,16 @@ struct Timer {
 } timer;
 
 void Execute(Type type) {
+	if (!me) return;
 	const auto now = duration<float>(*(float *) offset.oGameTime);
-	if(IsChatOpen() || IsLeagueInBackground() || now < timer.next_action_time) return;
+	if (IsChatOpen() || IsLeagueInBackground() || now < timer.next_action_time) return;
 	timer.next_action_time = now + milliseconds(33);
-	if(const auto target = GetTarget(type);
+	if (const auto target = GetTarget(type);
 		target && now >= timer.last_attack_time + me->ad()) {
 		timer.last_attack_time = now;
 		timer.next_move_time = now + me->acd();
 		last_object = target;
 		Attack(target);
-	} else if(now >= timer.next_move_time) Move();
+	} else if (now >= timer.next_move_time) Move();
 }
 

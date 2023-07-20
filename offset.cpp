@@ -31,7 +31,7 @@ struct {
 	{offset.oBonusRadius,      "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1} //ok
 };
 
-vector <pair<uint8_t, bool>> convertStringToVector(const string &input) {
+vector <pair<uint8_t, bool>> pattern2bytes(const string &input) {
 	vector <pair<uint8_t, bool>> result;
 	stringstream ss(input);
 	string token;
@@ -47,20 +47,22 @@ vector <pair<uint8_t, bool>> convertStringToVector(const string &input) {
 }
 
 uintptr_t FindAddress(const string &pattern) {
-	auto moduleAddr = GetModuleHandle(nullptr);
+	auto byteArr = pattern2bytes(pattern);
 	MEMORY_BASIC_INFORMATION mbi;
-	auto *baseAddress = (uint8_t *) moduleAddr;
-	auto patternArr = convertStringToVector(pattern);
-	while (VirtualQuery(baseAddress, &mbi, sizeof(mbi))) {
+	for (
+		auto *baseAddress = (uint8_t *) GetModuleHandle(nullptr);
+		VirtualQuery(baseAddress, &mbi, sizeof(mbi)) == sizeof(mbi);
+		baseAddress += mbi.RegionSize
+		) {
 		if (mbi.Protect != PAGE_NOACCESS) {
 			auto startAddr = (uint8_t *) mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize - 1;
-			auto result = search(startAddr, endAddr, patternArr.begin(), patternArr.end(),
+			auto result = search(startAddr, endAddr,
+			                     byteArr.begin(), byteArr.end(),
 			                     [](uint8_t a, pair<uint8_t, bool> b) {
 				                     return !b.second || a == b.first;
 			                     });
 			if (result != endAddr) return (uintptr_t) result;
 		}
-		baseAddress += mbi.RegionSize;
 	}
 	return 0;
 }

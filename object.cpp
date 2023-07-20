@@ -4,7 +4,7 @@ import Function;
 
 duration<float> Object::acd() {
 	auto origin = AttackCastDelay(this);
-	return duration<float>(fmin(origin * 1.5f, origin + 0.05f));
+	return duration<float>(fmin(origin * 1.25f, origin + 0.05f));
 }
 
 duration<float> Object::ad() {
@@ -20,7 +20,7 @@ bool Object::InRangeOf(Object *other) {
 	float dy = position.y - other->position.y;
 	float dz = position.z - other->position.z;
 	return sqrtf(dx * dx + dy * dy + dz * dz) <=
-	       other->attackrange + BonusRadius(this) / 2 + BonusRadius(other);
+	       other->attackrange + BonusRadius(this) + BonusRadius(other);
 }
 
 using namespace std;
