@@ -1,7 +1,7 @@
 #include <dxgi.h>
+#include <process.h>
 #include "kiero/kiero.h"
 import OrbWalker;
-import std.threading;
 
 HRESULT (WINAPI *oPresent)(IDXGISwapChain *, UINT, UINT);
 
@@ -19,17 +19,19 @@ HRESULT WINAPI HKPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Fla
 	return oPresent(pSwapChain, SyncInterval, Flags);
 }
 
-void Start() {
+unsigned Start(void*) {
 	LoadLibrary("R3nzSkin.dll");
 	InitOrb();
 	using namespace kiero;
 	while (init(RenderType::D3D11) != Status::Success ||
 	       bind(8, (void **) &oPresent, (void *) HKPresent) != Status::UnknownError);
+	return 0;
 }
 
-BOOL APIENTRY DllMain(HMODULE, DWORD dwReason, LPVOID) {
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {
+	DisableThreadLibraryCalls(hModule);
 	if (dwReason == DLL_PROCESS_ATTACH) {
-		std::thread(Start).detach();
+		_beginthreadex(nullptr, 0, Start, nullptr, 0, nullptr);
 	}
 	return TRUE;
 }

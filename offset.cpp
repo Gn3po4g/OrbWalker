@@ -48,14 +48,21 @@ vector <pair<uint8_t, bool>> pattern2bytes(const string &input) {
 
 uintptr_t FindAddress(const string &pattern) {
 	auto byteArr = pattern2bytes(pattern);
+	const auto module = (uint8_t *) GetModuleHandle(nullptr);
+	const auto dosHeader = (PIMAGE_DOS_HEADER) module;
+	const auto ntHeaders = (PIMAGE_NT_HEADERS) (module + dosHeader->e_lfanew);
+	const auto textSection = IMAGE_FIRST_SECTION(ntHeaders);
+	const auto startAddress = module + textSection->VirtualAddress;
+	const auto endAddress = startAddress + textSection->SizeOfRawData;
 	MEMORY_BASIC_INFORMATION mbi;
 	for (
-		auto *baseAddress = (uint8_t *) GetModuleHandle(nullptr);
-		VirtualQuery(baseAddress, &mbi, sizeof(mbi)) == sizeof(mbi);
+		auto *baseAddress = startAddress;
+		VirtualQuery(baseAddress, &mbi, sizeof(mbi)) == sizeof(mbi) &&
+		baseAddress + mbi.RegionSize <= endAddress;
 		baseAddress += mbi.RegionSize
 		) {
 		if (mbi.Protect != PAGE_NOACCESS) {
-			auto startAddr = (uint8_t *) mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize - 1;
+			auto startAddr = (uint8_t *) mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize;
 			auto result = search(startAddr, endAddr,
 			                     byteArr.begin(), byteArr.end(),
 			                     [](uint8_t a, pair<uint8_t, bool> b) {
