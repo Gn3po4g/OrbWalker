@@ -1,9 +1,8 @@
-module;
-export module Offset;
+#pragma once
 
-import std.core;
+#include <cstdint>
 
-export struct Offset {
+struct Offset {
 	uintptr_t oGameTime;
 	uintptr_t oLocalPlayer;
 	uintptr_t oViewProjMatrices;
@@ -20,6 +19,7 @@ export struct Offset {
 	uintptr_t oAttackCastDelay;
 	uintptr_t oIsAlive;
 	uintptr_t oBonusRadius;
-} offset;
+};
 
-export void InitOffset();
+extern Offset offset;
+void InitOffset();
