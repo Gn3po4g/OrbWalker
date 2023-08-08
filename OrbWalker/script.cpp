@@ -27,7 +27,7 @@ namespace script {
 		if (type == Type::AutoKite){
 			target = heroes->GetLowestHealth(me, false);
 		}
-		if (type == Type::CleanLane){
+		else if (type == Type::CleanLane){
 			(target = minions->GetLowestHealth(me, true)) || (target = turrets->GetLowestHealth(me, false));
 		}
 		return target;
