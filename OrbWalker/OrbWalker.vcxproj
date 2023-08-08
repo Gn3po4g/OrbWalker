@@ -17,7 +17,7 @@
     <ClCompile Include="function.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="offset.cpp" />
-    <ClCompile Include="orbwalker.cpp" />
+    <ClCompile Include="script.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Kiero\kiero.h" />
@@ -32,7 +32,7 @@
     <ClInclude Include="function.hpp" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="offset.hpp" />
-    <ClInclude Include="orbwalker.hpp" />
+    <ClInclude Include="script.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -48,6 +48,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -62,6 +63,7 @@
     <OutDir>$(SolutionDir)Out\</OutDir>
     <IntDir>$(SolutionDir)Out\$(Configuration)\</IntDir>
     <TargetName>Hid</TargetName>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -76,13 +78,14 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BuildStlModules>false</BuildStlModules>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
+      <EnableUAC>true</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

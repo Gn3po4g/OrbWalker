@@ -1,8 +1,8 @@
 #pragma once
 
+namespace script{
 enum class Type { AutoKite, CleanLane };
 
-extern bool* p_aco;
-
-void InitOrb();
+void Init();
 void Execute(Type);
+}

@@ -41,7 +41,7 @@
     <ClCompile Include="offset.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="orbwalker.cpp">
+    <ClCompile Include="script.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,7 +82,7 @@
     <ClInclude Include="offset.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="orbwalker.hpp">
+    <ClInclude Include="script.hpp">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

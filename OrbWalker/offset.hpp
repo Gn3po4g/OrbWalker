@@ -2,24 +2,24 @@
 
 #include <cstdint>
 
-struct Offset {
-	uintptr_t oGameTime;
-	uintptr_t oLocalPlayer;
-	uintptr_t oViewProjMatrices;
-	uintptr_t oHeroList;
-	uintptr_t oTurretList;
-	//uintptr_t oInhibitorList;
-	uintptr_t oMinionList;
-	uintptr_t oChatClient;
-	uintptr_t oHudInstance;
+namespace offset {
+	extern uintptr_t
+		oGameTime,
+		oLocalPlayer,
+		oViewProjMatrices,
+		oHeroList,
+		oTurretList,
+		//oInhibitorList,
+		oMinionList,
+		oChatClient,
+		oHudInstance,
 
-	uintptr_t oPrintChat;
-	uintptr_t oIssueOrder;
-	uintptr_t oAttackDelay;
-	uintptr_t oAttackCastDelay;
-	uintptr_t oIsAlive;
-	uintptr_t oBonusRadius;
+		oPrintChat,
+		oIssueOrder,
+		oAttackDelay,
+		oAttackWindup,
+		oIsAlive,
+		oBonusRadius;
+
+	void Init();
 };
-
-extern Offset offset;
-void InitOffset();

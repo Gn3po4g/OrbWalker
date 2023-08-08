@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <Psapi.h>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -6,98 +7,97 @@
 #include <thread>
 #include "offset.hpp"
 
-Offset offset{};
+namespace offset {
+	using namespace std;
 
-using namespace std;
+	uintptr_t
+		oGameTime,
+		oLocalPlayer,
+		oViewProjMatrices,
+		oHeroList,
+		oTurretList,
+		//oInhibitorList,
+		oMinionList,
+		oChatClient,
+		oHudInstance,
 
-struct
-{
-  uintptr_t& reference;
-  string pattern;
-  uintptr_t addition;
-} sig_to_scan[] = {
-  {offset.oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4},
-  {offset.oLocalPlayer, "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3},
-  {offset.oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 3},
-  {offset.oHeroList, "48 8B 05 ? ? ? ? 4C 8B 78 08", 3},
-  {offset.oTurretList, "48 8B 1D ? ? ? ? 48 8B 5B 28 48 85 DB", 3},
-  //{ &offsets.oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
-  {offset.oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3},
-  {offset.oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6},
-  {offset.oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3},
+		oPrintChat,
+		oIssueOrder,
+		oAttackDelay,
+		oAttackWindup,
+		oIsAlive,
+		oBonusRadius;
 
-  {offset.oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
-  {offset.oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
-  {offset.oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
-  {offset.oAttackCastDelay, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7},
-  {offset.oIsAlive, "48 8B D8 E8 ? ? ? ? 84 C0 74 35", 4},
-  {offset.oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1}
-};
+	struct
+	{
+		uintptr_t& reference;
+		string pattern;
+		uintptr_t addition;
+	} sig2scan[] = {
+		{oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4},
+		{oLocalPlayer, "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3},
+		{oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 3},
+		{oHeroList, "48 8B 05 ? ? ? ? 4C 8B 78 08", 3},
+		{oTurretList, "48 8B 1D ? ? ? ? 48 8B 5B 28 48 85 DB", 3},
+		//{ &oInhibitorList, "A1 ? ? ? ? 53 55 56 8B 70 04 8B 40 08", true },
+		{oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3},
+		{oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6},
+		{oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3},
 
-vector<pair<uint8_t, bool>> pattern2bytes(const string& input)
-{
-  vector<pair<uint8_t, bool>> result;
-  stringstream ss(input);
-  string token;
-  while (getline(ss, token, ' '))
-  {
-    if (token == "?")
-    {
-      result.emplace_back(0, false);
-    }
-    else
-    {
-      int value = stoi(token, nullptr, 16);
-      result.emplace_back(value, true);
-    }
-  }
-  return result;
-}
+		{oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
+		{oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
+		{oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
+		{oAttackWindup, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7},
+		{oIsAlive, "48 8B D8 E8 ? ? ? ? 84 C0 74 35", 4},
+		{oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1}
+	};
 
-uintptr_t FindAddress(const string& pattern)
-{
-  auto byteArr = pattern2bytes(pattern);
-  const auto module = (uint8_t*)GetModuleHandle(nullptr);
-  const auto dosHeader = (PIMAGE_DOS_HEADER)module;
-  const auto ntHeaders = (PIMAGE_NT_HEADERS)(module + dosHeader->e_lfanew);
-  const auto textSection = IMAGE_FIRST_SECTION(ntHeaders);
-  const auto startAddress = module + textSection->VirtualAddress;
-  const auto endAddress = startAddress + textSection->SizeOfRawData;
-  MEMORY_BASIC_INFORMATION mbi;
-  for (
-    auto* baseAddress = startAddress;
-    VirtualQuery(baseAddress, &mbi, sizeof(mbi)) == sizeof(mbi) &&
-    baseAddress + mbi.RegionSize <= endAddress;
-    baseAddress += mbi.RegionSize
-  )
-  {
-    if (mbi.Protect != PAGE_NOACCESS)
-    {
-      auto startAddr = (uint8_t*)mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize;
-      auto result = search(startAddr, endAddr,
-                           byteArr.begin(), byteArr.end(),
-                           [](uint8_t a, pair<uint8_t, bool> b)
-                           {
-                             return !b.second || a == b.first;
-                           });
-      if (result != endAddr) return (uintptr_t)result;
-    }
-  }
-  return 0;
-}
+	vector<pair<uint8_t, bool>> pattern2bytes(const string& input) {
+		vector<pair<uint8_t, bool>> result;
+		stringstream ss(input);
+		string token;
+		while (getline(ss, token, ' ')) {
+			if (token == "?") {
+				result.emplace_back(0, false);
+			}
+			else
+			{
+				int value = stoi(token, nullptr, 16);
+				result.emplace_back(value, true);
+			}
+		}
+		return result;
+	}
 
-void InitOffset()
-{
-  for (auto& [what, pattern, addition] : sig_to_scan)
-  {
-    auto address = FindAddress(pattern);
-    while (!address)
-    {
-      //MessageBox(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
-      this_thread::sleep_for(100ms);
-      address = FindAddress(pattern);
-    }
-    address += addition;
-    what = address + 4 + *(int32_t*)address;
-  }
+	uintptr_t FindAddress(const string& pattern) {
+		auto byteArr = pattern2bytes(pattern);
+		MODULEINFO moduleInfo{};
+		GetModuleInformation(GetCurrentProcess(), GetModuleHandle(nullptr), &moduleInfo, sizeof(MODULEINFO));
+		const auto begin = (uint8_t*)moduleInfo.lpBaseOfDll;
+		const auto size = moduleInfo.SizeOfImage;
+		MEMORY_BASIC_INFORMATION mbi{};
+		for (auto* cur = begin; cur < begin + size; cur += mbi.RegionSize) {
+			if (!VirtualQuery(cur, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT || mbi.Protect == PAGE_NOACCESS) continue;
+			auto startAddr = (uint8_t*)mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize;
+			auto result = search(startAddr, endAddr, byteArr.begin(), byteArr.end(),
+				[](uint8_t a, pair<uint8_t, bool> b) {
+					return !b.second || a == b.first;
+				});
+			if (result != endAddr) return (uintptr_t)result;
+		}
+		return 0;
+	}
+
+	void Init() {
+		for (auto& [what, pattern, addition] : sig2scan) {
+			auto address = FindAddress(pattern);
+			while (!address) {
+				//MessageBox(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
+				this_thread::sleep_for(100ms);
+				address = FindAddress(pattern);
+			}
+			address += addition;
+			what = address + 4 + *(int32_t*)address;
+		}
+	}
 }
