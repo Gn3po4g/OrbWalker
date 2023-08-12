@@ -40,12 +40,14 @@ float Object::AttackWindup() {
 	return ((fnAttackWindup)oAttackWindup)(this);
 }
 
+bool Object::IsAlive() {
+	using fnIsAlive = bool(__fastcall*)(Object*);
+	return ((fnIsAlive)oIsAlive)(this);
+}
 
 bool Object::AttackableFor(Object* other) {
-	using fnIsAlive = bool(__fastcall*)(Object*);
 	return team() != other->team() &&
-		visible() && targetable() &&
-		((fnIsAlive)oIsAlive)(this);
+		visible() && targetable() && IsAlive();
 }
 
 bool Object::InRangeOf(Object* other) {

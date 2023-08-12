@@ -15,6 +15,7 @@ public:
 	float health();
 	float AttackDelay();
 	float AttackWindup();
+	bool IsAlive();
 	bool AttackableFor(Object*);
 	bool InRangeOf(Object*);
 };

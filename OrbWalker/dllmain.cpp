@@ -41,7 +41,7 @@ void Start(void*) {
 	PrintMessage("#00FFFF", "Noroby's League of Legends OrbWalker");
 	kiero::init(kiero::RenderType::D3D11);
 	kiero::bind(8, (void**)&oPresent, Present);
-	while (GameTime() > 0.f) std::this_thread::sleep_for(std::chrono::seconds(1));
+	while (true) std::this_thread::sleep_for(std::chrono::minutes(10));
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {

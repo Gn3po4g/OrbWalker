@@ -9,7 +9,6 @@ namespace offset {
 		oViewProjMatrices,
 		oHeroList,
 		oTurretList,
-		//oInhibitorList,
 		oMinionList,
 		oChatClient,
 		oHudInstance,
