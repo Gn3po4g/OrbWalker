@@ -44,6 +44,9 @@
     <ClCompile Include="script.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Kiero\kiero.h">
@@ -85,5 +88,14 @@
     <ClInclude Include="script.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="util.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

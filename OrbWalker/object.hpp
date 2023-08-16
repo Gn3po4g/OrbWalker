@@ -1,17 +1,14 @@
-#pragma once
-
-#include <DirectXMath.h>
-#include <cstddef>
-
-#define OFFSET(type,offset) (*(type*)((uintptr_t)this+offset))
-
 class Object {
+	template<typename T>
+	T prop(uintptr_t offset) {
+		return *(T*)((uintptr_t)this + offset);
+	}
 	int team();
 	bool visible();
 	bool targetable();
 	float attackrange();
 public:
-	DirectX::XMFLOAT3 position();
+	FLOAT3 position();
 	float health();
 	float AttackDelay();
 	float AttackWindup();
@@ -23,8 +20,12 @@ public:
 extern Object* last_object;
 
 class ObjList {
+	template<typename T>
+	T prop(uintptr_t offset) {
+		return *(T*)((uintptr_t)this + offset);
+	}
 	Object** list();
 	int size();
 public:
-	Object* GetLowestHealth(Object*, bool);
+	Object* GetLowestHealth(bool);
 };

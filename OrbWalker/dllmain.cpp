@@ -1,11 +1,4 @@
-#include <Windows.h>
-#include <dxgi.h>
-#include <d3d9.h>
-#include <thread>
-#include "script.hpp"
-#include "offset.hpp"
-#include "function.hpp"
-#include "../Kiero/kiero.h"
+#include "stdafx.hpp"
 
 bool WINAPI HideThread(const HANDLE hThread) noexcept {
 	__try {
@@ -26,8 +19,9 @@ bool WINAPI HideThread(const HANDLE hThread) noexcept {
 HRESULT(WINAPI* oPresent)(IDXGISwapChain*, UINT, UINT);
 
 HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
-	if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) script::Execute(script::Type::AutoKite);
-	else if ((GetAsyncKeyState('V') & 0x8000) != 0) script::Execute(script::Type::CleanLane);
+	using namespace script;
+	if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) Execute(Type::AutoKite);
+	else if ((GetAsyncKeyState('V') & 0x8000) != 0) Execute(Type::CleanLane);
 
 	return oPresent(pSwapChain, SyncInterval, Flags);
 }
@@ -36,12 +30,19 @@ void Start(void*) {
 	HideThread(GetCurrentThread());
 	LoadLibrary(L"R3nzSkin.dll");
 	offset::Init();
-	script::Init();
 	while (GameTime() < 1.f) std::this_thread::sleep_for(std::chrono::seconds(1));
-	PrintMessage("#00FFFF", "Noroby's League of Legends OrbWalker");
+	PrintMessage("#00FFFF", "Noroby's League of Legends script loaded");
+	PrintMessage("#FF00FF", "Press DELETE to unload the script");
 	kiero::init(kiero::RenderType::D3D11);
 	kiero::bind(8, (void**)&oPresent, Present);
-	while (true) std::this_thread::sleep_for(std::chrono::minutes(10));
+	while (true) {
+		if ((GetAsyncKeyState(VK_DELETE) & 0x8000) != 0) {
+			PrintMessage("#FF00FF", "Script unloaded");
+			kiero::shutdown();
+			break;
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+	}
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {

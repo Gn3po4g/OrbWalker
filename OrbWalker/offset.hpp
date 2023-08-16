@@ -1,7 +1,3 @@
-#pragma once
-
-#include <cstdint>
-
 namespace offset {
 	extern uintptr_t
 		oGameTime,
@@ -15,6 +11,7 @@ namespace offset {
 
 		oPrintChat,
 		oIssueOrder,
+		oIssueMove,
 		oAttackDelay,
 		oAttackWindup,
 		oIsAlive,

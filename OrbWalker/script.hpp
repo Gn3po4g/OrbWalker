@@ -1,8 +1,10 @@
-#pragma once
+namespace script {
+	enum class Type { AutoKite, CleanLane };
 
-namespace script{
-enum class Type { AutoKite, CleanLane };
+	Object* LocalPlayer();
+	ObjList* Heroes();
+	ObjList* Minions();
+	ObjList* Turrets();
 
-void Init();
-void Execute(Type);
+	void Execute(Type type);
 }

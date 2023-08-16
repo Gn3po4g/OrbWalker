@@ -1,11 +1,4 @@
-#include <Windows.h>
-#include <Psapi.h>
-#include <string>
-#include <vector>
-#include <sstream>
-#include <algorithm>
-#include <thread>
-#include "offset.hpp"
+#include "stdafx.hpp"
 
 namespace offset {
 	using namespace std;
@@ -22,13 +15,13 @@ namespace offset {
 
 		oPrintChat,
 		oIssueOrder,
+		oIssueMove,
 		oAttackDelay,
 		oAttackWindup,
 		oIsAlive,
 		oBonusRadius;
 
-	struct
-	{
+	struct {
 		uintptr_t& reference;
 		string pattern;
 		uintptr_t addition;
@@ -44,6 +37,7 @@ namespace offset {
 
 		{oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
 		{oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
+		{oIssueMove, "44 88 7C 24 ? E8 ? ? ? ? EB 1D", 6},
 		{oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
 		{oAttackWindup, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7},
 		{oIsAlive, "48 8B D8 E8 ? ? ? ? 84 C0 74 35", 4},
@@ -58,8 +52,7 @@ namespace offset {
 			if (token == "?") {
 				result.emplace_back(0, false);
 			}
-			else
-			{
+			else {
 				int value = stoi(token, nullptr, 16);
 				result.emplace_back(value, true);
 			}
