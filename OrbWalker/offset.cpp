@@ -6,14 +6,15 @@ namespace offset {
 	uintptr_t
 		oGameTime,
 		oLocalPlayer,
-		oViewProjMatrices,
 		oHeroList,
 		oTurretList,
 		oMinionList,
 		oChatClient,
 		oHudInstance,
+		oViewPort,
 
 		oPrintChat,
+		oWorldToScreen,
 		oIssueOrder,
 		oIssueMove,
 		oAttackDelay,
@@ -28,14 +29,15 @@ namespace offset {
 	} sig2scan[] = {
 		{oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4},
 		{oLocalPlayer, "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3},
-		{oViewProjMatrices, "48 8D 0D ? ? ? ? 0F 10 00", 3},
 		{oHeroList, "48 8B 05 ? ? ? ? 4C 8B 78 08", 3},
 		{oTurretList, "48 8B 1D ? ? ? ? 48 8B 5B 28 48 85 DB", 3},
 		{oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? EB 07", 3},
 		{oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6},
 		{oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3},
+		{oViewPort, "48 8B 3D ? ? ? ? FF 90 ? ? ? ?", 3},
 
 		{oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
+		{oWorldToScreen, "E8 ? ? ? ? F3 0F 10 44 24 ? 49 8B CE", 1},
 		{oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
 		{oIssueMove, "44 88 7C 24 ? E8 ? ? ? ? EB 1D", 6},
 		{oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},

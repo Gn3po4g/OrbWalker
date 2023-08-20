@@ -31,7 +31,7 @@ namespace script {
 			Attack(target);
 		}
 		else if (now > last_move_time + 33e-3f &&
-			now > last_attack_time + self->AttackWindup() + 55e-3f) {
+			now > last_attack_time + self->AttackWindup() * 2.f) {
 			last_move_time = now;
 			Move2Mouse();
 		}

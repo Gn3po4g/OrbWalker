@@ -2,7 +2,6 @@
 
 #include <Windows.h>
 #include <Psapi.h>
-#include <DirectXMath.h>
 #include <dxgi.h>
 
 #include <algorithm>

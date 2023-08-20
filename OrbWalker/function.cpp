@@ -2,16 +2,6 @@
 
 using namespace offset;
 
-struct W2S {
-	DirectX::XMFLOAT4X4 view_matrix;
-	DirectX::XMFLOAT4X4 proj_matrix;
-private:
-	std::byte pad[0x14];
-public:
-	int width;
-	int height;
-} *w2s;
-
 float GameTime() {
 	if (!oGameTime) return 0.f;
 	return *(float*)oGameTime;
@@ -31,16 +21,11 @@ void PrintMessage(std::string color, std::string text) {
 	((fnPrintChat)oPrintChat)(oChatClient, wrapped.data(), 4);
 }
 
-INT2 WorldToScreen(FLOAT3 pos) {
-	w2s = (W2S*)oViewProjMatrices;
-	using namespace DirectX;
-	auto V = XMVECTOR{ pos.x, pos.y, pos.z, 1.f };
-	auto M = XMLoadFloat4x4(&w2s->view_matrix) * XMLoadFloat4x4(&w2s->proj_matrix);
-	auto coord = XMVector3TransformCoord(V, M);
-	return {
-		(int)((1 + XMVectorGetX(coord)) / 2 * w2s->width),
-		(int)((1 - XMVectorGetY(coord)) / 2 * w2s->height)
-	};
+INT2 WorldToScreen(FLOAT3 in) {
+	typedef bool(__fastcall* fnWorldToScreen)(uintptr_t viewport, FLOAT3* in, FLOAT3* out);
+	FLOAT3 out;
+	((fnWorldToScreen)oWorldToScreen)(*(uintptr_t*)oViewPort + 0x270, &in, &out);
+	return INT2{ (int)out.x, (int)out.y };
 }
 
 void Attack(Object* target) {
