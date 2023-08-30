@@ -1,8 +1,12 @@
-class Object {
-	template<typename T>
-	T prop(uintptr_t offset) {
-		return *(T*)((uintptr_t)this + offset);
+class Property {
+protected:
+	template<typename Type>
+	inline Type prop(uintptr_t offset) {
+		return *(Type*)((uintptr_t)this + offset);
 	}
+};
+
+class Object : Property {
 	int team();
 	bool visible();
 	bool targetable();
@@ -10,6 +14,7 @@ class Object {
 public:
 	FLOAT3 position();
 	float health();
+	float height();
 	float AttackDelay();
 	float AttackWindup();
 	bool IsAlive();
@@ -19,11 +24,7 @@ public:
 
 extern Object* last_object;
 
-class ObjList {
-	template<typename T>
-	T prop(uintptr_t offset) {
-		return *(T*)((uintptr_t)this + offset);
-	}
+class ObjList : Property {
 	Object** list();
 	int size();
 public:

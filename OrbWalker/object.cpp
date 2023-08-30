@@ -26,6 +26,12 @@ float Object::health() {
 	return prop<float>(0x1058);
 }
 
+float Object::height() {
+	const auto characterHeight = *(float*)(*(uintptr_t*)(*(uintptr_t*)((uintptr_t)this + 0x3528) + 0x28) + 0xC4);
+	const auto scale = *(float*)((uintptr_t)this + 0x1684);
+	return characterHeight * scale;
+}
+
 float Object::AttackDelay() {
 	using fnAttackDelay = float(__fastcall*)(Object*);
 	return ((fnAttackDelay)oAttackDelay)(this);

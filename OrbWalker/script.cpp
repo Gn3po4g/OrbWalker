@@ -7,15 +7,15 @@ namespace script {
 	ObjList* Turrets() { return *(ObjList**)offset::oTurretList; }
 
 	Object* GetTarget(const Type type) {
-		Object* target = nullptr;
-		if (type == Type::AutoKite) {
-			target = Heroes()->GetLowestHealth(false);
+		switch (type) {
+		case Type::AutoKite:
+			return Heroes()->GetLowestHealth(false);
+		case Type::CleanLane:
+			if (const auto target = Minions()->GetLowestHealth(true)) return target;
+			else return Turrets()->GetLowestHealth(false);
+		default:
+			return nullptr;
 		}
-		else if (type == Type::CleanLane) {
-			if (!(target = Minions()->GetLowestHealth(true)))
-				target = Turrets()->GetLowestHealth(false);
-		}
-		return target;
 	}
 
 	void Execute(Type type) {
@@ -25,13 +25,13 @@ namespace script {
 		if (!(self && self->IsAlive()) || IsChatOpen() || IsLeagueInBackground()) return;
 		const auto now = GameTime();
 		if (const auto target = GetTarget(type); target &&
-			now > last_attack_time + self->AttackDelay() + 15e-3f) {
+			std::is_gt(now <=> last_attack_time + self->AttackDelay() + 15e-3f)) {
 			last_attack_time = now;
 			last_object = target;
 			Attack(target);
 		}
-		else if (now > last_move_time + 33e-3f &&
-			now > last_attack_time + self->AttackWindup() * 2.f) {
+		else if (std::is_gt(now <=> last_move_time + 33e-3f) &&
+			std::is_gt(now <=> last_attack_time + self->AttackWindup() + 75e-3f)) {
 			last_move_time = now;
 			Move2Mouse();
 		}

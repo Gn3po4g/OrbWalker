@@ -30,7 +30,9 @@ INT2 WorldToScreen(FLOAT3 in) {
 
 void Attack(Object* target) {
 	using fnIssueOrder = int(__fastcall*)(uintptr_t, bool, int, int, int, int, int);
-	const auto pos = WorldToScreen(target->position());
+	auto headPos = target->position();
+	headPos.y += target->height() / 2;
+	const auto pos = WorldToScreen(headPos);
 	auto hudInput = *(uintptr_t*)(*(uintptr_t*)oHudInstance + 0x48);
 	((fnIssueOrder)oIssueOrder)(hudInput, false, 0, 1, pos.x, pos.y, 1);
 }

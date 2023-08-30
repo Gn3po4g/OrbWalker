@@ -37,13 +37,13 @@ namespace offset {
 		{oViewPort, "48 8B 3D ? ? ? ? FF 90 ? ? ? ?", 3},
 
 		{oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
-		{oWorldToScreen, "E8 ? ? ? ? F3 0F 10 44 24 ? 49 8B CE", 1},
+		{oWorldToScreen, "48 8B D5 E8 ? ? ? ? 48 83 BF ? ? ? ? ?", 4},
 		{oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
-		{oIssueMove, "44 88 7C 24 ? E8 ? ? ? ? EB 1D", 6},
+		{oIssueMove, "44 88 7C 24 ? E8 ? ? ? ? EB 19", 6},
 		{oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
 		{oAttackWindup, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7},
-		{oIsAlive, "48 8B D8 E8 ? ? ? ? 84 C0 74 35", 4},
-		{oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D3 48 8B CE", 1}
+		{oIsAlive, "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?", 1},
+		{oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D6", 1}
 	};
 
 	vector<pair<uint8_t, bool>> pattern2bytes(const string& input) {
@@ -85,7 +85,7 @@ namespace offset {
 		for (auto& [what, pattern, addition] : sig2scan) {
 			auto address = FindAddress(pattern);
 			while (!address) {
-				//MessageBox(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
+				//MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
 				this_thread::sleep_for(100ms);
 				address = FindAddress(pattern);
 			}
