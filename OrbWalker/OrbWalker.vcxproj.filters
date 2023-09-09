@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Imgui">
+      <UniqueIdentifier>{375d0d5a-7b76-47fb-97c7-ec2287185ae9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Kiero\kiero.cpp">
@@ -45,6 +48,30 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_impl_win32.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_tables.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_widgets.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_draw.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,6 +119,36 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imgui.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imgui_impl_dx11.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imconfig.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imgui_internal.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imstb_textedit.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imgui_impl_win32.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imstb_rectpack.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Imgui\imstb_truetype.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="render.hpp">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

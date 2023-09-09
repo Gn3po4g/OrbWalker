@@ -7,6 +7,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\Kiero\kiero.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -21,20 +51,32 @@
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\hook.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\trampoline.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="function.cpp" />
+    <ClCompile Include="hooks.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="offset.cpp" />
+    <ClCompile Include="render.cpp" />
     <ClCompile Include="script.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Imgui\imconfig.h" />
+    <ClInclude Include="..\Imgui\imgui.h" />
+    <ClInclude Include="..\Imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\Imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\Imgui\imgui_internal.h" />
+    <ClInclude Include="..\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Imgui\imstb_truetype.h" />
     <ClInclude Include="..\Kiero\kiero.h" />
     <ClInclude Include="..\Kiero\minhook\include\MinHook.h" />
     <ClInclude Include="..\Kiero\minhook\src\buffer.h" />
@@ -45,8 +87,10 @@
     <ClInclude Include="..\Kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="..\Kiero\minhook\src\trampoline.h" />
     <ClInclude Include="function.hpp" />
+    <ClInclude Include="hooks.hpp" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="offset.hpp" />
+    <ClInclude Include="render.hpp" />
     <ClInclude Include="script.hpp" />
     <ClInclude Include="stdafx.hpp" />
     <ClInclude Include="util.hpp" />

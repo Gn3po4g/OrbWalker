@@ -1,0 +1,3 @@
+namespace render {
+  void Update();
+}

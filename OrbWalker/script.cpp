@@ -1,39 +1,46 @@
 #include "stdafx.hpp"
 
 namespace script {
-	Object* LocalPlayer() { return *(Object**)offset::oLocalPlayer; }
-	ObjList* Heroes() { return *(ObjList**)offset::oHeroList; }
-	ObjList* Minions() { return *(ObjList**)offset::oMinionList; }
-	ObjList* Turrets() { return *(ObjList**)offset::oTurretList; }
+  Object *LocalPlayer() { return *(Object **)offset::oLocalPlayer; }
+  ObjList *Heroes() { return *(ObjList **)offset::oHeroList; }
+  ObjList *Minions() { return *(ObjList **)offset::oMinionList; }
+  ObjList *Turrets() { return *(ObjList **)offset::oTurretList; }
 
-	Object* GetTarget(const Type type) {
-		switch (type) {
-		case Type::AutoKite:
-			return Heroes()->GetLowestHealth(false);
-		case Type::CleanLane:
-			if (const auto target = Minions()->GetLowestHealth(true)) return target;
-			else return Turrets()->GetLowestHealth(false);
-		default:
-			return nullptr;
-		}
-	}
+  Object *GetTarget(bool aHero) {
+    if(aHero) {
+      return Heroes()->GetLowestHealth(false);
+    } else {
+      if(const auto target = Minions()->GetLowestHealth(true)) {
+        return target;
+      } else {
+        return Turrets()->GetLowestHealth(false);
+      }
+    }
+  }
 
-	void Execute(Type type) {
-		static float last_attack_time{};
-		static float last_move_time{};
-		const auto self = LocalPlayer();
-		if (!(self && self->IsAlive()) || IsChatOpen() || IsLeagueInBackground()) return;
-		const auto now = GameTime();
-		if (const auto target = GetTarget(type); target &&
-			std::is_gt(now <=> last_attack_time + self->AttackDelay() + 15e-3f)) {
-			last_attack_time = now;
-			last_object = target;
-			Attack(target);
-		}
-		else if (std::is_gt(now <=> last_move_time + 33e-3f) &&
-			std::is_gt(now <=> last_attack_time + self->AttackWindup() + 75e-3f)) {
-			last_move_time = now;
-			Move2Mouse();
-		}
-	}
-}
+  void Update() {
+    using std::is_gt;
+    static float LAT{};
+    static float LMT{};
+    bool excute{};
+    Object *target{};
+    if((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0) {
+      target = GetTarget(true);
+      excute = true;
+    } else if((GetAsyncKeyState('V') & 0x8000) != 0) {
+      target = GetTarget(false);
+      excute = true;
+    }
+    const auto self = LocalPlayer();
+    if(!(self && self->IsAlive()) || IsChatOpen() || IsLeagueInBackground() || !excute) return;
+    const auto now{GameTime()};
+    if(target && is_gt(now <=> LAT + self->AttackDelay() + 15e-3f)) {
+      LAT = now;
+      last_object = target;
+      Attack(target);
+    } else if(is_gt(now <=> LMT + 33e-3f) && is_gt(now <=> LAT + self->AttackWindup() + 75e-3f)) {
+      LMT = now;
+      Move2Mouse();
+    }
+  }
+}// namespace script
