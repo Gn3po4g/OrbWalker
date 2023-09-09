@@ -1,5 +1,10 @@
 <h1 align="center">Supported Version: 13.17</h1>
 
+# Feature
+1. Show attack range.
+1. Hold space to attack champions, hold v to clear line.
+1. Waiting to be added...
+
 # Build:
 
 + Use Visual Studio 2022.
