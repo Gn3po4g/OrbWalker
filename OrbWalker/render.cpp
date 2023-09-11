@@ -14,7 +14,7 @@ namespace render {
     float theta = 0.f;
     for(int i = 0; i < numPoints; i++, theta += IM_PI * 2 / numPoints) {
       FLOAT3 worldSpace = {worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
-      ImVec2 screenSpace = WorldToScreen(worldSpace).ToImVec();
+      ImVec2 screenSpace = function::WorldToScreen(worldSpace).ToImVec();
       points[i] = screenSpace;
     }
     window->DrawList->AddPolyline(points, numPoints, ImGui::GetColorU32({r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f}), true, thickness);

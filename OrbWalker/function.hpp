@@ -1,13 +1,17 @@
-float GameTime();
+namespace function {
+  float GameTime();
 
-bool IsChatOpen();
+  //bool IsChatOpen();
 
-bool IsLeagueInBackground();
+  //bool IsLeagueInBackground();
 
-void PrintMessage(std::string color, std::string text);
+  bool CanSendInput();
 
-INT2 WorldToScreen(FLOAT3 position);
+  void PrintMessage(std::string color, std::string text);
 
-void Attack(Object *target);
+  INT2 WorldToScreen(FLOAT3 position);
 
-void Move2Mouse();
+  void AttackObject(Object *target);
+
+  void Move2Mouse();
+}// namespace function

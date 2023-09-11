@@ -15,13 +15,13 @@ namespace hooks {
     if(!init) {
       if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void **)&pDevice))) {
         pDevice->GetImmediateContext(&pDeviceContext);
-        DXGI_SWAP_CHAIN_DESC sd;
+        DXGI_SWAP_CHAIN_DESC sd{};
         pSwapChain->GetDesc(&sd);
         window = sd.OutputWindow;
         ID3D11Texture2D *pBackBuffer{};
         pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *)&pBackBuffer);
         if(!pBackBuffer) return oPresent(pSwapChain, SyncInterval, Flags);
-        pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+        pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
         pBackBuffer->Release();
 
         IMGUI_CHECKVERSION();
@@ -33,6 +33,9 @@ namespace hooks {
 
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pDeviceContext);
+
+        function::PrintMessage("#00FFFF", "Noroby's League of Legends script loaded");
+        function::PrintMessage("#FF00FF", "Press DELETE to unload the script");
 
         init = true;
       } else {
@@ -53,7 +56,7 @@ namespace hooks {
     ImGui::EndFrame();
     ImGui::Render();
 
-    pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, NULL);
+    pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     return oPresent(pSwapChain, SyncInterval, Flags);
@@ -67,5 +70,6 @@ namespace hooks {
   void Shutdown() {
     kiero::unbind(8);
     kiero::shutdown();
+    function::PrintMessage("#FF00FF", "Script unloaded");
   }
 }// namespace hooks

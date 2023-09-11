@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <ranges>
+#include <set>
 #include <span>
 #include <sstream>
 #include <vector>

@@ -15,18 +15,14 @@ bool WINAPI HideThread(HANDLE hThread) noexcept {
   }
 }
 
-
 void Start(void *) {
   HideThread(GetCurrentThread());
   LoadLibrary(L"R3nzSkin.dll");
   offset::Init();
-  while(GameTime() < 1.f) std::this_thread::sleep_for(std::chrono::seconds(1));
+  while(function::GameTime() < .5f) std::this_thread::sleep_for(std::chrono::milliseconds(500));
   hooks::Init();
-  PrintMessage("#00FFFF", "Noroby's League of Legends script loaded");
-  PrintMessage("#FF00FF", "Press DELETE to unload the script");
   while(true) {
     if((GetAsyncKeyState(VK_DELETE) & 0x8000) != 0) {
-      PrintMessage("#FF00FF", "Script unloaded");
       hooks::Shutdown();
       break;
     }
