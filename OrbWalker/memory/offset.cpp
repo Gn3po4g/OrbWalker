@@ -80,15 +80,15 @@ namespace offset {
     return 0;
   }
 
-#define DEBUGMODE 1
+  constexpr auto DEBUGMODE = false;
 
   void Init() {
     for(auto &[what, pattern, addition] : sigs) {
       auto address = FindAddress(pattern);
       while(!address) {
-#ifdef DEBUGMODE
-        MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
-#endif
+        if(DEBUGMODE) {
+          MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
+        }
         this_thread::sleep_for(100ms);
         address = FindAddress(pattern);
       }
