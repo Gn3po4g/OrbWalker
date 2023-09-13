@@ -1,5 +1,6 @@
 namespace offset {
   extern uintptr_t
+      oGameState,
       oGameTime,
       oLocalPlayer,
       oObjUnderMouse,

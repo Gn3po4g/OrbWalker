@@ -10,6 +10,13 @@ namespace hooks {
     if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
       return true;
     }
+    using namespace config;
+    if(ImGui::GetIO().KeysDown[menuKey]) {
+      showMenu = !showMenu;
+      if(!showMenu) {
+        Save();
+      }
+    }
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
   }
 
@@ -37,7 +44,7 @@ namespace hooks {
         ImGuiIO &io = ImGui::GetIO();
         io.IniFilename = nullptr;//"window.ini";
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-        io.Fonts->AddFontFromFileTTF("C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16);
+        io.Fonts->AddFontFromFileTTF("C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pDeviceContext);
@@ -77,6 +84,7 @@ namespace hooks {
     render::Update();
     script::Update();
     ui::Update();
+    skin::Update();
 
     ImGui::EndFrame();
     ImGui::Render();
@@ -88,9 +96,11 @@ namespace hooks {
   }
 
   void Init() {
+    script::Init();
+    config::Load();
+    skin::Load();
     kiero::init(kiero::RenderType::D3D11);
     kiero::bind(8, (void **)&oPresent, Present);
-    script::Init();
     running = true;
   }
 }// namespace hooks

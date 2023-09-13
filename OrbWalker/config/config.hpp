@@ -1,9 +1,11 @@
 namespace config {
   extern bool showMenu;
 
+  extern int targeting;
   extern ImGuiKey kiteKey;
   extern ImGuiKey cleanKey;
 
+  extern int currentSkin;
   extern ImGuiKey prevSkinKey;
   extern ImGuiKey nextSkinKey;
 
@@ -17,5 +19,8 @@ namespace config {
       {"health-lowest",
        "distance-closest"});
   //inline const char *TargetingStr[] = {"health-lowest", "distance-closest"};
-  extern int targeting;
+
+
+  void Load();
+  void Save();
 }// namespace config

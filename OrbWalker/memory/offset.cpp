@@ -3,7 +3,9 @@
 namespace offset {
   using namespace std;
 
-  uintptr_t oGameTime,
+  uintptr_t
+      oGameState,
+      oGameTime,
       oLocalPlayer,
       oObjUnderMouse,
       oHeroList,
@@ -27,6 +29,7 @@ namespace offset {
     string pattern;
     uintptr_t addition;
   } sigs[] = {
+      {oGameState, "48 8D 4D D7 48 8B 05 ? ? ? ?", 7},
       {oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4},
       {oLocalPlayer, "48 8B 0D ? ? ? ? 48 85 C9 0F 84 ? ? ? ? 48 83 7B ? ?", 3},
       {oObjUnderMouse, "48 8B 05 ? ? ? ? 48 8B F9 33 C9 48 8B DA", 3},
@@ -39,13 +42,14 @@ namespace offset {
 
       {oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
       {oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
-      {oIssueMove, "E8 ? ? ? ? EB 15 0F B6", 1},
+      {oIssueMove, "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B F1 41 0F B6 F9", 0},
       {oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
       {oAttackWindup, "E8 ? ? ? ? 48 8B CE F3 0F 11 83 ? ? ? ?", 1},
       {oIsAlive, "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?", 1},
       {oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D6", 1},
       {oWorldToScreen, "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8", 1},
   };
+
 
   vector<ByteWithMask> pattern2bytes(const string &input) {
     vector<ByteWithMask> result;
@@ -92,8 +96,12 @@ namespace offset {
         this_thread::sleep_for(100ms);
         address = FindAddress(pattern);
       }
-      address += addition;
-      what = address + 4 + *(int32_t *)address;
+      if(!addition) {
+        what = address;
+      } else {
+        address += addition;
+        what = address + 4 + *(int32_t *)address;
+      }
     }
   }
 }// namespace offset

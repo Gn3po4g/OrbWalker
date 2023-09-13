@@ -2,11 +2,26 @@
 
 namespace ui {
 
+
+  auto vector_getter_skin = [](void *vec, const std::int32_t idx, const char **out_text) {
+    const auto &vector{*static_cast<std::vector<skin::SkinInfo> *>(vec)};
+    if(idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
+    *out_text = idx == 0 ? "Default" : vector.at(idx - 1).skin_name.c_str();
+    return true;
+  };
+
+  auto vector_getter_gear = [](void *vec, const std::int32_t idx, const char **out_text) noexcept {
+    const auto &vector{*static_cast<std::vector<const char *> *>(vec)};
+    if(idx < 0 || idx > static_cast<std::int32_t>(vector.size())) return false;
+    *out_text = vector[idx];
+    return true;
+  };
+
+
   void Update() {
     using namespace config;
-    if(ImGui::IsKeyPressed(menuKey)) {
-      showMenu = !showMenu;
-    }
+    const auto self = script::self;
+    static int gear{self ? self->characterDataStack()->baseSkin.gear : 0};
     if(!showMenu) return;
     ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     if(ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
@@ -23,9 +38,26 @@ namespace ui {
       }
       if(ImGui::BeginTabItem("Skin")) {
         ImGui::Text("Skin Setting:");
-        static int temp{};
-        const char *t[]{"coming soon"};
-        ImGui::Combo("Current Skin", &temp, t, IM_ARRAYSIZE(t));
+        auto &values{skin::champions_skins[fnv::hash_runtime(self->characterDataStack()->baseSkin.model.str)]};
+        if(ImGui::Combo("Current Skin", &config::currentSkin, vector_getter_skin, (void *)&values, (int)values.size() + 1)) {
+          if(config::currentSkin > 0) {
+            self->ChangeSkin(values[config::currentSkin - 1].model_name, values[config::currentSkin - 1].skin_id);
+          }
+        }
+        const auto playerHash{fnv::hash_runtime(self->characterDataStack()->baseSkin.model.str)};
+        if(const auto it{std::ranges::find_if(skin::specialSkins,
+                                              [&skin = self->characterDataStack()->baseSkin.skin, &ph = playerHash](const skin::SpecialSkin &x) {
+                                                return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
+                                              })};
+           it != skin::specialSkins.end()) {
+          const auto stack{self->characterDataStack()};
+          gear = stack->baseSkin.gear;
+
+          if(ImGui::Combo("Current Gear", &gear, vector_getter_gear, (void *)&it->gears, (int)it->gears.size())) {
+            self->characterDataStack()->baseSkin.gear = static_cast<std::int8_t>(gear);
+            self->characterDataStack()->update(true);
+          }
+        }
         ImGui::Separator();
         ImGui::Text("Key Setting:");
         ImGui::HotKey("Previous Skin Key", prevSkinKey);

@@ -101,6 +101,12 @@
     <ClCompile Include="agent\script.cpp">
       <Filter>source\agent</Filter>
     </ClCompile>
+    <ClCompile Include="agent\skinchanger.cpp">
+      <Filter>source\agent</Filter>
+    </ClCompile>
+    <ClCompile Include="class\champion.cpp">
+      <Filter>source\class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Kiero\kiero.h">
@@ -190,9 +196,30 @@
     <ClInclude Include="agent\script.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
+    <ClInclude Include="agent\skinchanger.hpp">
+      <Filter>source\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="class\champion.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\astring.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\skin.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="util\fnvhash.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\json.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="class\property.hpp">
+      <Filter>source\class</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">

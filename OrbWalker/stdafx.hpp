@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <format>
+#include <fstream>
 #include <map>
 #include <ranges>
 #include <set>
@@ -28,11 +29,19 @@
 #include "util/constant.hpp"
 #include "util/util.hpp"
 #include "util/function.hpp"
+#include "util/fnvhash.hpp"
+#include "util/json.hpp"
+#include "class/property.hpp"
+#include "class/astring.hpp"
+#include "class/skin.hpp"
+#include "class/champion.hpp"
 #include "class/object.hpp"
 #include "draw/render.hpp"
 #include "draw/ui.hpp"
 #include "agent/script.hpp"
 #include "agent/hooks.hpp"
+#include "agent/skinchanger.hpp"
 #include "config/config.hpp"
 
+using json = nlohmann::json;
 using namespace std::string_literals;

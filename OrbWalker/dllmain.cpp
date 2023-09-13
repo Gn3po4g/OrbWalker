@@ -17,9 +17,12 @@ bool WINAPI HideThread(HANDLE hThread) noexcept {
 
 void Start(void *) {
   HideThread(GetCurrentThread());
-  LoadLibrary(L"R3nzSkin.dll");
   offset::Init();
-  while(function::GameTime() < .5f) std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  GameState state{};
+  while(state != Running && state != Paused) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    state = *(GameState *)(*(uintptr_t *)offset::oGameState + 0xC);
+  }
   hooks::Init();
   while(hooks::running) {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));

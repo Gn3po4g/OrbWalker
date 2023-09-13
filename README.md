@@ -1,6 +1,7 @@
 <h1 align="center">Supported Version: 13.18</h1>
 
 # Feature
+1. Skin Changer(thank to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
 1. Show attack range.
 1. Hold space to attack champions, hold v to clean line(configurable).
 1. Left-click to lock on target.

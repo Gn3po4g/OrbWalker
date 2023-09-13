@@ -59,6 +59,8 @@
     </ClCompile>
     <ClCompile Include="agent\hooks.cpp" />
     <ClCompile Include="agent\script.cpp" />
+    <ClCompile Include="agent\skinchanger.cpp" />
+    <ClCompile Include="class\champion.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -91,7 +93,11 @@
     <ClInclude Include="..\Kiero\minhook\src\trampoline.h" />
     <ClInclude Include="agent\hooks.hpp" />
     <ClInclude Include="agent\script.hpp" />
+    <ClInclude Include="agent\skinchanger.hpp" />
+    <ClInclude Include="class\astring.hpp" />
+    <ClInclude Include="class\champion.hpp" />
     <ClInclude Include="class\object.hpp" />
+    <ClInclude Include="class\skin.hpp" />
     <ClInclude Include="config\config.hpp" />
     <ClInclude Include="draw\render.hpp" />
     <ClInclude Include="draw\ui.hpp" />
@@ -99,11 +105,14 @@
     <ClInclude Include="memory\spoofcall.h" />
     <ClInclude Include="stdafx.hpp" />
     <ClInclude Include="util\constant.hpp" />
+    <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\function.hpp" />
+    <ClInclude Include="util\json.hpp" />
     <ClInclude Include="util\util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="class\property.hpp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm" />

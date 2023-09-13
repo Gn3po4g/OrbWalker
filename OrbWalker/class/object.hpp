@@ -1,11 +1,3 @@
-class Property {
-protected:
-  template<typename Type>
-  inline Type prop(uintptr_t offset) {
-    return *reinterpret_cast<Type *>(reinterpret_cast<uintptr_t>(this) + offset);
-  }
-};
-
 class CharacterData : Property {
 public:
   float size();
@@ -26,6 +18,23 @@ class Object : Property {
   CharacterState actionstate();
 
 public:
+  class CharacterDataStack {
+  public:
+    class CharacterStackData {
+    public:
+      AString model;
+      char pad0[0x10];
+      std::int32_t skin;
+      char pad1[0x60];
+      std::int8_t gear;
+      char pad2[0x7];
+    };
+    std::vector<CharacterStackData> stack;
+    CharacterStackData baseSkin;
+
+    void update(bool);
+    void push(const char *, std::int32_t);
+  };
   CharacterData *characterdata();
   std::string_view name();
   FLOAT3 position();
@@ -43,6 +52,9 @@ public:
   bool CanMove();
   bool HasBuff(std::string_view);
   //Spell *GetSpell(int slotId);
+  CharacterDataStack *characterDataStack();
+  bool CheckSpecialSkins(const char *, int32_t);
+  void ChangeSkin(const char *, int32_t);
 };
 
 class ObjList : Property {
@@ -51,7 +63,7 @@ class ObjList : Property {
 
 public:
   Object *GetAppropriateObject();
-  bool Contains(Object*);
+  bool Contains(Object *);
 };
 
 class Buff : Property {
