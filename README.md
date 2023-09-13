@@ -1,9 +1,10 @@
-<h1 align="center">Supported Version: 13.17</h1>
+<h1 align="center">Supported Version: 13.18</h1>
 
 # Feature
 1. Show attack range.
-1. Hold space to attack champions, hold v to clear line.
-1. Waiting to be added...
+1. Hold space to attack champions, hold v to clean line(configurable).
+1. Left-click to lock on target.
+1. Change skin(coming soon).
 
 # Build:
 

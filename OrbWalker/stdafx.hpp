@@ -7,10 +7,14 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <format>
+#include <map>
 #include <ranges>
 #include <set>
+#include <string>
 #include <span>
 #include <sstream>
+#include <string_view>
 #include <vector>
 
 #include "../Kiero/kiero.h"
@@ -19,10 +23,16 @@
 #include "../Imgui/imgui_impl_dx11.h"
 #include "../Imgui/imgui_impl_win32.h"
 
-#include "util.hpp"
-#include "object.hpp"
-#include "function.hpp"
-#include "offset.hpp"
-#include "script.hpp"
-#include "hooks.hpp"
-#include "render.hpp"
+#include "memory/offset.hpp"
+#include "memory/spoofcall.h"
+#include "util/constant.hpp"
+#include "util/util.hpp"
+#include "util/function.hpp"
+#include "class/object.hpp"
+#include "draw/render.hpp"
+#include "draw/ui.hpp"
+#include "agent/script.hpp"
+#include "agent/hooks.hpp"
+#include "config/config.hpp"
+
+using namespace std::string_literals;

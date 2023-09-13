@@ -1,0 +1,13 @@
+constexpr auto objTeam = 0x3C;
+constexpr auto objPosition = 0x220;
+constexpr auto objVisible = 0x310;
+constexpr auto objTargetable = 0xEB0;
+constexpr auto objHealth = 0x1058;
+constexpr auto objActionState = 0x13C0;
+constexpr auto objScale = 0x1684;
+constexpr auto objAttackRange = 0x16B4;
+constexpr auto objBuffBegin = 0x27C8;
+constexpr auto objBuffEnd = 0x27D0;
+constexpr auto objCharacterData = 0x3528;
+constexpr auto objCharDataData = 0x28;
+constexpr auto objName = 0x35D8;

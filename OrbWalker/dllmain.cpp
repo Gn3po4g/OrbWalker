@@ -21,12 +21,8 @@ void Start(void *) {
   offset::Init();
   while(function::GameTime() < .5f) std::this_thread::sleep_for(std::chrono::milliseconds(500));
   hooks::Init();
-  while(true) {
-    if((GetAsyncKeyState(VK_DELETE) & 0x8000) != 0) {
-      hooks::Shutdown();
-      break;
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+  while(hooks::running) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 }
 

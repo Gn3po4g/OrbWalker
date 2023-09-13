@@ -1,16 +1,23 @@
 #include "stdafx.hpp"
 
 namespace hooks {
+  bool running = false;
   bool init = false;
 
-  HRESULT(WINAPI *oPresent)
-  (IDXGISwapChain *, UINT, UINT);
-
   HWND window{};
+  WNDPROC oWndProc{};
+  LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
+      return true;
+    }
+    return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+  }
+
   ID3D11Device *pDevice{};
   ID3D11DeviceContext *pDeviceContext{};
   ID3D11RenderTargetView *pRenderTargetView{};
-
+  HRESULT(WINAPI *oPresent)
+  (IDXGISwapChain *, UINT, UINT);
   HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags) {
     if(!init) {
       if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void **)&pDevice))) {
@@ -23,13 +30,14 @@ namespace hooks {
         if(!pBackBuffer) return oPresent(pSwapChain, SyncInterval, Flags);
         pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
         pBackBuffer->Release();
+        oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
         io.IniFilename = nullptr;//"window.ini";
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-        //io.Fonts->AddFontFromFileTTF(SP_STRING("C:\\Windows\\Fonts\\Arial.ttf"), 14);
+        io.Fonts->AddFontFromFileTTF("C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16);
 
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pDeviceContext);
@@ -43,15 +51,32 @@ namespace hooks {
       }
     }
 
+    if(!function::IsChatOpen() && !function::IsLeagueInBackground()) {
+      if(ImGui::IsKeyPressed(ImGuiKey_Delete)) {
+        SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+
+        HRESULT result = oPresent(pSwapChain, SyncInterval, Flags);
+
+        kiero::unbind(8);
+        kiero::shutdown();
+        pDevice->Release();
+        function::PrintMessage("#FF00FF", "Script unloaded");
+        running = false;
+
+        return result;
+      }
+    }
+
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    //ImGui::Begin("ImGui Window");
-    //ImGui::End();
-
     render::Update();
     script::Update();
+    ui::Update();
 
     ImGui::EndFrame();
     ImGui::Render();
@@ -65,11 +90,7 @@ namespace hooks {
   void Init() {
     kiero::init(kiero::RenderType::D3D11);
     kiero::bind(8, (void **)&oPresent, Present);
-  }
-
-  void Shutdown() {
-    kiero::unbind(8);
-    kiero::shutdown();
-    function::PrintMessage("#FF00FF", "Script unloaded");
+    script::Init();
+    running = true;
   }
 }// namespace hooks

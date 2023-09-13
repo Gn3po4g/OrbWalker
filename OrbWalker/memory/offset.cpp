@@ -5,6 +5,7 @@ namespace offset {
 
   uintptr_t oGameTime,
       oLocalPlayer,
+      oObjUnderMouse,
       oHeroList,
       oTurretList,
       oMinionList,
@@ -25,24 +26,25 @@ namespace offset {
     uintptr_t &reference;
     string pattern;
     uintptr_t addition;
-  } sig2scan[] = {
+  } sigs[] = {
       {oGameTime, "F3 0F 5C 35 ? ? ? ? 0F 28 F8", 4},
-      {oLocalPlayer, "48 8B 05 ? ? ? ? 4C 8B D2 4C 8B C1", 3},
-      {oHeroList, "48 8B 05 ? ? ? ? 4C 8B 78 08", 3},
+      {oLocalPlayer, "48 8B 0D ? ? ? ? 48 85 C9 0F 84 ? ? ? ? 48 83 7B ? ?", 3},
+      {oObjUnderMouse, "48 8B 05 ? ? ? ? 48 8B F9 33 C9 48 8B DA", 3},
+      {oHeroList, "48 8B 05 ? ? ? ? 45 33 E4 0F 57 C0", 3},
       {oTurretList, "48 8B 1D ? ? ? ? 48 8B 5B 28", 3},
-      {oMinionList, "48 89 0D ? ? ? ? 48 8D 05 ? ? ? ? 33 D2", 3},
-      {oChatClient, "41 FF D1 48 8B 0D ? ? ? ?", 6},
+      {oMinionList, "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B 45 88", 3},
+      {oChatClient, "41 FF D1 48 8B 0D ? ? ? ? 0F B6 D8", 6},
       {oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3},
       {oViewPort, "48 8B 3D ? ? ? ? FF 90 ? ? ? ?", 3},
 
       {oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
-      {oWorldToScreen, "48 8B D5 E8 ? ? ? ? 48 83 BF ? ? ? ? ?", 4},
       {oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
-      {oIssueMove, "44 88 7C 24 ? E8 ? ? ? ? EB 19", 6},
+      {oIssueMove, "E8 ? ? ? ? EB 15 0F B6", 1},
       {oAttackDelay, "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?", 1},
-      {oAttackWindup, "89 83 ? ? ? ? E8 ? ? ? ? 48 8B CE", 7},
+      {oAttackWindup, "E8 ? ? ? ? 48 8B CE F3 0F 11 83 ? ? ? ?", 1},
       {oIsAlive, "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?", 1},
       {oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D6", 1},
+      {oWorldToScreen, "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8", 1},
   };
 
   vector<ByteWithMask> pattern2bytes(const string &input) {
@@ -78,11 +80,15 @@ namespace offset {
     return 0;
   }
 
+#define DEBUGMODE 1
+
   void Init() {
-    for(auto &[what, pattern, addition] : sig2scan) {
+    for(auto &[what, pattern, addition] : sigs) {
       auto address = FindAddress(pattern);
       while(!address) {
-        // MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
+#ifdef DEBUGMODE
+        MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
+#endif
         this_thread::sleep_for(100ms);
         address = FindAddress(pattern);
       }

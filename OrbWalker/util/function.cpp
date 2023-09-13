@@ -1,7 +1,13 @@
 #include "stdafx.hpp"
 
+#pragma section(".text")
+__declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23};//jmp qword ptr[rbx]
+void *trampoline = (void*)jmp_rbx_0;
+
 using namespace offset;
 namespace function {
+
+
   float GameTime() {
     if(!oGameTime) return 0.f;
     return *(float *)oGameTime;
@@ -16,37 +22,39 @@ namespace function {
   }
 
   bool CanSendInput() {
-    return script::LocalPlayer() && script::LocalPlayer()->IsAlive() &&
+    return script::self && script::self->IsAlive() &&
            !(IsChatOpen() || IsLeagueInBackground());
   }
 
-  void PrintMessage(std::string color, std::string text) {
+  void PrintMessage(std::string_view color, std::string_view text) {
     using fnPrintChat = void(__fastcall *)(uintptr_t, const char *, int);
-    const auto wrapped = "<font color=" + color + '>' + text + "</font>";
+    const auto wrapped = std::format("<font color={}>{}</font>", color, text);
     ((fnPrintChat)oPrintChat)(oChatClient, wrapped.data(), 4);
   }
 
   INT2 WorldToScreen(FLOAT3 in) {
-    using fnWorldToScreen = bool(__fastcall *)(uintptr_t, FLOAT3 *, FLOAT3 *);
+    using fnWorldToScreen = uintptr_t(__fastcall *)(uintptr_t, FLOAT3 *, FLOAT3 *);
     FLOAT3 out;
     ((fnWorldToScreen)oWorldToScreen)(*(uintptr_t *)oViewPort + 0x270, &in, &out);
     return {(int)out.x, (int)out.y};
   }
 
   void AttackObject(Object *target) {
-    using fnIssueOrder = int(__fastcall *)(uintptr_t, bool, int, int, int, int, int);
+    using fnIssueOrder = bool(__fastcall *)(uintptr_t, int, bool, bool, int, int, bool);
     auto headPos = target->position();
-    headPos.y += target->scale() * target->characterdata()->size() * .5f;
+    headPos.y += target->scale() * target->characterdata()->size() * .9f;
     const auto pos = WorldToScreen(headPos);
     auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
-    ((fnIssueOrder)oIssueOrder)(hudInput, false, 0, 1, pos.x, pos.y, 1);
+    fnIssueOrder IssueOrder = (fnIssueOrder)oIssueOrder;
+    spoof_call(trampoline, IssueOrder, hudInput, 0, false, true, pos.x, pos.y, true);
   }
 
   void Move2Mouse() {
-    using fnIssueMove = bool(__fastcall *)(uintptr_t, int, int, bool, int, int);
+    using fnIssueMove = bool(__fastcall *)(uintptr_t, int, int, bool, bool, bool);
     if(POINT pos; GetCursorPos(&pos)) {
       auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x28);
-      ((fnIssueMove)oIssueMove)(hudInput, pos.x, pos.y, false, 0, 1);
+      fnIssueMove IssueMove = (fnIssueMove)oIssueMove;
+      spoof_call(trampoline, IssueMove, hudInput, (int)pos.x, (int)pos.y, false, false, true);
     }
   }
 }// namespace function

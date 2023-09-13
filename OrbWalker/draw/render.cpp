@@ -1,14 +1,8 @@
 #include "stdafx.hpp"
 
 namespace render {
-  void RenderCircleWorld(const FLOAT3 &worldPos, float radius, uintptr_t color, float thickness) {
+  void RenderCircleWorld(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
     ImGuiWindow *window = ImGui::GetCurrentWindow();
-
-    float a = (float)((color >> 24) & 0xff);
-    float r = (float)((color >> 16) & 0xff);
-    float g = (float)((color >> 8) & 0xff);
-    float b = (float)(color & 0xff);
-
     const int numPoints = 100;
     ImVec2 points[numPoints]{};
     float theta = 0.f;
@@ -17,12 +11,18 @@ namespace render {
       ImVec2 screenSpace = function::WorldToScreen(worldSpace).ToImVec();
       points[i] = screenSpace;
     }
-    window->DrawList->AddPolyline(points, numPoints, ImGui::GetColorU32({r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f}), true, thickness);
+    window->DrawList->AddPolyline(points, numPoints, color, true, thickness);
   }
 
   void DrawAttackRange() {
-    const auto self = script::LocalPlayer();
-    RenderCircleWorld(self->position(), self->RealAttackRange(), 0xffffffff, 1.0f);
+    const auto self = script::self;
+    RenderCircleWorld(self->position(), self->RealAttackRange(), 0xffffffff, 1.f);
+  }
+
+  void DrawMarkedObject() {
+    const auto obj = script::markedObject;
+    if(!obj) return;
+    RenderCircleWorld(obj->position(), obj->BonusRadius(), 0xff0c9d00, 5.f);
   }
 
   void Update() {
@@ -37,6 +37,7 @@ namespace render {
     ImGui::SetWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y), ImGuiCond_Always);
 
     DrawAttackRange();
+    DrawMarkedObject();
 
     ImGuiWindow *window = ImGui::GetCurrentWindow();
     window->DrawList->PushClipRectFullScreen();

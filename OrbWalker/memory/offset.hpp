@@ -2,6 +2,7 @@ namespace offset {
   extern uintptr_t
       oGameTime,
       oLocalPlayer,
+      oObjUnderMouse,
       oHeroList,
       oTurretList,
       oMinionList,

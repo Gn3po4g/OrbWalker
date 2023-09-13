@@ -1,158 +1,202 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Kiero">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Source">
+    <Filter Include="source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Imgui">
+    <Filter Include="source\memory">
+      <UniqueIdentifier>{69a3290e-f86c-43f3-a311-67e2e07d9de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\draw">
+      <UniqueIdentifier>{caaa4414-6311-4076-8a0c-2f3afc38efcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kiero">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="imgui">
       <UniqueIdentifier>{375d0d5a-7b76-47fb-97c7-ec2287185ae9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\config">
+      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\util">
+      <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\class">
+      <UniqueIdentifier>{2d4aa31f-1a47-4148-87c2-72ca3089edd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\agent">
+      <UniqueIdentifier>{67edf1eb-9aff-4950-95a8-4e28b8af4c3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Kiero\kiero.cpp">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\buffer.c">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\hde\hde32.c">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\hde\hde64.c">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\hook.c">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="..\Kiero\minhook\src\trampoline.c">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="function.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="offset.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="script.cpp">
-      <Filter>Source</Filter>
+      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source</Filter>
+      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks.cpp">
-      <Filter>Source</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui_impl_win32.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui_tables.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Imgui\imgui_draw.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="render.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="memory\offset.cpp">
+      <Filter>source\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\render.cpp">
+      <Filter>source\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="draw\ui.cpp">
+      <Filter>source\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="util\util.cpp">
+      <Filter>source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="config\config.cpp">
+      <Filter>source\config</Filter>
+    </ClCompile>
+    <ClCompile Include="class\object.cpp">
+      <Filter>source\class</Filter>
+    </ClCompile>
+    <ClCompile Include="util\function.cpp">
+      <Filter>source\util</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\hooks.cpp">
+      <Filter>source\agent</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\script.cpp">
+      <Filter>source\agent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Kiero\kiero.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\include\MinHook.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\buffer.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\hde\hde32.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\hde\hde64.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\hde\pstdint.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\hde\table32.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\hde\table64.h">
-      <Filter>Kiero</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="..\Kiero\minhook\src\trampoline.h">
-      <Filter>Kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="function.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="object.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="offset.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="script.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="util.hpp">
-      <Filter>Source</Filter>
+      <Filter>kiero</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.hpp">
-      <Filter>Source</Filter>
+      <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imgui.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imgui_impl_dx11.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imconfig.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imgui_internal.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imstb_textedit.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks.hpp">
-      <Filter>Source</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imgui_impl_win32.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imstb_rectpack.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Imgui\imstb_truetype.h">
-      <Filter>Imgui</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="render.hpp">
-      <Filter>Source</Filter>
+    <ClInclude Include="memory\offset.hpp">
+      <Filter>source\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\spoofcall.h">
+      <Filter>source\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\render.hpp">
+      <Filter>source\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\ui.hpp">
+      <Filter>source\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="util\util.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
+    <ClInclude Include="config\config.hpp">
+      <Filter>source\config</Filter>
+    </ClInclude>
+    <ClInclude Include="util\constant.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
+    <ClInclude Include="class\object.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="util\function.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\hooks.hpp">
+      <Filter>source\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\script.hpp">
+      <Filter>source\agent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="memory\spoofer.asm">
+      <Filter>source\memory</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

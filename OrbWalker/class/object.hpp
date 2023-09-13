@@ -13,12 +13,11 @@ public:
   //int64_t GetObjectTypeHashDetailed();
 };
 
-class Buff : Property {
-public:
-  std::string name();
-  float starttime();
-  float endtime();
-};
+//class Spell : Property {
+//public:
+//  uintptr_t spellInput();
+//  uintptr_t spellInfo();
+//};
 
 class Object : Property {
   int team();
@@ -28,27 +27,36 @@ class Object : Property {
 
 public:
   CharacterData *characterdata();
+  std::string_view name();
   FLOAT3 position();
   float health();
   float scale();
-  float attackdamage();
+  //float attackdamage();
   float AttackDelay();
   float AttackWindup();
   float BonusRadius();
   float RealAttackRange();
   bool IsAlive();
+  bool IsEnemy();
   bool IsValidTarget();
   bool CanAttack();
   bool CanMove();
-  bool HasBuff(std::string);
+  bool HasBuff(std::string_view);
+  //Spell *GetSpell(int slotId);
 };
-
-extern Object *lastObject;
 
 class ObjList : Property {
   Object **list();
   int size();
 
 public:
-  Object *GetLowestHealth(bool);
+  Object *GetAppropriateObject();
+  bool Contains(Object*);
+};
+
+class Buff : Property {
+public:
+  std::string_view name();
+  float starttime();
+  float endtime();
 };

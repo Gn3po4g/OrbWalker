@@ -1,13 +1,15 @@
+class Object;
+
 namespace function {
   float GameTime();
 
-  //bool IsChatOpen();
+  bool IsChatOpen();
 
-  //bool IsLeagueInBackground();
+  bool IsLeagueInBackground();
 
   bool CanSendInput();
 
-  void PrintMessage(std::string color, std::string text);
+  void PrintMessage(std::string_view, std::string_view);
 
   INT2 WorldToScreen(FLOAT3 position);
 
