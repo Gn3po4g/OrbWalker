@@ -21,7 +21,7 @@ CharacterState Object::actionstate() {
 CharacterData *Object::characterdata() {
   const auto addr = prop<uintptr_t>(objCharacterData);
   if(!IsValidPtr(addr)) return nullptr;
-  return *(CharacterData **)(addr + objCharDataData);
+  return *(CharacterData **)(addr + characterDataData);
 }
 
 std::string_view Object::name() {
@@ -146,11 +146,11 @@ bool ObjList::Contains(Object *obj) {
 }
 
 float CharacterData::size() {
-  return prop<float>(0xC4);
+  return prop<float>(characterDataSize);
 }
 
 ObjectType CharacterData::type() {
-  return *(ObjectType *)(prop<uintptr_t>(0x770));
+  return *(ObjectType *)(prop<uintptr_t>(characterDataType));
 }
 
 //uintptr_t Spell::spellInput() {

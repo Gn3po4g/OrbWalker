@@ -86,7 +86,7 @@ namespace offset {
     for(auto &[what, pattern, addition] : sigs) {
       auto address = FindAddress(pattern);
       while(!address) {
-        if(DEBUGMODE) {
+        if constexpr(DEBUGMODE) {
           MessageBoxA(nullptr, (string("Unable to find ") + pattern).data(), "", MB_OK);
         }
         this_thread::sleep_for(100ms);
