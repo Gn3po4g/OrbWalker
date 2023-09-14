@@ -8,7 +8,7 @@ namespace skin {
       return;
     }
 
-    if(const auto stack = obj->characterDataStack(); stack->baseSkin.skin != skin) {
+    if(const auto stack = obj->dataStack(); stack->baseSkin.skin != skin) {
       stack->baseSkin.skin = skin;
       stack->stack.clear();
       stack->push(model, skin);
@@ -19,15 +19,14 @@ namespace skin {
     if(skin == -1) {
       return;
     }
-    if(const auto stack = obj->characterDataStack(); stack->baseSkin.skin != skin) {
+    if(const auto stack = obj->dataStack(); stack->baseSkin.skin != skin) {
       stack->baseSkin.skin = skin;
       stack->update(true);
     }
   }
 
   void Load() {
-    auto addr = (uintptr_t)GetModuleHandle(nullptr) + 0x218C350;
-    const auto &champions = *(std::vector<Champion *> *)(*(uintptr_t *)(addr) + 0x18);
+    const auto &champions = *(std::vector<Champion *> *)(*(uintptr_t *)(offset::oChampionManager) + 0x18);
     for(const auto &champion : champions) {
       std::vector<std::int32_t> skinsIds;
       for(auto &sk : champion->skins()) {
@@ -38,9 +37,9 @@ namespace skin {
       for(const auto &i : skinsIds) {
         const auto name = champion->champion_name();
         const auto skinDisplayname = std::format("game_character_skin_displayname_{}_{}", name.str, i);
-        using translateString_t = const char *(__fastcall *)(const char *);
-        translateString_t translateString = translateString_t((uintptr_t)GetModuleHandle(nullptr) + 0xCF0F80);
-        auto skinDisplaynameTranslated = i > 0 ? std::string(translateString(skinDisplayname.data())) : std::string(name.str, name.length);
+        using fnTranslateString = const char *(__fastcall *)(const char *);
+        fnTranslateString TranslateString = fnTranslateString(offset::oTranslateString);
+        auto skinDisplaynameTranslated = i > 0 ? std::string(TranslateString(skinDisplayname.data())) : std::string(name.str, name.length);
         if(skinDisplaynameTranslated == skinDisplayname) {
           continue;
         }
@@ -69,7 +68,7 @@ namespace skin {
       }
     }
     if(config::currentSkin > 0) {
-      const auto &values{championsSkins[FNV(script::self->characterDataStack()->baseSkin.model.str)]};
+      const auto &values{championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
       script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
     }
   }
@@ -79,14 +78,14 @@ namespace skin {
     if(!self) return;
     if(ImGui::IsKeyPressed(ImGuiKey_5)) {
       if(!ImGui::GetIO().KeysDown[ImGuiKey_LeftCtrl]) return;
-      const auto playerHash = FNV(self->characterDataStack()->baseSkin.model.str);
+      const auto playerHash = FNV(self->dataStack()->baseSkin.model.str);
       if(const auto it = std::ranges::find_if(
              specialSkins,
-             [&skin = self->characterDataStack()->baseSkin.skin, &ph = playerHash](const SpecialSkin &x) {
+             [&skin = self->dataStack()->baseSkin.skin, &ph = playerHash](const SpecialSkin &x) {
                return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
              });
          it != specialSkins.end()) {
-        const auto stack = self->characterDataStack();
+        const auto stack = self->dataStack();
         if(stack->baseSkin.gear < (int8_t)it->gears.size() - 1) {
           ++stack->baseSkin.gear;
         } else {
@@ -96,7 +95,7 @@ namespace skin {
       }
     }
     if(ImGui::IsKeyPressed(config::prevSkinKey)) {
-      const auto &values{championsSkins[FNV(self->characterDataStack()->baseSkin.model.str)]};
+      const auto &values{championsSkins[FNV(self->dataStack()->baseSkin.model.str)]};
       if(--config::currentSkin > 0) {
         self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
       } else {
@@ -105,7 +104,7 @@ namespace skin {
       }
 
     } else if(ImGui::IsKeyPressed(config::nextSkinKey)) {
-      const auto &values{championsSkins[FNV(self->characterDataStack()->baseSkin.model.str)]};
+      const auto &values{championsSkins[FNV(self->dataStack()->baseSkin.model.str)]};
       if(++config::currentSkin > (int32_t)values.size()) {
         config::currentSkin = (int32_t)values.size();
       }
@@ -114,23 +113,31 @@ namespace skin {
       }
       config::Save();
     }
-    if(!self->characterDataStack()->stack.empty()) {
-      if(auto &stack = self->characterDataStack()->stack.front(); stack.skin != self->characterDataStack()->baseSkin.skin) {
-        stack.skin = self->characterDataStack()->baseSkin.skin;
-        self->characterDataStack()->update(true);
+    if(!self->dataStack()->stack.empty()) {
+      if(auto &stack = self->dataStack()->stack.front(); stack.skin != self->dataStack()->baseSkin.skin) {
+        stack.skin = self->dataStack()->baseSkin.skin;
+        self->dataStack()->update(true);
       }
     }
     for(auto minion : script::minions->data()) {
-      const auto hash = FNV(minion->characterDataStack()->baseSkin.model.str);
-      const auto playerHash = FNV(self->characterDataStack()->baseSkin.model.str);
-      if(hash == FNV("TestCubeRender10Vision") && playerHash == FNV("Yone")) {
-        ChangeModelForObject(minion, "Yone", self->characterDataStack()->baseSkin.skin);
-      } else if(hash == FNV("TestCubeRender10Vision")) {
-        ChangeSkinForObject(minion, 0);
+      const auto hash = FNV(minion->dataStack()->baseSkin.model.str);
+      const auto playerHash = FNV(self->dataStack()->baseSkin.model.str);
+      if(const auto owner = minion->GetOwner(); owner) {
+        if(hash == FNV("TestCubeRender10Vision")) {
+          if(owner == self) {
+            if(playerHash == FNV("Yone")) {
+              ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin);
+            } else {
+              ChangeSkinForObject(minion, 0);
+            }
+          }
+        } else if(hash != FNV("SRU_Jungle_Companions") && hash != FNV("DominationScout")) {
+          ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin);
+        }
+        continue;
       }
-
       if((hash == FNV("NunuSnowball") && playerHash == FNV("Nunu")) || (hash == FNV("KindredWolf") && playerHash == FNV("Kindred")) || (hash == FNV("QuinnValor") && playerHash == FNV("Quinn"))) {
-        ChangeSkinForObject(minion, self->characterDataStack()->baseSkin.skin);
+        ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin);
       }
     }
   }

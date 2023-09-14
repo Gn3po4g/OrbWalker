@@ -3,27 +3,6 @@
 namespace offset {
   using namespace std;
 
-  uintptr_t
-      oGameState,
-      oGameTime,
-      oLocalPlayer,
-      oObjUnderMouse,
-      oHeroList,
-      oTurretList,
-      oMinionList,
-      oChatClient,
-      oHudInstance,
-      oViewPort,
-
-      oPrintChat,
-      oWorldToScreen,
-      oIssueOrder,
-      oIssueMove,
-      oAttackDelay,
-      oAttackWindup,
-      oIsAlive,
-      oBonusRadius;
-
   struct {
     uintptr_t &reference;
     string pattern;
@@ -39,6 +18,7 @@ namespace offset {
       {oChatClient, "41 FF D1 48 8B 0D ? ? ? ? 0F B6 D8", 6},
       {oHudInstance, "48 8B 0D ? ? ? ? 8B 57 10", 3},
       {oViewPort, "48 8B 3D ? ? ? ? FF 90 ? ? ? ?", 3},
+      {oChampionManager, "48 8B 0D ? ? ? ? 48 69 D0 ? ? 00 00 48 8B 05", 3},
 
       {oPrintChat, "E8 ? ? ? ? 4C 8B C3 B2 01", 1},
       {oIssueOrder, "45 33 C0 E8 ? ? ? ? 48 83 C4 48", 4},
@@ -48,6 +28,10 @@ namespace offset {
       {oIsAlive, "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?", 1},
       {oBonusRadius, "E8 ? ? ? ? 0F 28 F8 48 8B D6", 1},
       {oWorldToScreen, "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8", 1},
+      {oDataStackUpdate, "88 54 24 10 53 55 56 57 41 54 41 55 41 56 41", 0},
+      {oDataStackPush, "E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0", 1},
+      {oGetOwner, "E8 ? ? ? ? 4C 3B F8 0F 94 C0", 1},
+      {oTranslateString, "E8 ? ? ? ? BA ? ? ? ? E9 ? ? ? ? 8B 84 24 ? ? ? ?", 1},
   };
 
 

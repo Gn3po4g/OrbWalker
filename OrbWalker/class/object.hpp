@@ -1,10 +1,3 @@
-class CharacterData : Property {
-public:
-  float size();
-  ObjectType type();
-  //int64_t GetObjectTypeHashDetailed();
-};
-
 //class Spell : Property {
 //public:
 //  uintptr_t spellInput();
@@ -15,31 +8,30 @@ class Object : Property {
   int team();
   bool visible();
   bool targetable();
-  CharacterState actionstate();
+  CharacterState state();
 
 public:
-  class CharacterDataStack {
+  class DataStack {
   public:
-    class CharacterStackData {
+    class Data {
     public:
       AString model;
       char pad0[0x10];
-      std::int32_t skin;
+      int32_t skin;
       char pad1[0x60];
-      std::int8_t gear;
+      int8_t gear;
       char pad2[0x7];
     };
-    std::vector<CharacterStackData> stack;
-    CharacterStackData baseSkin;
+    std::vector<Data> stack;
+    Data baseSkin;
 
     void update(bool);
-    void push(const char *, std::int32_t);
+    void push(const char *, int32_t);
   };
-  CharacterData *characterdata();
+  ObjectType type();
   std::string_view name();
   FLOAT3 position();
   float health();
-  float scale();
   //float attackdamage();
   float AttackDelay();
   float AttackWindup();
@@ -52,9 +44,10 @@ public:
   bool CanMove();
   bool HasBuff(std::string_view);
   //Spell *GetSpell(int slotId);
-  CharacterDataStack *characterDataStack();
+  DataStack *dataStack();
   bool CheckSpecialSkins(const char *, int32_t);
   void ChangeSkin(const char *, int32_t);
+  Object* GetOwner();
 };
 
 class ObjList : Property {

@@ -28,7 +28,7 @@ namespace config {
       configJson = j;
     }
     if(self) {
-      currentSkin = configJson.value(std::string(self->characterDataStack()->baseSkin.model.str) + ".currentSkinIndex", 0);
+      currentSkin = configJson.value(std::string(self->dataStack()->baseSkin.model.str) + ".currentSkinIndex", 0);
     }
     showAttackRange = configJson.value("showAttackRange", true);
     kiteKey = configJson.value("kiteKey", ImGuiKey_Space);
@@ -47,7 +47,7 @@ namespace config {
       return;
     }
     if(self) {
-      configJson[std::string(self->characterDataStack()->baseSkin.model.str) + ".currentSkinIndex"] = currentSkin;
+      configJson[std::string(self->dataStack()->baseSkin.model.str) + ".currentSkinIndex"] = currentSkin;
       configJson["showAttackRange"] = showAttackRange;
       configJson["kiteKey"] = kiteKey;
       configJson["cleanKey"] = cleanKey;

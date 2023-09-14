@@ -41,12 +41,10 @@ namespace function {
 
   void AttackObject(Object *target) {
     using fnIssueOrder = bool(__fastcall *)(uintptr_t, int, bool, bool, int, int, bool);
-    auto headPos = target->position();
-    headPos.y += target->scale() * target->characterdata()->size() * .9f;
-    const auto pos = WorldToScreen(headPos);
+    const auto pos = WorldToScreen(target->position());
     auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
     fnIssueOrder IssueOrder = (fnIssueOrder)oIssueOrder;
-    spoof_call(trampoline, IssueOrder, hudInput, 0, false, true, pos.x, pos.y, true);
+    spoof_call(trampoline, IssueOrder, hudInput, 0, false, false, pos.x, pos.y, true);
   }
 
   void Move2Mouse() {

@@ -21,7 +21,7 @@ namespace ui {
   void Update() {
     using namespace config;
     const auto self = script::self;
-    static int gear{self ? self->characterDataStack()->baseSkin.gear : 0};
+    static int gear{self ? self->dataStack()->baseSkin.gear : 0};
     if(!showMenu) return;
     ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize);
     if(ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
@@ -41,24 +41,24 @@ namespace ui {
       }
       if(ImGui::BeginTabItem("Skin")) {
         ImGui::Text("Skin Setting:");
-        auto &values{skin::championsSkins[fnv::hash_runtime(self->characterDataStack()->baseSkin.model.str)]};
+        auto &values{skin::championsSkins[fnv::hash_runtime(self->dataStack()->baseSkin.model.str)]};
         if(ImGui::Combo("Current Skin", &config::currentSkin, vector_getter_skin, (void *)&values, (int)values.size() + 1)) {
           if(config::currentSkin > 0) {
             self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
           }
         }
-        const auto playerHash{fnv::hash_runtime(self->characterDataStack()->baseSkin.model.str)};
+        const auto playerHash{fnv::hash_runtime(self->dataStack()->baseSkin.model.str)};
         if(const auto it{std::ranges::find_if(skin::specialSkins,
-                                              [&skin = self->characterDataStack()->baseSkin.skin, &ph = playerHash](const skin::SpecialSkin &x) {
+                                              [&skin = self->dataStack()->baseSkin.skin, &ph = playerHash](const skin::SpecialSkin &x) {
                                                 return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
                                               })};
            it != skin::specialSkins.end()) {
-          const auto stack{self->characterDataStack()};
+          const auto stack{self->dataStack()};
           gear = stack->baseSkin.gear;
 
           if(ImGui::Combo("Current Gear", &gear, vector_getter_gear, (void *)&it->gears, (int)it->gears.size())) {
-            self->characterDataStack()->baseSkin.gear = static_cast<std::int8_t>(gear);
-            self->characterDataStack()->update(true);
+            self->dataStack()->baseSkin.gear = static_cast<std::int8_t>(gear);
+            self->dataStack()->update(true);
           }
         }
         ImGui::Separator();

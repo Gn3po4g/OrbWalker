@@ -1,5 +1,5 @@
 namespace offset {
-  extern uintptr_t
+  inline uintptr_t
       oGameState,
       oGameTime,
       oLocalPlayer,
@@ -10,6 +10,7 @@ namespace offset {
       oChatClient,
       oHudInstance,
       oViewPort,
+      oChampionManager,
 
       oPrintChat,
       oWorldToScreen,
@@ -18,7 +19,11 @@ namespace offset {
       oAttackDelay,
       oAttackWindup,
       oIsAlive,
-      oBonusRadius;
+      oBonusRadius,
+      oDataStackUpdate,
+      oDataStackPush,
+      oGetOwner,
+  oTranslateString;
 
   void Init();
 }// namespace offset

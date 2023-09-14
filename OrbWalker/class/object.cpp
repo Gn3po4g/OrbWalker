@@ -14,14 +14,15 @@ bool Object::targetable() {
   return prop<bool>(objTargetable);
 }
 
-CharacterState Object::actionstate() {
+CharacterState Object::state() {
   return prop<CharacterState>(objActionState);
 }
 
-CharacterData *Object::characterdata() {
+ObjectType Object::type() {
   const auto addr = prop<uintptr_t>(objCharacterData);
-  if(!IsValidPtr(addr)) return nullptr;
-  return *(CharacterData **)(addr + characterDataData);
+  if(!IsValidPtr(addr)) return (ObjectType)0;
+  const auto data = *(uintptr_t *)(addr + characterDataData);
+  return *(ObjectType *)(*(uintptr_t *)(data + characterDataType));
 }
 
 std::string_view Object::name() {
@@ -34,10 +35,6 @@ FLOAT3 Object::position() {
 
 float Object::health() {
   return prop<float>(objHealth);
-}
-
-float Object::scale() {
-  return prop<float>(objScale);
 }
 
 //float Object::attackdamage() {
@@ -79,19 +76,17 @@ bool Object::IsValidTarget() {
 }
 
 bool Object::CanAttack() {
-  return actionstate() & CharacterState::CanAttack &&
+  return state() & CharacterState::CanAttack &&
          !HasBuff("KaisaE");
 }
 
 bool Object::CanMove() {
-  return actionstate() & CharacterState::CanMove;
+  return state() & CharacterState::CanMove;
 }
 
 bool Object::HasBuff(std::string_view name) {
-  auto begin = prop<Buff **>(objBuffBegin);
-  auto end = prop<Buff **>(objBuffEnd);
-  if(!IsValidPtr(begin) || !IsValidPtr(end)) return false;
-  for(auto buff : std::span(begin, end)) {
+  auto &buffManager = *(std::vector<Buff *> *)((uintptr_t)this + objBuffBegin);
+  for(auto buff : buffManager) {
     if(buff->name() == name &&
        buff->starttime() <= script::gameTime &&
        buff->endtime() >= script::gameTime) {
@@ -105,12 +100,12 @@ bool Object::HasBuff(std::string_view name) {
 //  return ((Spell **)((uintptr_t)this + 0x29E8 + 0x6D0))[slotId];
 //}
 
-Object::CharacterDataStack *Object::characterDataStack() {
-  return (CharacterDataStack *)(uintptr_t(this) + 0x35C8);
+Object::DataStack *Object::dataStack() {
+  return (DataStack *)(uintptr_t(this) + objDataStack);
 }
 
 bool Object::CheckSpecialSkins(const char *model, int32_t skin) {
-  const auto stack{characterDataStack()};
+  const auto stack{dataStack()};
   const auto champ_name{fnv::hash_runtime(stack->baseSkin.model.str)};
 
   if(champ_name == FNV("Katarina") && (skin >= 29 && skin <= 36)) {
@@ -135,23 +130,28 @@ bool Object::CheckSpecialSkins(const char *model, int32_t skin) {
 }
 
 void Object::ChangeSkin(const char *model, int32_t skin) {
-  const auto stack{characterDataStack()};
-  reinterpret_cast<xor_value<std::int32_t> *>(std::uintptr_t(this) + 0x1234)->encrypt(skin);
+  const auto stack{dataStack()};
+  ((xor_value<std::int32_t> *)(uintptr_t(this) + objSkinId))->encrypt(skin);
   stack->baseSkin.skin = skin;
-
   if(!CheckSpecialSkins(model, skin)) {
     stack->update(true);
   }
 }
 
-void Object::CharacterDataStack::update(bool change) {
-  using update_t = int64_t(__fastcall *)(uintptr_t, bool);
-  ((update_t)((uintptr_t)GetModuleHandle(nullptr) + 0x184FA0))(uintptr_t(this), change);
+Object *Object::GetOwner() {
+  using fnGetOwner = Object *(__fastcall *)(Object *);
+  return ((fnGetOwner)(offset::oGetOwner))(this);
 }
 
-void Object::CharacterDataStack::push(const char *model, int32_t skin) {
-  using push_t = __int64(__fastcall *)(uintptr_t, const char *, int32_t, int32_t, bool, bool, bool, bool, bool, bool, int8_t, const char *, int32_t, const char *, int32_t, bool, int32_t);
-  ((push_t)((uintptr_t)GetModuleHandle(nullptr) + 0x19B010))(uintptr_t(this), model, skin, 0, false, false, false, false, true, false, -1, "\x00", 0, "\x00", 0, false, 1);
+
+void Object::DataStack::update(bool change) {
+  using fnUpdate = int64_t(__fastcall *)(Object::DataStack *, bool);
+  ((fnUpdate)(offset::oDataStackUpdate))(this, change);
+}
+
+void Object::DataStack::push(const char *model, int32_t skin) {
+  using fnPush = int64_t(__fastcall *)(Object::DataStack *, const char *, int32_t, int32_t, bool, bool, bool, bool, bool, bool, int8_t, const char *, int32_t, const char *, int32_t, bool, int32_t);
+  ((fnPush)(offset::oDataStackPush))(this, model, skin, 0, false, false, false, false, true, false, -1, "\x00", 0, "\x00", 0, false, 1);
 }
 
 std::span<Object *> ObjList::data() {
@@ -162,7 +162,7 @@ std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectTyp
 
 Object *ObjList::GetAppropriateObject() {
   auto objList = data() | std::views::filter([](Object *obj) {
-                   return obj->IsValidTarget() && hashes.contains(obj->characterdata()->type());
+                   return obj->IsValidTarget() && hashes.contains(obj->type());
                  });
   auto target = std::ranges::min_element(objList, {}, [self = script::self](Object *obj) {
     using config::Targeting;
@@ -182,21 +182,9 @@ Object *ObjList::GetAppropriateObject() {
 }
 
 bool ObjList::Contains(Object *obj) {
-  for(auto o : data()) {
-    if(obj == o) {
-      return true;
-    }
-  }
-  return false;
+  return std::ranges::find(data(), obj) != data().end();
 }
 
-float CharacterData::size() {
-  return prop<float>(characterDataSize);
-}
-
-ObjectType CharacterData::type() {
-  return *(ObjectType *)(prop<uintptr_t>(characterDataType));
-}
 
 //uintptr_t Spell::spellInput() {
 //  return prop<uintptr_t>(0x108);
