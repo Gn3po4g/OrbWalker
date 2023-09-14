@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <format>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <ranges>
 #include <set>
@@ -26,14 +27,12 @@
 
 #include "memory/offset.hpp"
 #include "memory/spoofcall.h"
+#include "memory/function.hpp"
 #include "util/constant.hpp"
 #include "util/util.hpp"
-#include "util/function.hpp"
 #include "util/fnvhash.hpp"
 #include "util/json.hpp"
-#include "class/property.hpp"
-#include "class/astring.hpp"
-#include "class/skin.hpp"
+#include "class/struct.hpp"
 #include "class/champion.hpp"
 #include "class/object.hpp"
 #include "draw/render.hpp"

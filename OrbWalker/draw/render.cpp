@@ -15,6 +15,7 @@ namespace render {
   }
 
   void DrawAttackRange() {
+    if(!config::showAttackRange) return;
     const auto self = script::self;
     RenderCircleWorld(self->position(), self->RealAttackRange(), 0xffffffff, 1.f);
   }

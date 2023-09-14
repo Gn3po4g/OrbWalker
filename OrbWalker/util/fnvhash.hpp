@@ -50,5 +50,7 @@ namespace detail {
 }// namespace detail
 
 using fnv = ::detail::fnv_hash<sizeof(void *) * 8>;
-
-#define FNV(str) (std::integral_constant<fnv::hash, fnv::hash_constexpr(str)>::value)
+//#define FNV(str) (std::integral_constant<fnv::hash, fnv::hash_constexpr(str)>::value)
+inline const auto FNV(const char *str) {
+  return fnv::hash_runtime(str);
+};

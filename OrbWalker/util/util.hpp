@@ -3,38 +3,6 @@ bool IsValidPtr(T addr) {
   return ((uintptr_t)(addr) > 0x100 && (uintptr_t)(addr) < 0x7fffffffffff /* && !IsBadReadPtr(addr, sizeof(PVOID))*/);
 }
 
-struct INT2 {
-  int x, y;
-
-  ImVec2 ToImVec() const {
-    return ImVec2(static_cast<float>(x), static_cast<float>(y));
-  }
-};
-
-struct FLOAT3 {
-  float x, y, z;
-
-  float operator-(const FLOAT3 &other) {
-    const float dx = x - other.x;
-    const float dy = y - other.y;
-    const float dz = z - other.z;
-    return sqrtf(dx * dx + dy * dy + dz * dz);
-  }
-};
-
-struct ByteWithMask {
-  ByteWithMask() = default;
-  ByteWithMask(int _b, bool _m) : _b(std::byte(_b)), _m(_m) {}
-
-  friend bool operator==(const ByteWithMask &bwm, const uint8_t val) {
-    return !bwm._m || bwm._b == std::byte(val);
-  }
-
-private:
-  std::byte _b;
-  bool _m;
-};
-
 enum GameState : int32_t {
   Loading = 0,
   Connecting = 1,
@@ -82,111 +50,21 @@ enum ObjectType : uint64_t {
 };
 
 constexpr auto keyMap = std::to_array<std::string_view>(
-    {"Tab",
-     "LeftArrow",
-     "RightArrow",
-     "UpArrow",
-     "DownArrow",
-     "PageUp",
-     "PageDown",
-     "Home",
-     "End",
-     "Insert",
-     "Delete",
-     "Backspace",
-     "Space",
-     "Enter",
-     "Escape",
-     "LeftCtrl",
-     "LeftShift",
-     "LeftAlt",
-     "LeftSuper",
-     "RightCtrl",
-     "RightShift",
-     "RightAlt",
-     "RightSuper",
-     "Menu",
-     "0",
-     "1",
-     "2",
-     "3",
-     "4",
-     "5",
-     "6",
-     "7",
-     "8",
-     "9",
-     "A",
-     "B",
-     "C",
-     "D",
-     "E",
-     "F",
-     "G",
-     "H",
-     "I",
-     "J",
-     "K",
-     "L",
-     "M",
-     "N",
-     "O",
-     "P",
-     "Q",
-     "R",
-     "S",
-     "T",
-     "U",
-     "V",
-     "W",
-     "X",
-     "Y",
-     "Z",
-     "F1",
-     "F2",
-     "F3",
-     "F4",
-     "F5",
-     "F6",
-     "F7",
-     "F8",
-     "F9",
-     "F10",
-     "F11",
-     "F12",
-     "'",
-     ",",
-     "-",
-     ".",
-     "/",
-     ";",
-     "=",
-     "[",
-     "\\",
-     "]",
-     "`",
-     "CapsLock",
-     "ScrollLock",
-     "NumLock",
-     "PrintScreen",
-     "Pause",
-     "Keypad0",
-     "Keypad1",
-     "Keypad2",
-     "Keypad3",
-     "Keypad4",
-     "Keypad5",
-     "Keypad6",
-     "Keypad7",
-     "Keypad8",
-     "Keypad9",
-     "KeypadDecimal",
-     "KeypadDivide",
-     "KeypadMultiply",
-     "KeypadSubtract",
-     "KeypadAdd",
-     "KeypadEnter",
-     "KeypadEqual"});
+    {"Tab", "LeftArrow", "RightArrow", "UpArrow", "DownArrow",
+     "PageUp", "PageDown", "Home", "End", "Insert", "Delete",
+     "Backspace", "Space", "Enter", "Escape",
+     "LeftCtrl", "LeftShift", "LeftAlt", "LeftSuper",
+     "RightCtrl", "RightShift", "RightAlt", "RightSuper", "Menu",
+     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+     "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+     "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
+     "'", ",", "-", ".", "/", ";", "=", "[", "\\", "]", "`",
+     "CapsLock", "ScrollLock", "NumLock", "PrintScreen", "Pause",
+     "Keypad0", "Keypad1", "Keypad2", "Keypad3", "Keypad4",
+     "Keypad5", "Keypad6", "Keypad7", "Keypad8", "Keypad9",
+     "KeypadDecimal", "KeypadDivide", "KeypadMultiply", "KeypadSubtract",
+     "KeypadAdd", "KeypadEnter", "KeypadEqual"});
 
 #pragma pack(push, 4)
 template<typename T>

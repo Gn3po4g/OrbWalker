@@ -1,3 +1,5 @@
+struct INT2;
+struct FLOAT3;
 class Object;
 
 namespace function {

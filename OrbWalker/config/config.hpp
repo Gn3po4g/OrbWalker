@@ -1,6 +1,7 @@
 namespace config {
   extern bool showMenu;
 
+  extern bool showAttackRange;
   extern int targeting;
   extern ImGuiKey kiteKey;
   extern ImGuiKey cleanKey;

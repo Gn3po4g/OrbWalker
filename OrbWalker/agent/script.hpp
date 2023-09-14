@@ -2,6 +2,7 @@ namespace script {
   extern float gameTime;
   extern Object *self;
   extern Object *markedObject;
+  extern ObjList* minions;
 
   void Init();
 

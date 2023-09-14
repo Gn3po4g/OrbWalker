@@ -124,8 +124,9 @@ bool Object::CheckSpecialSkins(const char *model, int32_t skin) {
       stack->stack.clear();
       stack->push(model, skin);
       return true;
-    } else
+    } else {
       stack->stack.clear();
+    }
   } else if(stack->baseSkin.gear != static_cast<std::int8_t>(-1) && champ_name != FNV("Kayn")) {
     stack->baseSkin.gear = static_cast<std::int8_t>(-1);
   }
@@ -138,8 +139,9 @@ void Object::ChangeSkin(const char *model, int32_t skin) {
   reinterpret_cast<xor_value<std::int32_t> *>(std::uintptr_t(this) + 0x1234)->encrypt(skin);
   stack->baseSkin.skin = skin;
 
-  if(!CheckSpecialSkins(model, skin))
+  if(!CheckSpecialSkins(model, skin)) {
     stack->update(true);
+  }
 }
 
 void Object::CharacterDataStack::update(bool change) {
@@ -147,23 +149,19 @@ void Object::CharacterDataStack::update(bool change) {
   ((update_t)((uintptr_t)GetModuleHandle(nullptr) + 0x184FA0))(uintptr_t(this), change);
 }
 
-void Object::CharacterDataStack::push(const char* model, int32_t skin) {
+void Object::CharacterDataStack::push(const char *model, int32_t skin) {
   using push_t = __int64(__fastcall *)(uintptr_t, const char *, int32_t, int32_t, bool, bool, bool, bool, bool, bool, int8_t, const char *, int32_t, const char *, int32_t, bool, int32_t);
   ((push_t)((uintptr_t)GetModuleHandle(nullptr) + 0x19B010))(uintptr_t(this), model, skin, 0, false, false, false, false, true, false, -1, "\x00", 0, "\x00", 0, false, 1);
 }
 
-Object **ObjList::list() {
-  return prop<Object **>(0x8);
-}
-
-int ObjList::size() {
-  return prop<int>(0x10);
+std::span<Object *> ObjList::data() {
+  return std::span(prop<Object **>(0x8), prop<int>(0x10));
 }
 
 std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectType::Monster, ObjectType::Turret};
 
 Object *ObjList::GetAppropriateObject() {
-  auto objList = std::span(list(), size()) | std::views::filter([](Object *obj) {
+  auto objList = data() | std::views::filter([](Object *obj) {
                    return obj->IsValidTarget() && hashes.contains(obj->characterdata()->type());
                  });
   auto target = std::ranges::min_element(objList, {}, [self = script::self](Object *obj) {
@@ -184,7 +182,7 @@ Object *ObjList::GetAppropriateObject() {
 }
 
 bool ObjList::Contains(Object *obj) {
-  for(auto o : std::span(list(), size())) {
+  for(auto o : data()) {
     if(obj == o) {
       return true;
     }

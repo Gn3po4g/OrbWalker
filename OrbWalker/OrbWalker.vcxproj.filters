@@ -92,9 +92,6 @@
     <ClCompile Include="class\object.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
-    <ClCompile Include="util\function.cpp">
-      <Filter>source\util</Filter>
-    </ClCompile>
     <ClCompile Include="agent\hooks.cpp">
       <Filter>source\agent</Filter>
     </ClCompile>
@@ -106,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="class\champion.cpp">
       <Filter>source\class</Filter>
+    </ClCompile>
+    <ClCompile Include="memory\function.cpp">
+      <Filter>source\memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,9 +187,6 @@
     <ClInclude Include="class\object.hpp">
       <Filter>source\class</Filter>
     </ClInclude>
-    <ClInclude Include="util\function.hpp">
-      <Filter>source\util</Filter>
-    </ClInclude>
     <ClInclude Include="agent\hooks.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
@@ -202,24 +199,21 @@
     <ClInclude Include="class\champion.hpp">
       <Filter>source\class</Filter>
     </ClInclude>
-    <ClInclude Include="class\astring.hpp">
-      <Filter>source\class</Filter>
-    </ClInclude>
-    <ClInclude Include="class\skin.hpp">
-      <Filter>source\class</Filter>
-    </ClInclude>
     <ClInclude Include="util\fnvhash.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
     <ClInclude Include="util\json.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
+    <ClInclude Include="class\struct.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\function.hpp">
+      <Filter>source\memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
-    <None Include="class\property.hpp">
-      <Filter>source\class</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">

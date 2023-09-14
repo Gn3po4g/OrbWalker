@@ -58,10 +58,8 @@ public:
 };
 
 class ObjList : Property {
-  Object **list();
-  int size();
-
 public:
+  std::span<Object *> data();
   Object *GetAppropriateObject();
   bool Contains(Object *);
 };

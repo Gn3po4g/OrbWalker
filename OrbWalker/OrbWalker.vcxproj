@@ -66,11 +66,11 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="draw\render.cpp" />
     <ClCompile Include="draw\ui.cpp" />
+    <ClCompile Include="memory\function.cpp" />
     <ClCompile Include="memory\offset.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="util\function.cpp" />
     <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -94,25 +94,23 @@
     <ClInclude Include="agent\hooks.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />
-    <ClInclude Include="class\astring.hpp" />
     <ClInclude Include="class\champion.hpp" />
     <ClInclude Include="class\object.hpp" />
-    <ClInclude Include="class\skin.hpp" />
+    <ClInclude Include="class\struct.hpp" />
     <ClInclude Include="config\config.hpp" />
     <ClInclude Include="draw\render.hpp" />
     <ClInclude Include="draw\ui.hpp" />
+    <ClInclude Include="memory\function.hpp" />
     <ClInclude Include="memory\offset.hpp" />
     <ClInclude Include="memory\spoofcall.h" />
     <ClInclude Include="stdafx.hpp" />
     <ClInclude Include="util\constant.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
-    <ClInclude Include="util\function.hpp" />
     <ClInclude Include="util\json.hpp" />
     <ClInclude Include="util\util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
-    <None Include="class\property.hpp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm" />

@@ -5,6 +5,7 @@ namespace config {
 
   bool showMenu{true};
 
+   bool showAttackRange{true};
   int targeting{};
   ImGuiKey kiteKey{ImGuiKey_Space};
   ImGuiKey cleanKey{ImGuiKey_V};
@@ -29,6 +30,7 @@ namespace config {
     if(self) {
       currentSkin = configJson.value(std::string(self->characterDataStack()->baseSkin.model.str) + ".currentSkinIndex", 0);
     }
+    showAttackRange = configJson.value("showAttackRange", true);
     kiteKey = configJson.value("kiteKey", ImGuiKey_Space);
     cleanKey = configJson.value("cleanKey", ImGuiKey_V);
     prevSkinKey = configJson.value("prevSkinKey", ImGuiKey_PageUp);
@@ -46,6 +48,7 @@ namespace config {
     }
     if(self) {
       configJson[std::string(self->characterDataStack()->baseSkin.model.str) + ".currentSkinIndex"] = currentSkin;
+      configJson["showAttackRange"] = showAttackRange;
       configJson["kiteKey"] = kiteKey;
       configJson["cleanKey"] = cleanKey;
       configJson["prevSkinKey"] = prevSkinKey;
