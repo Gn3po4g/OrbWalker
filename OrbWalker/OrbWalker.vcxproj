@@ -60,8 +60,11 @@
     <ClCompile Include="agent\hooks.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
+    <ClCompile Include="class\buff.cpp" />
     <ClCompile Include="class\champion.cpp" />
+    <ClCompile Include="class\datastack.cpp" />
     <ClCompile Include="class\object.cpp" />
+    <ClCompile Include="class\objlist.cpp" />
     <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="draw\render.cpp" />
@@ -71,7 +74,6 @@
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Imgui\imconfig.h" />
@@ -94,8 +96,6 @@
     <ClInclude Include="agent\hooks.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />
-    <ClInclude Include="class\champion.hpp" />
-    <ClInclude Include="class\object.hpp" />
     <ClInclude Include="class\struct.hpp" />
     <ClInclude Include="config\config.hpp" />
     <ClInclude Include="draw\render.hpp" />

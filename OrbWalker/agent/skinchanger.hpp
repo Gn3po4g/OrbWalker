@@ -1,3 +1,5 @@
+const uint64_t FNV(const char *str);
+
 namespace skin {
   class SkinInfo {
   public:

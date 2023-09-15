@@ -1,106 +1,112 @@
 #include "stdafx.hpp"
 
 namespace hooks {
-  bool running = false;
-  bool init = false;
+bool running = false;
+bool init = false;
 
-  HWND window{};
-  WNDPROC oWndProc{};
-  LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
-      return true;
-    }
-    using namespace config;
-    if(ImGui::GetIO().KeysDown[menuKey]) {
-      showMenu = !showMenu;
-      if(!showMenu) {
-        Save();
-      }
-    }
-    return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+HWND window {};
+WNDPROC oWndProc {};
+
+LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+  if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
+    return true;
   }
+  using namespace config;
+  if(ImGui::GetIO().KeysDown[menuKey]) {
+    showMenu = !showMenu;
+    if(!showMenu) {
+      Save();
+    }
+  }
+  return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+}
 
-  ID3D11Device *pDevice{};
-  ID3D11DeviceContext *pDeviceContext{};
-  ID3D11RenderTargetView *pRenderTargetView{};
-  HRESULT(WINAPI *oPresent)
-  (IDXGISwapChain *, UINT, UINT);
-  HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags) {
-    if(!init) {
-      if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void **)&pDevice))) {
-        pDevice->GetImmediateContext(&pDeviceContext);
-        DXGI_SWAP_CHAIN_DESC sd{};
-        pSwapChain->GetDesc(&sd);
-        window = sd.OutputWindow;
-        ID3D11Texture2D *pBackBuffer{};
-        pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *)&pBackBuffer);
-        if(!pBackBuffer) return oPresent(pSwapChain, SyncInterval, Flags);
-        pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
-        pBackBuffer->Release();
-        oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
+ID3D11Device* pDevice {};
+ID3D11DeviceContext* pDeviceContext {};
+ID3D11RenderTargetView* pRenderTargetView {};
+HRESULT(WINAPI* oPresent)(IDXGISwapChain*, UINT, UINT);
 
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-        io.IniFilename = nullptr;//"window.ini";
-        io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-        io.Fonts->AddFontFromFileTTF("C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull());
-
-        ImGui_ImplWin32_Init(window);
-        ImGui_ImplDX11_Init(pDevice, pDeviceContext);
-
-        function::PrintMessage("#00FFFF", "Noroby's League of Legends script loaded");
-        function::PrintMessage("#FF00FF", "Press DELETE to unload the script");
-
-        init = true;
-      } else {
+HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
+  if(!init) {
+    if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
+      pDevice->GetImmediateContext(&pDeviceContext);
+      DXGI_SWAP_CHAIN_DESC sd {};
+      pSwapChain->GetDesc(&sd);
+      window = sd.OutputWindow;
+      ID3D11Texture2D* pBackBuffer {};
+      pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+      if(!pBackBuffer) {
         return oPresent(pSwapChain, SyncInterval, Flags);
       }
+      pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
+      pBackBuffer->Release();
+      oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
+
+      IMGUI_CHECKVERSION();
+      ImGui::CreateContext();
+      ImGuiIO& io = ImGui::GetIO();
+      io.IniFilename = nullptr;  //"window.ini";
+      io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+      io.Fonts->AddFontFromFileTTF(
+        "C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr,
+        io.Fonts->GetGlyphRangesChineseFull()
+      );
+
+      ImGui_ImplWin32_Init(window);
+      ImGui_ImplDX11_Init(pDevice, pDeviceContext);
+
+      function::PrintMessage("#00FFFF", "Noroby's League of Legends script loaded");
+      function::PrintMessage("#FF00FF", "Press DELETE to unload the script");
+
+      init = true;
+    } else {
+      return oPresent(pSwapChain, SyncInterval, Flags);
     }
-
-    if(!function::IsChatOpen() && !function::IsLeagueInBackground()) {
-      if(ImGui::IsKeyPressed(ImGuiKey_Delete)) {
-        SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
-        ImGui_ImplDX11_Shutdown();
-        ImGui_ImplWin32_Shutdown();
-        ImGui::DestroyContext();
-
-        HRESULT result = oPresent(pSwapChain, SyncInterval, Flags);
-
-        kiero::unbind(8);
-        kiero::shutdown();
-        pDevice->Release();
-        function::PrintMessage("#FF00FF", "Script unloaded");
-        running = false;
-
-        return result;
-      }
-    }
-
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
-    render::Update();
-    script::Update();
-    ui::Update();
-    skin::Update();
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    return oPresent(pSwapChain, SyncInterval, Flags);
   }
 
-  void Init() {
-    script::Init();
-    config::Load();
-    skin::Load();
-    kiero::init(kiero::RenderType::D3D11);
-    kiero::bind(8, (void **)&oPresent, Present);
-    running = true;
+  if(!function::IsChatOpen() && !function::IsLeagueInBackground()) {
+    if(ImGui::IsKeyPressed(ImGuiKey_Delete)) {
+      SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
+      ImGui_ImplDX11_Shutdown();
+      ImGui_ImplWin32_Shutdown();
+      ImGui::DestroyContext();
+
+      HRESULT result = oPresent(pSwapChain, SyncInterval, Flags);
+
+      kiero::unbind(8);
+      kiero::shutdown();
+      pDevice->Release();
+      function::PrintMessage("#FF00FF", "Script unloaded");
+      running = false;
+
+      return result;
+    }
   }
-}// namespace hooks
+
+  ImGui_ImplDX11_NewFrame();
+  ImGui_ImplWin32_NewFrame();
+  ImGui::NewFrame();
+
+  render::Update();
+  script::Update();
+  ui::Update();
+  skin::Update();
+
+  ImGui::EndFrame();
+  ImGui::Render();
+
+  pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
+  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+  return oPresent(pSwapChain, SyncInterval, Flags);
+}
+
+void Init() {
+  script::Init();
+  config::Load();
+  skin::Load();
+  kiero::init(kiero::RenderType::D3D11);
+  kiero::bind(8, (void**)&oPresent, Present);
+  running = true;
+}
+}  // namespace hooks

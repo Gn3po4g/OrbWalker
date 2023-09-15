@@ -83,9 +83,6 @@
     <ClCompile Include="draw\ui.cpp">
       <Filter>source\draw</Filter>
     </ClCompile>
-    <ClCompile Include="util\util.cpp">
-      <Filter>source\util</Filter>
-    </ClCompile>
     <ClCompile Include="config\config.cpp">
       <Filter>source\config</Filter>
     </ClCompile>
@@ -106,6 +103,15 @@
     </ClCompile>
     <ClCompile Include="memory\function.cpp">
       <Filter>source\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="class\buff.cpp">
+      <Filter>source\class</Filter>
+    </ClCompile>
+    <ClCompile Include="class\objlist.cpp">
+      <Filter>source\class</Filter>
+    </ClCompile>
+    <ClCompile Include="class\datastack.cpp">
+      <Filter>source\class</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +190,6 @@
     <ClInclude Include="util\constant.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
-    <ClInclude Include="class\object.hpp">
-      <Filter>source\class</Filter>
-    </ClInclude>
     <ClInclude Include="agent\hooks.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
@@ -195,9 +198,6 @@
     </ClInclude>
     <ClInclude Include="agent\skinchanger.hpp">
       <Filter>source\agent</Filter>
-    </ClInclude>
-    <ClInclude Include="class\champion.hpp">
-      <Filter>source\class</Filter>
     </ClInclude>
     <ClInclude Include="util\fnvhash.hpp">
       <Filter>source\util</Filter>

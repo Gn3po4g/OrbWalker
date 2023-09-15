@@ -1,3 +1,6 @@
+class Object;
+class ObjList;
+
 namespace script {
   extern float gameTime;
   extern Object *self;
