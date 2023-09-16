@@ -3,7 +3,7 @@
 std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectType::Monster, ObjectType::Turret};
 
 std::span<Object *> ObjList::data() {
-  return std::span(prop<Object **>(0x8), prop<int>(0x10));
+  return std::span(MEMBER<Object **>(0x8), MEMBER<int>(0x10));
 }
 
 Object *ObjList::GetAppropriateObject() {

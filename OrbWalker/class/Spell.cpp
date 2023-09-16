@@ -2,11 +2,11 @@
 
 using SpellInput = Spell::SpellInput;
 
-float Spell::readyTime() { return prop<float>(0x30); }
+float Spell::readyTime() { return MEMBER<float>(0x30); }
 
-SpellInput* Spell::spellInput() { return prop<SpellInput*>(0x128); }
+SpellInput* Spell::spellInput() { return MEMBER<SpellInput*>(0x128); }
 
-uintptr_t Spell::spellInfo() { return prop<uintptr_t>(0x130); }
+uintptr_t Spell::spellInfo() { return MEMBER<uintptr_t>(0x130); }
 
 void SpellInput::SetCasterHandle(int index) { *reinterpret_cast<uintptr_t*>(this + 0x10) = index; }
 

@@ -16,6 +16,9 @@ namespace action {
 float lastActionTime {-FLT_MAX};
 
 void CheckMarkedObject() {
+  if(auto obj = markedObject; obj && (!obj->IsAlive() || !obj->visible())) {
+    markedObject = nullptr;
+  }
   if(ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
     auto obj = *(Object**)(*(uintptr_t*)(offset::oObjUnderMouse) + 0x18);
     if(heros->Contains(obj) && obj->IsEnemy()) {

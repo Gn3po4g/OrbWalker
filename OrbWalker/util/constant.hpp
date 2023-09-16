@@ -9,6 +9,7 @@ constexpr auto objScale = 0x1684;
 constexpr auto objAttackRange = 0x16B4;
 constexpr auto objBuffBegin = 0x27C8;
 constexpr auto objBuffEnd = 0x27D0;
+constexpr auto objSpell = 0x30B8;
 constexpr auto objCharacterData = 0x3598;
 constexpr auto characterDataData = 0x28;
 constexpr auto characterDataType = 0x770;

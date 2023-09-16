@@ -1,4 +1,11 @@
-enum GameState : int32_t { Loading = 0, Connecting = 1, Running = 2, Paused = 3, Finished = 4, Exiting = 5 };
+enum GameState : int32_t {
+  Loading = 0,
+  Connecting = 1,
+  Running = 2,
+  Paused = 3,
+  Finished = 4,
+  Exiting = 5
+};
 
 enum CharacterState : uint16_t {
   CanAttack = 1 << 0,
@@ -59,19 +66,13 @@ struct ByteWithMask {
 
   ByteWithMask(int _b, bool _m) : _b(std::byte(_b)), _m(_m) {}
 
-  friend bool operator==(const ByteWithMask& bwm, const uint8_t val) { return !bwm._m || bwm._b == std::byte(val); }
+  friend bool operator==(const ByteWithMask& bwm, const uint8_t val) {
+    return !bwm._m || bwm._b == std::byte(val);
+  }
 
 private:
   std::byte _b;
   bool _m;
-};
-
-class Property {
-protected:
-  template<typename Type>
-  inline Type prop(uintptr_t offset) {
-    return *reinterpret_cast<Type*>(this + offset);
-  }
 };
 
 struct AString {
@@ -86,14 +87,27 @@ struct SkinData {
   AString skinName;
 };
 
-class Buff : Property {
+class IMEMBER {
+protected:
+  template<typename Type>
+  inline Type MEMBER(uintptr_t offset) {
+    return *reinterpret_cast<Type*>(this + offset);
+  }
+
+  template<typename Type>
+  inline Type* pMEMBER(uintptr_t offset) {
+    return reinterpret_cast<Type*>(this + offset);
+  }
+};
+
+class Buff : IMEMBER {
 public:
   std::string_view name();
   float starttime();
   float endtime();
 };
 
-class Spell : Property {
+class Spell : IMEMBER {
 public:
   class SpellInput {
   public:
@@ -104,12 +118,13 @@ public:
     void SetClickedPos(FLOAT3);
     void SetUnkPos(FLOAT3);
   };
+
   float readyTime();
   SpellInput* spellInput();
   uintptr_t spellInfo();
 };
 
-class Champion : Property {
+class Champion : IMEMBER {
 public:
   AString champion_name();
 
@@ -135,16 +150,15 @@ public:
   void push(const char*, int32_t);
 };
 
-class Object : Property {
+class Object : IMEMBER {
+public:
   int team();
   bool visible();
   bool targetable();
   CharacterState state();
-
-public:
+  std::string_view name();
   //int index();
   ObjectType type();
-  std::string_view name();
   FLOAT3 position();
   float health();
   DataStack* dataStack();
@@ -166,7 +180,7 @@ public:
   Object* GetOwner();
 };
 
-class ObjList : Property {
+class ObjList : IMEMBER {
 public:
   std::span<Object*> data();
   Object* GetAppropriateObject();
