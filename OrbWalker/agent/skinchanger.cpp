@@ -67,10 +67,10 @@ void Load() {
       }
     }
   }
-  if(config::currentSkin > 0) {
-    const auto& values {championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
-    script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
-  }
+  //if(config::currentSkin > 0) {
+  //  const auto& values {championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
+  //  script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
+  //}
 }
 
 void Update() {
@@ -78,6 +78,13 @@ void Update() {
   if(!self) {
     return;
   }
+  static std::once_flag changeSkin;
+  std::call_once(changeSkin, []() {
+    if(config::currentSkin > 0) {
+      const auto& values {championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
+      script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
+    }
+  });
   if(ImGui::IsKeyPressed(ImGuiKey_5)) {
     if(!ImGui::GetIO().KeysDown[ImGuiKey_LeftCtrl]) {
       return;
@@ -105,7 +112,6 @@ void Update() {
       config::currentSkin = 1;
       config::Save();
     }
-
   } else if(ImGui::IsKeyPressed(config::nextSkinKey)) {
     const auto& values {championsSkins[FNV(self->dataStack()->baseSkin.model.str)]};
     if(++config::currentSkin > (int32_t)values.size()) {

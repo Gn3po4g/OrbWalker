@@ -113,6 +113,9 @@
     <ClCompile Include="class\datastack.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
+    <ClCompile Include="class\Spell.cpp">
+      <Filter>source\class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Kiero\kiero.h">

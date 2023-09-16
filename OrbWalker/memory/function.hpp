@@ -1,21 +1,19 @@
-struct INT2;
-struct FLOAT3;
-class Object;
-
 namespace function {
-  float GameTime();
+float GameTime();
 
-  bool IsChatOpen();
+bool IsChatOpen();
 
-  bool IsLeagueInBackground();
+bool IsLeagueInBackground();
 
-  bool CanSendInput();
+bool CanSendInput();
 
-  void PrintMessage(std::string_view, std::string_view);
+void PrintMessage(std::string_view, std::string_view);
 
-  INT2 WorldToScreen(FLOAT3 position);
+INT2 WorldToScreen(FLOAT3 position);
 
-  void AttackObject(Object *target);
+void AttackObject(Object* target);
 
-  void Move2Mouse();
-}// namespace function
+void Move2Mouse();
+
+bool CastSpell(Object*, int);
+}  // namespace function

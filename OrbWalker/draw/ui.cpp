@@ -24,7 +24,13 @@ auto vector_getter_gear = [](void* vec, const int32_t idx, const char** out_text
 void Update() {
   using namespace config;
   const auto self = script::self;
-  static int gear {self ? self->dataStack()->baseSkin.gear : 0};
+  static int gear {};
+  if(ImGui::IsKeyPressed(menuKey)) {
+    showMenu = !showMenu;
+    if(!showMenu) {
+      Save();
+    }
+  }
   if(!showMenu) {
     return;
   }

@@ -13,4 +13,4 @@ constexpr auto objCharacterData = 0x3598;
 constexpr auto characterDataData = 0x28;
 constexpr auto characterDataType = 0x770;
 constexpr auto objDataStack = 0x35C8;
-constexpr auto objName = 0x35D8;
+constexpr auto objName = 0x35E0;

@@ -70,7 +70,7 @@ class Property {
 protected:
   template<typename Type>
   inline Type prop(uintptr_t offset) {
-    return *reinterpret_cast<Type*>(reinterpret_cast<uintptr_t>(this) + offset);
+    return *reinterpret_cast<Type*>(this + offset);
   }
 };
 
@@ -91,6 +91,22 @@ public:
   std::string_view name();
   float starttime();
   float endtime();
+};
+
+class Spell : Property {
+public:
+  class SpellInput {
+  public:
+    void SetCasterHandle(int);
+    void SetTargetHandle(int);
+    void SetStartPos(FLOAT3);
+    void SetEndPos(FLOAT3);
+    void SetClickedPos(FLOAT3);
+    void SetUnkPos(FLOAT3);
+  };
+  float readyTime();
+  SpellInput* spellInput();
+  uintptr_t spellInfo();
 };
 
 class Champion : Property {
@@ -126,6 +142,7 @@ class Object : Property {
   CharacterState state();
 
 public:
+  //int index();
   ObjectType type();
   std::string_view name();
   FLOAT3 position();
@@ -143,7 +160,7 @@ public:
   bool CanAttack();
   bool CanMove();
   bool HasBuff(std::string_view);
-  //Spell *GetSpell(int slotId);
+  Spell* GetSpell(int);
   bool CheckSpecialSkins(const char*, int32_t);
   void ChangeSkin(const char*, int32_t);
   Object* GetOwner();

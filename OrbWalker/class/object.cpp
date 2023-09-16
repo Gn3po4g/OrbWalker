@@ -19,7 +19,7 @@ ObjectType Object::type() {
   return *(ObjectType*)(*(uintptr_t*)(data + characterDataType));
 }
 
-std::string_view Object::name() { return prop<char*>(objName); }
+std::string_view Object::name() { return std::string_view(prop<char*>(objName), prop<int32_t>(objName + 0x8)); }
 
 FLOAT3 Object::position() { return prop<FLOAT3>(objPosition); }
 
@@ -33,12 +33,18 @@ DataStack* Object::dataStack() { return (DataStack*)(uintptr_t(this) + objDataSt
 
 float Object::AttackDelay() {
   using fnAttackDelay = float(__fastcall*)(Object*);
-  return ((fnAttackDelay)oAttackDelay)(this);
+  auto ad = ((fnAttackDelay)oAttackDelay)(this);
+  if(name() == "Graves") {
+    ad *= .15f;
+  } else if(name() == "Zeri") {
+    return 0.f;
+  }
+  return ad - .09f;
 }
 
 float Object::AttackWindup() {
   using fnAttackWindup = float(__fastcall*)(Object*, int);
-  return ((fnAttackWindup)oAttackWindup)(this, 0x40);
+  return ((fnAttackWindup)oAttackWindup)(this, 0x40) - .03f;
 }
 
 float Object::BonusRadius() {
@@ -46,7 +52,12 @@ float Object::BonusRadius() {
   return ((fnBonusRadius)oBonusRadius)(this);
 }
 
-float Object::RealAttackRange() { return prop<float>(objAttackRange) + BonusRadius(); }
+float Object::RealAttackRange() {
+  if(name() == "Zeri") {
+    return prop<float>(objAttackRange) + 200.f + BonusRadius();
+  }
+  return prop<float>(objAttackRange) + BonusRadius();
+}
 
 bool Object::IsAlive() {
   using fnIsAlive = bool(__fastcall*)(Object*);
@@ -62,11 +73,22 @@ bool Object::IsTargetableToTeam() {
 
 bool Object::IsValidTarget() {
   const auto self = script::self;
+  auto distance = position() - self->position() - BonusRadius();
+  if(self->name() == "Zeri") {
+    distance += BonusRadius();
+  }
   return visible() && targetable() && IsEnemy() && IsAlive() && IsTargetableToTeam()
-      && position() - self->position() <= self->RealAttackRange() + BonusRadius();
+      && distance <= self->RealAttackRange();
 }
 
-bool Object::CanAttack() { return state() & CharacterState::CanAttack && !HasBuff("KaisaE"); }
+bool Object::CanAttack() {
+  if(name() == "Kaisa") {
+    return (state() & CharacterState::CanAttack) && !HasBuff("KaisaE");
+  } else if(name() == "Zeri") {
+    return (state() & CharacterState::CanCast) && script::gameTime >= GetSpell(0)->readyTime();
+  }
+  return state() & CharacterState::CanAttack;
+}
 
 bool Object::CanMove() { return state() & CharacterState::CanMove; }
 
@@ -79,6 +101,8 @@ bool Object::HasBuff(std::string_view name) {
   }
   return false;
 }
+
+Spell* Object::GetSpell(int index) { return ((Spell**)((uintptr_t)this + 0x30B8))[index]; }
 
 bool Object::CheckSpecialSkins(const char* model, int32_t skin) {
   const auto stack {dataStack()};

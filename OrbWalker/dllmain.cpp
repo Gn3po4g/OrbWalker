@@ -19,7 +19,7 @@ void Start(void *) {
   HideThread(GetCurrentThread());
   offset::Init();
   GameState state{};
-  while(state != Running && state != Paused) {
+  while(state != Running) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     state = *(GameState *)(*(uintptr_t *)offset::oGameState + 0xC);
   }

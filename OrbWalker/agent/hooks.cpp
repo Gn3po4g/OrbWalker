@@ -11,13 +11,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
   if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
     return true;
   }
-  using namespace config;
-  if(ImGui::GetIO().KeysDown[menuKey]) {
-    showMenu = !showMenu;
-    if(!showMenu) {
-      Save();
-    }
-  }
   return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
