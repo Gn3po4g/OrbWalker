@@ -39,7 +39,8 @@ void Load() {
       const auto skinDisplayname = format("game_character_skin_displayname_{}_{}", name.str, i);
       using fnTranslateString = const char*(__fastcall*)(const char*);
       fnTranslateString TranslateString = fnTranslateString(offset::oTranslateString);
-      auto translatedName = i > 0 ? string(TranslateString(skinDisplayname.data())) : string(name.str, name.length);
+      auto translatedName =
+        i > 0 ? string(TranslateString(skinDisplayname.data())) : string(name.str, name.length);
       if(translatedName == skinDisplayname) {
         continue;
       }
@@ -82,7 +83,9 @@ void Update() {
   std::call_once(changeSkin, []() {
     if(config::currentSkin > 0) {
       const auto& values {championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
-      script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
+      script::self->ChangeSkin(
+        values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId
+      );
     }
   });
   if(ImGui::IsKeyPressed(ImGuiKey_5)) {
@@ -91,8 +94,10 @@ void Update() {
     }
     const auto playerHash = FNV(self->dataStack()->baseSkin.model.str);
     if(const auto it = ranges::find_if(
-         specialSkins, [&skin = self->dataStack()->baseSkin.skin, &ph = playerHash](const SpecialSkin& x
-                       ) { return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin); }
+         specialSkins,
+         [&skin = self->dataStack()->baseSkin.skin, &ph = playerHash](const SpecialSkin& x) {
+           return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
+         }
        );
        it != specialSkins.end()) {
       const auto stack = self->dataStack();
@@ -107,7 +112,9 @@ void Update() {
   if(ImGui::IsKeyPressed(config::prevSkinKey)) {
     const auto& values {championsSkins[FNV(self->dataStack()->baseSkin.model.str)]};
     if(--config::currentSkin > 0) {
-      self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
+      self->ChangeSkin(
+        values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId
+      );
     } else {
       config::currentSkin = 1;
       config::Save();
@@ -118,12 +125,15 @@ void Update() {
       config::currentSkin = (int32_t)values.size();
     }
     if(config::currentSkin > 0) {
-      self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
+      self->ChangeSkin(
+        values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId
+      );
     }
     config::Save();
   }
   if(!self->dataStack()->stack.empty()) {
-    if(auto& stack = self->dataStack()->stack.front(); stack.skin != self->dataStack()->baseSkin.skin) {
+    if(auto& stack = self->dataStack()->stack.front();
+       stack.skin != self->dataStack()->baseSkin.skin) {
       stack.skin = self->dataStack()->baseSkin.skin;
       self->dataStack()->update(true);
     }
@@ -140,7 +150,7 @@ void Update() {
             ChangeSkinForObject(minion, 0);
           }
         }
-      } else if(hash != FNV("SRU_Jungle_Companions") && hash != FNV("DominationScout")) {
+      } else if(hash != FNV("SRU_Jungle_Companions") && hash != FNV("DominationScout") && hash != FNV("JammerDevice") && hash != FNV("SightWard") && hash != FNV("YellowTrinket") && hash != FNV("VisionWard") && hash != FNV("BlueTrinket")) {
         ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin);
       }
       continue;
