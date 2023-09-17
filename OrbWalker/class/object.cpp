@@ -2,7 +2,9 @@
 
 using namespace offset;
 
-int Object::team() { return MEMBER<int>(objTeam); }
+int32_t Object::index() { return MEMBER<int32_t>(objIndex); }
+
+int32_t Object::team() { return MEMBER<int32_t>(objTeam); }
 
 bool Object::visible() { return MEMBER<bool>(objVisible); }
 
@@ -39,7 +41,7 @@ float Object::AttackDelay() {
   if(name() == "Graves") {
     ad *= .15f;
   } else if(name() == "Zeri") {
-    return GetSpell(0)->readyTime() - script::gameTime;
+    return 0.f;
   }
   return ad - .09f;
 }
@@ -89,7 +91,7 @@ bool Object::CanAttack() {
   if(name() == "Kaisa") {
     return canAttack && !HasBuff("KaisaE");
   } else if(name() == "Zeri") {
-    return state() & CharacterState::CanCast;
+    return state() & CharacterState::CanCast && GetSpell(0)->readyTime() <= script::gameTime;
   }
   return canAttack;
 }

@@ -109,10 +109,10 @@ public:
 
 class Spell : IMEMBER {
 public:
-  class SpellInput {
+  class SpellInput : IMEMBER {
   public:
-    void SetCasterHandle(int);
-    void SetTargetHandle(int);
+    void SetCasterHandle(int32_t);
+    void SetTargetHandle(int32_t);
     void SetStartPos(FLOAT3);
     void SetEndPos(FLOAT3);
     void SetClickedPos(FLOAT3);
@@ -152,12 +152,12 @@ public:
 
 class Object : IMEMBER {
 public:
-  int team();
+  int32_t index();
+  int32_t team();
   bool visible();
   bool targetable();
   CharacterState state();
   std::string_view name();
-  //int index();
   ObjectType type();
   FLOAT3 position();
   float health();

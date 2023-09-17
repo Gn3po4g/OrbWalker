@@ -68,10 +68,6 @@ void Load() {
       }
     }
   }
-  //if(config::currentSkin > 0) {
-  //  const auto& values {championsSkins[FNV(script::self->dataStack()->baseSkin.model.str)]};
-  //  script::self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
-  //}
 }
 
 void Update() {

@@ -13,7 +13,9 @@ inline bool IsChatOpen() { return *(bool*)(*(uintptr_t*)oChatClient + 0xC90); }
 
 inline bool IsLeagueInBackground() { return *(bool*)(*(uintptr_t*)oHudInstance + 0xB9); }
 
-bool CanSendInput() { return script::self && script::self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
+bool CanSendInput() {
+  return script::self && script::self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground());
+}
 
 void PrintMessage(std::string_view color, std::string_view text) {
   using fnPrintChat = void(__fastcall*)(uintptr_t, const char*, int);
@@ -45,26 +47,71 @@ void Move2Mouse() {
   }
 }
 
+bool CastSpell(int index) {
+  Object* self = script::self;
+  auto hudInput = *(uintptr_t*)(*(uintptr_t*)oHudInstance + 0x68);
+  auto spell = self->GetSpell(index);
+  auto targetInfo = spell->spellInput();
+  if(!targetInfo) {
+    return false;
+  }
+  // set spell position
+  targetInfo->SetCasterHandle(self->index());
+  targetInfo->SetTargetHandle(0);
+  targetInfo->SetStartPos(self->position());
+  targetInfo->SetEndPos(self->position());
+  targetInfo->SetClickedPos(self->position());
+  targetInfo->SetUnkPos(self->position());
+
+  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
+  fnHudCastSpell HudCastSpell = (fnHudCastSpell)((uintptr_t)GetModuleHandle(nullptr) + 0x897870);
+  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
+
+  return true;
+}
+
 bool CastSpell(Object* target, int index) {
   Object* self = script::self;
+  auto hudInput = *(uintptr_t*)(*(uintptr_t*)oHudInstance + 0x68);
   auto spell = self->GetSpell(index);
   auto targetInfo = spell->spellInput();
   if(!targetInfo || !target) {
     return false;
   }
-  uintptr_t InputLogic = *(uintptr_t*)(*(uintptr_t*)oHudInstance + 0x68);
-
   // set spell position
-  //targetInfo->SetCasterHandle(self->index());
-  //targetInfo->SetTargetHandle(target->index());
+  targetInfo->SetCasterHandle(self->index());
+  targetInfo->SetTargetHandle(target->index());
   targetInfo->SetStartPos(self->position());
   targetInfo->SetEndPos(target->position());
   targetInfo->SetClickedPos(target->position());
   targetInfo->SetUnkPos(target->position());
 
-  typedef void(__fastcall * fnHudCastSpell)(uintptr_t HudInput, uintptr_t SpellData);
+  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
   fnHudCastSpell HudCastSpell = (fnHudCastSpell)((uintptr_t)GetModuleHandle(nullptr) + 0x897870);
-  spoof_call(trampoline, HudCastSpell, InputLogic, spell->spellInfo());
+  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
+
+  return true;
+}
+
+bool CastSpell(FLOAT3 pos, int index) {
+  Object* self = script::self;
+  auto hudInput = *(uintptr_t*)(*(uintptr_t*)oHudInstance + 0x68);
+  auto spell = self->GetSpell(index);
+  auto targetInfo = spell->spellInput();
+  if(!targetInfo) {
+    return false;
+  }
+  // set spell position
+  targetInfo->SetCasterHandle(self->index());
+  targetInfo->SetTargetHandle(0);
+  targetInfo->SetStartPos(self->position());
+  targetInfo->SetEndPos(pos);
+  targetInfo->SetClickedPos(pos);
+  targetInfo->SetUnkPos(pos);
+
+  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
+  fnHudCastSpell HudCastSpell = (fnHudCastSpell)((uintptr_t)GetModuleHandle(nullptr) + 0x897870);
+  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
 
   return true;
 }

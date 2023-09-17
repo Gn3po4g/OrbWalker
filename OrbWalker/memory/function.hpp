@@ -15,5 +15,7 @@ void AttackObject(Object* target);
 
 void Move2Mouse();
 
+bool CastSpell(int);
 bool CastSpell(Object*, int);
+bool CastSpell(FLOAT3, int);
 }  // namespace function

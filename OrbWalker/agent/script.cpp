@@ -65,7 +65,7 @@ void Attack() {
   const auto obj = GetTarget();
   if(obj && self->CanAttack() && CanDoAction()) {
     if(self->name() == "Zeri") {
-      function::CastSpell(obj, 0);
+      function::CastSpell(obj->position(), 0);
       lastAttackTime = gameTime;
     } else {
       function::AttackObject(obj);
