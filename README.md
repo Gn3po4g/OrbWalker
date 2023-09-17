@@ -5,7 +5,6 @@
 1. Show attack range.
 1. Hold space to attack champions, hold v to clean line(configurable).
 1. Left-click to lock on target.
-1. Change skin(coming soon).
 
 # Build:
 
