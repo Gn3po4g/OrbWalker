@@ -38,7 +38,7 @@ void Script::extra_update() {
 bool Script::can_attack() { return orb->self->state() & CharacterState::CanAttack; }
 
 bool Script::can_do_action() {
-  if(game_time < last_action_time + .03f) return false;
+  if(game_time < last_action_time + .033f) return false;
   last_action_time = game_time;
   return true;
 }
@@ -69,16 +69,18 @@ bool Script::has_buff(std::string_view name) {
 }
 
 bool Cassiopeia::can_attack() {
-  return (orb->self->state() & CharacterState::CanCast) && (orb->self->mana_cost(2) <= orb->self->mana());
+  return orb->self->state() & CharacterState::CanCast && orb->self->mana_cost(2) <= orb->self->mana();
 }
 
-bool Cassiopeia::is_reloading() { return game_time < orb->self->GetSpell(2)->readyTime() - .03f; }
+bool Cassiopeia::is_reloading() { return game_time < orb->self->GetSpell(2)->readyTime() - .033f; }
 
 void Cassiopeia::attack() {
   auto obj = GetTarget(700.f, false);
-  if(obj && obj->type() != ObjectType::Turret && can_attack() && can_do_action()) {
-    function::CastSpell(obj->position(), 0);
-    function::CastSpell(obj, 2);
+  if(obj && obj->type() != ObjectType::Turret && can_do_action()) {
+    if(orb->self->state() & CharacterState::CanCast && orb->self->mana_cost(0) <= orb->self->mana()) {
+      function::CastSpell(obj->position(), 0);
+    }
+    if(can_attack()) function::CastSpell(obj, 2);
   } else idle();
 }
 
@@ -90,7 +92,7 @@ bool Kaisa::can_attack() { return Script::can_attack() && !has_buff("KaisaE"); }
 
 bool Zeri::can_attack() { return orb->self->state() & CharacterState::CanCast; }
 
-bool Zeri::is_reloading() { return game_time < orb->self->GetSpell(0)->readyTime() - .03f; }
+bool Zeri::is_reloading() { return game_time < orb->self->GetSpell(0)->readyTime() - .033f; }
 
 void Zeri::attack() {
   auto obj = GetTarget(draw_range(), false);
