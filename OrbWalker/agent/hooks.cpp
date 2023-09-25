@@ -1,49 +1,52 @@
 #include "stdafx.hpp"
 
-namespace hooks {
-bool running = false;
+#include "hooks.hpp"
+
+#include "agent/orb.hpp"
+#include "agent/script.hpp"
+#include "agent/skinchanger.hpp"
+#include "config/config.hpp"
+#include "draw/render.hpp"
+#include "draw/ui.hpp"
+#include "memory/function.hpp"
+
+Hooks *hooks;
+
 bool init = false;
 
-HWND window {};
-WNDPROC oWndProc {};
+HWND window{};
+WNDPROC oWndProc{};
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-  if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
-    return true;
-  }
+  if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) { return true; }
   return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-ID3D11Device* pDevice {};
-ID3D11DeviceContext* pDeviceContext {};
-ID3D11RenderTargetView* pRenderTargetView {};
-HRESULT(WINAPI* oPresent)(IDXGISwapChain*, UINT, UINT);
+ID3D11Device *pDevice{};
+ID3D11DeviceContext *pDeviceContext{};
+ID3D11RenderTargetView *pRenderTargetView{};
+HRESULT(WINAPI *oPresent)(IDXGISwapChain *, UINT, UINT);
 
-HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
+HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags) {
   if(!init) {
-    if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
+    if(SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void **)&pDevice))) {
       pDevice->GetImmediateContext(&pDeviceContext);
-      DXGI_SWAP_CHAIN_DESC sd {};
+      DXGI_SWAP_CHAIN_DESC sd{};
       pSwapChain->GetDesc(&sd);
       window = sd.OutputWindow;
-      ID3D11Texture2D* pBackBuffer {};
-      pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-      if(!pBackBuffer) {
-        return oPresent(pSwapChain, SyncInterval, Flags);
-      }
+      ID3D11Texture2D *pBackBuffer{};
+      pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *)&pBackBuffer);
+      if(!pBackBuffer) { return oPresent(pSwapChain, SyncInterval, Flags); }
       pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
       pBackBuffer->Release();
       oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
-      ImGuiIO& io = ImGui::GetIO();
-      io.IniFilename = nullptr;  //"window.ini";
+      ImGuiIO &io = ImGui::GetIO();
+      io.IniFilename = nullptr;
       io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-      io.Fonts->AddFontFromFileTTF(
-        "C:\\Users\\gnepo\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr,
-        io.Fonts->GetGlyphRangesChineseFull()
-      );
+      io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16);
 
       ImGui_ImplWin32_Init(window);
       ImGui_ImplDX11_Init(pDevice, pDeviceContext);
@@ -52,9 +55,8 @@ HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags
       function::PrintMessage("#FF00FF", "Press DELETE to unload the script");
 
       init = true;
-    } else {
-      return oPresent(pSwapChain, SyncInterval, Flags);
     }
+    return oPresent(pSwapChain, SyncInterval, Flags);
   }
 
   if(!function::IsChatOpen() && !function::IsLeagueInBackground()) {
@@ -70,7 +72,7 @@ HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags
       kiero::shutdown();
       pDevice->Release();
       function::PrintMessage("#FF00FF", "Script unloaded");
-      running = false;
+      hooks->cvRun.notify_all();
 
       return result;
     }
@@ -80,8 +82,8 @@ HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 
+  orb->update();
   render::Update();
-  script::Update();
   ui::Update();
   skin::Update();
 
@@ -94,12 +96,9 @@ HRESULT WINAPI Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags
   return oPresent(pSwapChain, SyncInterval, Flags);
 }
 
-void Init() {
-  script::Init();
+Hooks::Hooks() {
   config::Load();
   skin::Load();
   kiero::init(kiero::RenderType::D3D11);
-  kiero::bind(8, (void**)&oPresent, Present);
-  running = true;
+  kiero::bind(8, (void **)&oPresent, Present);
 }
-}  // namespace hooks

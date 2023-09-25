@@ -1,5 +1,7 @@
 #include "stdafx.hpp"
 
+#include "struct.hpp"
+
 using SpellInput = Spell::SpellInput;
 
 float Spell::readyTime() { return MEMBER<float>(0x30); }

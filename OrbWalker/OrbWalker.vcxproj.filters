@@ -53,9 +53,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\Imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -92,7 +89,7 @@
     <ClCompile Include="agent\hooks.cpp">
       <Filter>source\agent</Filter>
     </ClCompile>
-    <ClCompile Include="agent\script.cpp">
+    <ClCompile Include="agent\orb.cpp">
       <Filter>source\agent</Filter>
     </ClCompile>
     <ClCompile Include="agent\skinchanger.cpp">
@@ -115,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="class\Spell.cpp">
       <Filter>source\class</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\script.cpp">
+      <Filter>source\agent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,7 +199,7 @@
     <ClInclude Include="agent\hooks.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
-    <ClInclude Include="agent\script.hpp">
+    <ClInclude Include="agent\orb.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
     <ClInclude Include="agent\skinchanger.hpp">
@@ -213,6 +216,9 @@
     </ClInclude>
     <ClInclude Include="memory\function.hpp">
       <Filter>source\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\script.hpp">
+      <Filter>source\agent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

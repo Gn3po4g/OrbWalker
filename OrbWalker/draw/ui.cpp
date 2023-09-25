@@ -1,39 +1,37 @@
 #include "stdafx.hpp"
 
+#include "ui.hpp"
+
+#include "agent/orb.hpp"
+#include "agent/skinchanger.hpp"
+#include "config/config.hpp"
+
 namespace ui {
 using namespace std;
 
-auto vector_getter_skin = [](void* vec, const int32_t idx, const char** out_text) {
-  const auto& v = *static_cast<vector<skin::SkinInfo>*>(vec);
-  if(idx < 0 || idx > static_cast<int32_t>(v.size())) {
-    return false;
-  }
-  *out_text = idx == 0 ? "Default" : v.at(idx - 1).skinName.data();
+auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
+  const auto &v = *(vector<skin::SkinInfo> *)vec;
+  if(idx < 0 || idx > (int32_t)v.size()) { return false; }
+  *out_text = idx == 0 ? "Default" : v[idx - 1].skinName.data();
   return true;
 };
 
-auto vector_getter_gear = [](void* vec, const int32_t idx, const char** out_text) noexcept {
-  const auto& v = *static_cast<vector<const char*>*>(vec);
-  if(idx < 0 || idx > static_cast<int32_t>(v.size())) {
-    return false;
-  }
+auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text) noexcept {
+  const auto &v = *(vector<const char *> *)vec;
+  if(idx < 0 || idx > (int32_t)v.size()) { return false; }
   *out_text = v[idx];
   return true;
 };
 
 void Update() {
   using namespace config;
-  const auto self = script::self;
-  static int gear {};
+  const auto self = orb->self;
+  static int gear{};
   if(ImGui::IsKeyPressed(menuKey)) {
     showMenu = !showMenu;
-    if(!showMenu) {
-      Save();
-    }
+    if(!showMenu) { Save(); }
   }
-  if(!showMenu) {
-    return;
-  }
+  if(!showMenu) { return; }
   ImGui::Begin(
     "Settings", nullptr,
     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar
@@ -48,7 +46,7 @@ void Update() {
       ImGui::Separator();
       ImGui::Text("Targeting Setting:");
       ImGui::PushItemWidth(150);
-      ImGui::Combo("Current Method", &targeting, TargetingStr.data(), (int)TargetingStr.size());
+      ImGui::Combo("Current Method", (int *)&targeting, targetingStr, IM_ARRAYSIZE(targetingStr));
       ImGui::PopItemWidth();
       ImGui::Separator();
       ImGui::Text("Key Setting:");
@@ -58,27 +56,27 @@ void Update() {
     }
     if(ImGui::BeginTabItem("Skin")) {
       ImGui::Text("Skin Setting:");
-      auto& values {skin::championsSkins[FNV(self->dataStack()->baseSkin.model.str)]};
+      auto &values{skin::championsSkins[FNV(self->dataStack()->baseSkin.model)]};
       if(ImGui::Combo(
-           "Current Skin", &config::currentSkin, vector_getter_skin, (void*)&values, (int)values.size() + 1
+           "Current Skin", &config::currentSkin, vector_getter_skin, (void *)&values, (int)values.size() + 1
          )) {
         if(config::currentSkin > 0) {
           self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
         }
       }
-      const auto playerHash {FNV(self->dataStack()->baseSkin.model.str)};
-      if(const auto it {ranges::find_if(
+      const auto playerHash{FNV(self->dataStack()->baseSkin.model)};
+      if(const auto it{ranges::find_if(
            skin::specialSkins,
-           [playerHash](const skin::SpecialSkin& x) {
-             auto skin = script::self->dataStack()->baseSkin.skin;
+           [playerHash, self](const skin::SpecialSkin &x) {
+             auto skin = self->dataStack()->baseSkin.skin;
              return x.champHash == playerHash && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
            }
          )};
          it != skin::specialSkins.end()) {
-        const auto stack {self->dataStack()};
+        const auto stack{self->dataStack()};
         gear = stack->baseSkin.gear;
 
-        if(ImGui::Combo("Current Gear", &gear, vector_getter_gear, (void*)&it->gears, (int)it->gears.size())) {
+        if(ImGui::Combo("Current Gear", &gear, vector_getter_gear, (void *)&it->gears, (int)it->gears.size())) {
           self->dataStack()->baseSkin.gear = static_cast<int8_t>(gear);
           self->dataStack()->update(true);
         }
@@ -93,19 +91,17 @@ void Update() {
     if(ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", menuKey);
       ImGui::Separator();
-      if(ImGui::Button("Force Close")) {
-        ExitProcess(0u);
-      }
+      if(ImGui::Button("Force Close")) { ExitProcess(0u); }
       ImGui::EndTabItem();
     }
     ImGui::End();
   }
 }
-}  // namespace ui
+} // namespace ui
 
 namespace ImGui {
-bool SetToPressedKey(ImGuiKey& key) {
-  for(int i = ImGuiKey::ImGuiKey_Tab; i < ImGuiKey::ImGuiKey_KeypadEqual + 1; ++i) {
+bool SetToPressedKey(ImGuiKey &key) {
+  for(int i = ImGuiKey::ImGuiKey_Tab; i <= ImGuiKey::ImGuiKey_KeypadEqual; ++i) {
     if(ImGui::IsKeyPressed(ImGuiKey(i))) {
       if(i == ImGuiKey_Escape) {
         key = ImGuiKey_None;
@@ -118,7 +114,7 @@ bool SetToPressedKey(ImGuiKey& key) {
   return false;
 }
 
-const char* ToString(ImGuiKey key) {
+const char *ToString(ImGuiKey key) {
   if(key == ImGuiKey_None) {
     return "NONE";
   } else {
@@ -126,7 +122,7 @@ const char* ToString(ImGuiKey key) {
   }
 }
 
-void HotKey(const char* label, ImGuiKey& key, const ImVec2& size) {
+void HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
   static std::map<ImGuiID, bool> activeMap;
   const auto id = GetID(label);
   PushItemWidth(150);
@@ -137,11 +133,9 @@ void HotKey(const char* label, ImGuiKey& key, const ImVec2& size) {
     PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
     Button("...", size);
     PopStyleColor();
-    if((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) {
-      activeMap[id] = false;
-    }
+    if((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) { activeMap[id] = false; }
   } else if(Button(ToString(key), size)) {
     activeMap[id] = true;
   }
 }
-}  // namespace ImGui
+} // namespace ImGui

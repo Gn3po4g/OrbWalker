@@ -1,3 +1,7 @@
+#pragma once
+
+#include "class/struct.hpp"
+
 namespace function {
 float GameTime();
 

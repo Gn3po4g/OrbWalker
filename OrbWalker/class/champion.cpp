@@ -1,9 +1,9 @@
 #include "stdafx.hpp"
 
-AString Champion::champion_name() {
-  return MEMBER<AString>(0x8);
-}
+#include "struct.hpp"
 
-std::span<SkinData> Champion::skins() {
-  return std::span(MEMBER<SkinData *>(0xE8), MEMBER<int32_t>(0xF0));
+RiotString Champion::championName() { return MEMBER<RiotString>(0x8); }
+
+RiotArray<SkinData> Champion::skins() {
+  return MEMBER<RiotArray<SkinData>>(0xE0);
 }

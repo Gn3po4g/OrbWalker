@@ -1,3 +1,5 @@
+#pragma once
+
 namespace ui {
   void Update();
 }// namespace ui
