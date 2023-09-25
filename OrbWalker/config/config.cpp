@@ -1,53 +1,38 @@
-#include "stdafx.hpp"
+#include "pch.hpp"
+
+#include "config.hpp"
+
+#include "agent/orb.hpp"
 
 namespace config {
+std::string fileName = "setting.json"s;
 json configJson = json();
 
-bool showMenu {true};
-
-bool showAttackRange {true};
-int targeting {};
-ImGuiKey kiteKey {ImGuiKey_Space};
-ImGuiKey cleanKey {ImGuiKey_V};
-
-int currentSkin {};
-ImGuiKey prevSkinKey {ImGuiKey_PageUp};
-ImGuiKey nextSkinKey {ImGuiKey_PageDown};
-
-ImGuiKey menuKey {ImGuiKey_Insert};
-
 void Load() {
-  const auto self = script::self;
-  auto in = std::ifstream("setting");
-  if(!in.good()) {
-    return;
-  }
-  if(json j = json::parse(in, nullptr, false, true); j.is_discarded()) {
-    return;
-  } else {
-    configJson = j;
-  }
-  if(self) {
-    currentSkin = configJson.value(std::string(self->dataStack()->baseSkin.model.str) + ".currentSkinIndex", 0);
-  }
+  const auto self = orb->self;
+  auto in = std::ifstream(fileName);
+  if(!in.good()) return;
+
+  if(json j = json::parse(in, nullptr, false, true); j.is_discarded()) return;
+  else configJson = j;
+
+  if(self) currentSkin = configJson.value(self->dataStack()->baseSkin.model + ".currentSkinIndex", 0);
   showAttackRange = configJson.value("showAttackRange", true);
   kiteKey = configJson.value("kiteKey", ImGuiKey_Space);
   cleanKey = configJson.value("cleanKey", ImGuiKey_V);
   prevSkinKey = configJson.value("prevSkinKey", ImGuiKey_PageUp);
   nextSkinKey = configJson.value("nextSkinKey", ImGuiKey_PageDown);
   menuKey = configJson.value("menuKey", ImGuiKey_Insert);
-  targeting = configJson.value("targeting", 0);
+  targeting = configJson.value("targeting", Targeting::health_lowest);
   in.close();
 }
 
 void Save() {
-  const auto self = script::self;
-  auto out = std::ofstream("setting");
-  if(!out.good()) {
-    return;
-  }
+  const auto self = orb->self;
+  auto out = std::ofstream(fileName);
+  if(!out.good()) { return; }
   if(self) {
-    configJson[std::string(self->dataStack()->baseSkin.model.str) + ".currentSkinIndex"] = currentSkin;
+    configJson[self->dataStack()->baseSkin.model + ".currentSkinIndex"] = currentSkin;
     configJson["showAttackRange"] = showAttackRange;
     configJson["kiteKey"] = kiteKey;
     configJson["cleanKey"] = cleanKey;
@@ -59,4 +44,4 @@ void Save() {
   out << configJson.dump();
   out.close();
 }
-}  // namespace config
+} // namespace config

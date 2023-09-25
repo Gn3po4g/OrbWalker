@@ -1,9 +1,14 @@
-namespace offset {
-inline uintptr_t oGameState, oGameTime, oLocalPlayer, oObjUnderMouse, oHeroList, oTurretList, oMinionList, oChatClient,
-  oHudInstance, oViewPort, oChampionManager,
+#pragma once
 
-  oPrintChat, oWorldToScreen, oIssueOrder, oIssueMove, oAttackDelay, oAttackWindup, oIsAlive, oIsTargetableToTeam,
-  oBonusRadius, oDataStackUpdate, oDataStackPush, oGetOwner, oTranslateString;
+class Offset {
+public:
+  uintptr_t oGameState, oGameTime, oLocalPlayer, oObjUnderMouse, oHeroList, oTurretList, oMinionList, oChatClient,
+    oHudInstance, oViewPort, oChampionManager,
 
-void Init();
-}  // namespace offset
+    oPrintChat, oWorldToScreen, oIssueOrder, oIssueMove, oAttackDelay, oAttackWindup, oIsAlive, oIsTargetableToTeam,
+    oBonusRadius, oDataStackUpdate, oDataStackPush, oGetOwner, oTranslateString;
+
+  Offset();
+};
+
+extern Offset *offset;

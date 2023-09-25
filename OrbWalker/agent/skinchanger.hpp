@@ -1,3 +1,5 @@
+#pragma once
+
 const uint64_t FNV(const char *str);
 
 namespace skin {
@@ -5,7 +7,7 @@ namespace skin {
   public:
     const char *modelName;
     std::string skinName;
-    std::int32_t skinId;
+    int32_t skinId;
   };
 
   class SpecialSkin {

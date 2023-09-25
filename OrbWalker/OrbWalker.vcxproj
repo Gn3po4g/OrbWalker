@@ -58,6 +58,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="agent\hooks.cpp" />
+    <ClCompile Include="agent\orb.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
     <ClCompile Include="class\buff.cpp" />
@@ -72,7 +73,7 @@
     <ClCompile Include="draw\ui.cpp" />
     <ClCompile Include="memory\function.cpp" />
     <ClCompile Include="memory\offset.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="..\Kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="..\Kiero\minhook\src\trampoline.h" />
     <ClInclude Include="agent\hooks.hpp" />
+    <ClInclude Include="agent\orb.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />
     <ClInclude Include="class\struct.hpp" />
@@ -104,7 +106,7 @@
     <ClInclude Include="memory\function.hpp" />
     <ClInclude Include="memory\offset.hpp" />
     <ClInclude Include="memory\spoofcall.h" />
-    <ClInclude Include="stdafx.hpp" />
+    <ClInclude Include="pch.hpp" />
     <ClInclude Include="util\constant.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\json.hpp" />
@@ -157,7 +159,7 @@
       <PreprocessorDefinitions>NDEBUG;ORBWALKER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BuildStlModules>false</BuildStlModules>
       <CompileAsWinRT>false</CompileAsWinRT>

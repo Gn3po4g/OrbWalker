@@ -1,133 +1,101 @@
-#include "stdafx.hpp"
+#include "pch.hpp"
 
-namespace script {
-float gameTime {};
-Object* markedObject {};
-Object* self {};
-ObjList* heros {};
-ObjList* minions {};
-ObjList* turrets {};
+#include "memory/function.hpp"
+#include "orb.hpp"
+#include "script.hpp"
 
-float lastAttackTime {-FLT_MAX};
-uintptr_t lastSpellCastAddress {};
-enum class OrbState { Off, Kite, Clear } orbState;
-
-namespace action {
-float lastActionTime {-FLT_MAX};
-
-void CheckMarkedObject() {
-  if(auto obj = markedObject; obj && (!obj->IsAlive() || !obj->visible())) {
-    markedObject = nullptr;
-  }
-  if(ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-    auto obj = *(Object**)(*(uintptr_t*)(offset::oObjUnderMouse) + 0x18);
-    if(heros->Contains(obj) && obj->IsEnemy()) {
-      markedObject = obj;
+Object *GetTarget(float range, bool collision) {
+  if(orb->orbState == Orb::OrbState::Kite) {
+    if(std::ranges::count(orb->heros->objects_in_range(range, collision), orb->markedObject)) {
+      return orb->markedObject;
     } else {
-      markedObject = nullptr;
+      return orb->heros->best_object_in_range(range, collision);
     }
-  }
-}
-
-Object* GetTarget() {
-  if(orbState == OrbState::Kite) {
-    if(markedObject && markedObject->IsValidTarget()) {
-      return markedObject;
-    } else {
-      return heros->GetAppropriateObject();
-    }
-  } else if(orbState == OrbState::Clear) {
-    if(const auto target = minions->GetAppropriateObject()) {
+  } else if(orb->orbState == Orb::OrbState::Clear) {
+    if(const auto target = orb->minions->best_object_in_range(range, collision)) {
       return target;
     } else {
-      return turrets->GetAppropriateObject();
+      return orb->turrets->best_object_in_range(range, collision);
     }
   } else {
     return nullptr;
   }
 }
 
-bool CanDoAction() {
-  if(gameTime < lastActionTime + .03f) {
-    return false;
+void Script::update() {
+  game_time = function::GameTime();
+  extra_update();
+}
+
+void Script::extra_update() {
+  auto spell_cast = orb->self->spell_cast();
+  if(spell_cast && (*(int *)(spell_cast + 0x10) == -1 || *(int *)(spell_cast + 0x124) >= 14) && spell_cast != last_spell_cast) {
+    last_attack_time = game_time;
   }
-  lastActionTime = gameTime;
+  last_spell_cast = spell_cast;
+}
+
+bool Script::can_attack() { return orb->self->state() & CharacterState::CanAttack; }
+
+bool Script::can_do_action() {
+  if(game_time < last_action_time + .03f) return false;
+  last_action_time = game_time;
   return true;
 }
 
-void Idle() {
-  if(self->CanMove() && CanDoAction()) {
-    function::Move2Mouse();
-  }
+bool Script::is_reloading() { return game_time < last_attack_time + orb->self->AttackDelay() - .09f; }
+
+bool Script::is_attacking() { return game_time < last_attack_time + orb->self->AttackWindup() - .03f; }
+
+void Script::idle() {
+  if(!is_attacking() && can_do_action()) function::Move2Mouse();
 }
 
-void Attack() {
-  const auto obj = GetTarget();
-  if(obj && self->CanAttack() && CanDoAction()) {
-    if(self->name() == "Zeri") {
-      function::CastSpell(obj->position(), 0);
-      lastAttackTime = gameTime;
-    } else {
-      function::AttackObject(obj);
-    }
+void Script::attack() {
+  auto obj = GetTarget(orb->self->RealAttackRange(), true);
+  if(obj && can_attack() && can_do_action()) {
+    function::AttackObject(obj);
   } else {
-    Idle();
+    idle();
   }
 }
-}  // namespace action
 
-namespace state {
-bool IsAttacking() { return gameTime < lastAttackTime + self->AttackWindup(); }
+float Script::draw_range() { return orb->self->RealAttackRange(); }
 
-bool IsReloading() { return gameTime < lastAttackTime + self->AttackDelay(); }
-
-void CheckActiveAttack() {
-  if(self->name() == "Zeri") {
-    return;
-  }
-  auto spellCast = *(uintptr_t*)((uintptr_t)self + 0x2A20);
-  if(spellCast) {
-    if((*(int*)(spellCast + 0x10) == -1 || *(int*)(spellCast + 0x124) >= 14) && spellCast != lastSpellCastAddress) {
-      lastAttackTime = gameTime;
-    }
-  }
-  lastSpellCastAddress = spellCast;
+bool Script::has_buff(std::string_view name) {
+  return std::ranges::any_of(orb->self->buffs(), [name, this](Buff *buff) {
+    return buff->name() == name && buff->starttime() <= game_time && buff->endtime() >= game_time;
+  });
 }
 
-void CheckOrbState() {
-  if(ImGui::IsKeyDown(config::kiteKey)) {
-    orbState = OrbState::Kite;
-  } else if(ImGui::IsKeyDown(config::cleanKey)) {
-    orbState = OrbState::Clear;
-  } else {
-    orbState = OrbState::Off;
-  }
-}
-}  // namespace state
-
-void Init() {
-  self = *(Object**)offset::oLocalPlayer;
-  heros = *(ObjList**)offset::oHeroList;
-  minions = *(ObjList**)offset::oMinionList;
-  turrets = *(ObjList**)offset::oTurretList;
+bool Cassiopeia::can_attack() {
+  return (orb->self->state() & CharacterState::CanCast) && (orb->self->mana_cost(2) <= orb->self->mana());
 }
 
-void Update() {
-  gameTime = function::GameTime();
-  state::CheckActiveAttack();
-  state::CheckOrbState();
-  action::CheckMarkedObject();
+bool Cassiopeia::is_reloading() { return game_time < orb->self->GetSpell(2)->readyTime() - .03f; }
 
-  if(!function::CanSendInput() || state::IsAttacking()) {
-    return;
-  }
-
-  if(orbState != OrbState::Off) {
-    if(state::IsReloading()) {
-      action::Idle();
-    } else {
-      action::Attack();
-    }
-  }
+void Cassiopeia::attack() {
+  auto obj = GetTarget(700.f, false);
+  if(obj && obj->type() != ObjectType::Turret && can_attack() && can_do_action()) {
+    function::CastSpell(obj->position(), 0);
+    function::CastSpell(obj, 2);
+  } else idle();
 }
-}  // namespace script
+
+float Cassiopeia::draw_range() { return 700.f; }
+
+bool Graves::is_reloading() { return game_time < last_attack_time + orb->self->AttackDelay() * .15f - .09f; }
+
+bool Kaisa::can_attack() { return Script::can_attack() && !has_buff("KaisaE"); }
+
+bool Zeri::can_attack() { return orb->self->state() & CharacterState::CanCast; }
+
+bool Zeri::is_reloading() { return game_time < orb->self->GetSpell(0)->readyTime() - .03f; }
+
+void Zeri::attack() {
+  auto obj = GetTarget(draw_range(), false);
+  if(obj && can_attack() && can_do_action()) function::CastSpell(obj->position(), 0);
+  else idle();
+}
+
+float Zeri::draw_range() { return orb->self->RealAttackRange() - orb->self->BonusRadius() + 250.f; }

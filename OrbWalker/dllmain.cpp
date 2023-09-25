@@ -1,32 +1,31 @@
-#include "stdafx.hpp"
+#include "pch.hpp"
+
+#include "agent/hooks.hpp"
+#include "agent/orb.hpp"
+#include "memory/offset.hpp"
 
 bool WINAPI HideThread(HANDLE hThread) noexcept {
   __try {
     using FnSetInformationThread = NTSTATUS(NTAPI *)(HANDLE, UINT, PVOID, ULONG);
     const auto module = GetModuleHandle(L"ntdll.dll");
-    if(!module) return false;
+    if(!module) { return false; }
     const auto proc = GetProcAddress(module, "NtSetInformationThread");
-    if(!proc) return false;
+    if(!proc) { return false; }
     const auto NtSetInformationThread = (FnSetInformationThread)proc;
-    if(const auto status = NtSetInformationThread(hThread, 0x11u, nullptr, 0ul); status == 0) return true;
+    if(const auto status = NtSetInformationThread(hThread, 0x11u, nullptr, 0ul); status == 0) { return true; }
     return false;
-  } __except(TRUE) {
-    return false;
-  }
+  } __except(TRUE) { return false; }
 }
 
 void Start(void *) {
   HideThread(GetCurrentThread());
-  offset::Init();
-  GameState state{};
-  while(state != Running) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    state = *(GameState *)(*(uintptr_t *)offset::oGameState + 0xC);
-  }
-  hooks::Init();
-  while(hooks::running) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  }
+  offset = new Offset();
+  auto pState{(GameState *)(*(uintptr_t *)offset->oGameState + 0xC)};
+  while(*pState != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  orb = new Orb();
+  hooks = new Hooks();
+  std::unique_lock<std::mutex> lkRun(hooks->mRun);
+  hooks->cvRun.wait(lkRun);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {

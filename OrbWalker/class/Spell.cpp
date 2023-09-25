@@ -1,4 +1,6 @@
-#include "stdafx.hpp"
+#include "pch.hpp"
+
+#include "struct.hpp"
 
 using SpellInput = Spell::SpellInput;
 
