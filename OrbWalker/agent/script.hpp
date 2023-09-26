@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr float interval = .033f;
+
 class Script {
 public:
   void update();
@@ -22,7 +24,7 @@ protected:
 };
 
 class Cassiopeia : public Script {
-  void extra_update() override{};
+  void extra_update() override;
   bool can_attack() override;
   bool is_reloading() override;
   bool is_attacking() override { return false; };

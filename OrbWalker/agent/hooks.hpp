@@ -1,3 +1,5 @@
+#pragma once
+
 class Hooks {
 public:
   std::mutex mRun;

@@ -6,6 +6,8 @@
 
 using SpellInput = Spell::SpellInput;
 
+int16_t Spell::level() { return MEMBER<int16_t>(0x28); }
+
 float Spell::readyTime() { return MEMBER<float>(0x30); }
 
 SpellInput* Spell::spellInput() { return MEMBER<SpellInput*>(0x128); }

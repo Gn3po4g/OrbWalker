@@ -50,7 +50,7 @@ public:
     void SetClickedPos(FLOAT3);
     void SetUnkPos(FLOAT3);
   };
-
+  int16_t level();
   float readyTime();
   SpellInput *spellInput();
   uintptr_t spellInfo();
