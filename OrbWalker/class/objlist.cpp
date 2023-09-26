@@ -5,6 +5,11 @@
 #include "agent/orb.hpp"
 #include "config/config.hpp"
 
+#include "struct.hpp"
+
+#include "agent/orb.hpp"
+#include "config/config.hpp"
+
 std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectType::Monster, ObjectType::Turret};
 
 std::vector<Object *> ObjList::objects_in_range(float range, bool collision) {

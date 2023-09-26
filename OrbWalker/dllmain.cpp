@@ -4,6 +4,10 @@
 #include "agent/orb.hpp"
 #include "memory/offset.hpp"
 
+#include "agent/hooks.hpp"
+#include "agent/orb.hpp"
+#include "memory/offset.hpp"
+
 bool WINAPI HideThread(HANDLE hThread) noexcept {
   __try {
     using FnSetInformationThread = NTSTATUS(NTAPI *)(HANDLE, UINT, PVOID, ULONG);

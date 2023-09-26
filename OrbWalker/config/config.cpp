@@ -4,6 +4,10 @@
 
 #include "agent/orb.hpp"
 
+#include "config.hpp"
+
+#include "agent/orb.hpp"
+
 namespace config {
 std::string fileName = "setting.json"s;
 json configJson = json();

@@ -6,6 +6,12 @@
 
 #include "agent/orb.hpp"
 
+#include "function.hpp"
+#include "offset.hpp"
+#include "spoofcall.h"
+
+#include "agent/orb.hpp"
+
 #pragma section(".text")
 __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
 void *trampoline = (void *)jmp_rbx_0;

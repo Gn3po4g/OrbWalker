@@ -6,6 +6,12 @@
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
 
+#include "ui.hpp"
+
+#include "agent/orb.hpp"
+#include "agent/skinchanger.hpp"
+#include "config/config.hpp"
+
 namespace ui {
 using namespace std;
 

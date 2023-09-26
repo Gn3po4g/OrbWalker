@@ -6,6 +6,12 @@
 #include "memory/offset.hpp"
 #include "skinchanger.hpp"
 
+#include "agent/orb.hpp"
+#include "class/struct.hpp"
+#include "config/config.hpp"
+#include "memory/offset.hpp"
+#include "skinchanger.hpp"
+
 namespace skin {
 using namespace std;
 
