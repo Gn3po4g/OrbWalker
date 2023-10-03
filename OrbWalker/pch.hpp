@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEBUGMODE
+
 #include <Windows.h>
 
 #include <Psapi.h>

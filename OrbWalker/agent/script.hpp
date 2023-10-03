@@ -23,6 +23,10 @@ protected:
   bool has_buff(std::string_view name);
 };
 
+class Ashe : public Script {
+  void extra_update() override;
+};
+
 class Cassiopeia : public Script {
   void extra_update() override;
   bool can_attack() override;

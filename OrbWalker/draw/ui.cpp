@@ -5,25 +5,18 @@
 #include "agent/orb.hpp"
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
-
-#include "ui.hpp"
-
-#include "agent/orb.hpp"
-#include "agent/skinchanger.hpp"
-#include "config/config.hpp"
+#include "memory/function.hpp"
 
 namespace ui {
-using namespace std;
-
 auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
-  const auto &v = *(vector<skin::SkinInfo> *)vec;
+  const auto &v = *(std::vector<skin::SkinInfo> *)vec;
   if(idx < 0 || idx > (int32_t)v.size()) { return false; }
   *out_text = idx == 0 ? "Default" : v[idx - 1].skinName.data();
   return true;
 };
 
 auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text) noexcept {
-  const auto &v = *(vector<const char *> *)vec;
+  const auto &v = *(std::vector<const char *> *)vec;
   if(idx < 0 || idx > (int32_t)v.size()) { return false; }
   *out_text = v[idx];
   return true;
@@ -71,7 +64,7 @@ void Update() {
         }
       }
       const auto playerHash{FNV(self->dataStack()->baseSkin.model)};
-      if(const auto it{ranges::find_if(
+      if(const auto it{std::ranges::find_if(
            skin::specialSkins,
            [playerHash, self](const skin::SpecialSkin &x) {
              auto skin = self->dataStack()->baseSkin.skin;
@@ -93,7 +86,18 @@ void Update() {
       ImGui::HotKey("Next Skin Key", nextSkinKey);
       ImGui::EndTabItem();
     }
-
+#ifdef DEBUGMODE
+    if(ImGui::BeginTabItem("Infos")) {
+      ImGui::LabelText("##GameTime", "GameTime: %fs", function::GameTime());
+      ImGui::LabelText("##LocalPlayer", "LocalPlayer: %p", orb->self);
+      ImGui::LabelText("##HeroList", "HeroList: %p", orb->heros);
+      ImGui::LabelText("##name", "name: %s", orb->self->name().data());
+      ImGui::LabelText("##AttackDelay", "AttackDelay: %f", orb->self->AttackDelay());
+      ImGui::LabelText("##AttackWindup", "AttackWindup: %f", orb->self->AttackWindup());
+      ImGui::LabelText("##Target", "Target: %p", orb->markedObject);
+      ImGui::EndTabItem();
+    }
+#endif // DEBUGMODE
     if(ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", menuKey);
       ImGui::Separator();

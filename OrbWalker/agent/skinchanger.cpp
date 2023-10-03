@@ -88,8 +88,11 @@ void Update() {
     if(!ImGui::GetIO().KeysDown[ImGuiKey_LeftCtrl]) { return; }
     const auto playerHash = FNV(self->dataStack()->baseSkin.model);
     if(const auto it = ranges::find_if(
-         specialSkins, [&skin = self->dataStack()->baseSkin.skin, &ph = playerHash](const SpecialSkin &x
-                       ) { return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin); }
+         specialSkins,
+         [&](const SpecialSkin &x) {
+           auto skin = self->dataStack()->baseSkin.skin;
+           return x.champHash == playerHash && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
+         }
        );
        it != specialSkins.end()) {
       const auto stack = self->dataStack();

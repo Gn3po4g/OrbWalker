@@ -5,16 +5,11 @@
 #include "agent/orb.hpp"
 #include "config/config.hpp"
 
-#include "struct.hpp"
-
-#include "agent/orb.hpp"
-#include "config/config.hpp"
-
 std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectType::Monster, ObjectType::Turret};
 
 std::vector<Object *> ObjList::objects_in_range(float range, bool collision) {
   return std::span(data, size) | std::views::filter([&](Object *obj) {
-           return obj->IsValidTarget() && hashes.contains(obj->type())
+           return obj->IsValidTarget() /*&& hashes.contains(obj->type())*/
                && obj->position() - orb->self->position() <= range + (collision ? obj->BonusRadius() : 0.f);
          })
        | std::ranges::to<std::vector>();

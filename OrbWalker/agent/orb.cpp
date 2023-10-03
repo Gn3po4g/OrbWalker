@@ -1,9 +1,10 @@
 #include "pch.hpp"
 
+#include "orb.hpp"
+
 #include "config/config.hpp"
 #include "memory/function.hpp"
 #include "memory/offset.hpp"
-#include "orb.hpp"
 
 Orb *orb;
 
@@ -11,7 +12,7 @@ Orb::Orb()
     : self(*(Object **)offset->oLocalPlayer), heros(*(ObjList **)offset->oHeroList),
       minions(*(ObjList **)offset->oMinionList), turrets(*(ObjList **)offset->oTurretList), script(new Script()),
       markedObject(nullptr), orbState(OrbState::Off) {
-  if(scripts.contains(self->name().str)) script = scripts[self->name().str];
+  if(scripts.contains(self->name())) script = scripts[self->name()];
 }
 
 void Orb::check_marked_object() {

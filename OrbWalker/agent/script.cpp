@@ -1,8 +1,9 @@
 #include "pch.hpp"
 
-#include "memory/function.hpp"
 #include "orb.hpp"
 #include "script.hpp"
+
+#include "memory/function.hpp"
 
 Object *GetTarget(float range, bool collision) {
   if(orb->orbState == Orb::OrbState::Kite) {
@@ -52,8 +53,10 @@ void Script::idle() {
 }
 
 void Script::attack() {
-  auto obj = GetTarget(orb->self->RealAttackRange(), true);
+  auto obj = GetTarget(draw_range(), true);
+  if(obj) function::PrintMessage("#FFFFFF","target");
   if(obj && can_attack() && can_do_action()) {
+    function::PrintMessage("#FFFFFF","attack");
     function::AttackObject(obj);
   } else {
     idle();
@@ -68,14 +71,20 @@ bool Script::has_buff(std::string_view name) {
   });
 }
 
+void Ashe::extra_update() {
+  auto spell_cast = orb->self->spell_cast();
+  if(spell_cast && *(int *)(spell_cast + 0x124) == 0 && spell_cast != last_spell_cast) { last_attack_time = -FLT_MAX; }
+  Script::extra_update();
+}
+
 void Cassiopeia::extra_update() {
-  if(orb->orbState == Orb::OrbState::Off) return;
-  auto obj = GetTarget(850.f, false);
-  if(obj && obj->type() != ObjectType::Turret && orb->self->state() & CharacterState::CanCast
-  && orb->self->GetSpell(0)->level() > 0 && orb->self->mana_cost(0) <= orb->self->mana()
-  && game_time < orb->self->GetSpell(0)->readyTime() - interval && can_do_action()) {
-    function::CastSpell(obj->position(), 0);
-  }
+  //if(orb->orbState == Orb::OrbState::Off) return;
+  //auto obj = GetTarget(850.f, false);
+  //if(obj && obj->type() != ObjectType::Turret && orb->self->state() & CharacterState::CanCast
+  //&& orb->self->GetSpell(0)->level() > 0 && orb->self->mana_cost(0) <= orb->self->mana()
+  //&& game_time >= orb->self->GetSpell(0)->readyTime() && can_do_action()) {
+  //  function::CastSpell(obj->position(), 0);
+  //}
 }
 
 bool Cassiopeia::can_attack() {

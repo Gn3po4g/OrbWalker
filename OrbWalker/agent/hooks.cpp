@@ -46,7 +46,9 @@ HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags
       ImGuiIO &io = ImGui::GetIO();
       io.IniFilename = nullptr;
       io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-      io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16);
+      io.Fonts->AddFontFromFileTTF(
+        "C:\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull()
+      );
 
       ImGui_ImplWin32_Init(window);
       ImGui_ImplDX11_Init(pDevice, pDeviceContext);

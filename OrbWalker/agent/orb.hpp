@@ -20,6 +20,7 @@ public:
 
 private:
   std::map<std::string_view, Script *> scripts{
+    {"Ashe",       new Ashe()      },
     {"Cassiopeia", new Cassiopeia()},
     {"Graves",     new Graves()    },
     {"Kaisa",      new Kaisa()     },

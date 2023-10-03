@@ -89,7 +89,7 @@ public:
   bool visible();
   bool targetable();
   CharacterState state();
-  RiotString name();
+  std::string_view name();
   ObjectType type();
   FLOAT3 position();
   float health();

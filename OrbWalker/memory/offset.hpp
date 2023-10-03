@@ -5,7 +5,7 @@ public:
   uintptr_t oGameState, oGameTime, oLocalPlayer, oObjUnderMouse, oHeroList, oTurretList, oMinionList, oChatClient,
     oHudInstance, oViewPort, oChampionManager,
 
-    oPrintChat, oWorldToScreen, oIssueOrder, oIssueMove, oAttackDelay, oAttackWindup, oIsAlive, oIsTargetableToTeam,
+    oPrintChat, oWorldToScreen, oIssueOrder, oIssueMove, oCastSpell, oAttackDelay, oAttackWindup, oIsAlive, oIsTargetableToTeam,
     oBonusRadius, oDataStackUpdate, oDataStackPush, oGetOwner, oTranslateString;
 
   Offset();

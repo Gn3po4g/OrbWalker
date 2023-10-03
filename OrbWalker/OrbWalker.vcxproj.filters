@@ -110,7 +110,7 @@
     <ClCompile Include="class\datastack.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
-    <ClCompile Include="class\Spell.cpp">
+    <ClCompile Include="class\spell.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">

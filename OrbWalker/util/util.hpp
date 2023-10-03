@@ -39,8 +39,8 @@ enum ObjectType : uint64_t {
 
 template <typename T> bool IsValidPtr(T addr) { return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff; }
 
-struct INT2 {
-  int x, y;
+struct UINT2 {
+  unsigned int x, y;
 
   ImVec2 ToImVec() const { return ImVec2(static_cast<float>(x), static_cast<float>(y)); }
 };

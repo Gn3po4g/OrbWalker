@@ -22,7 +22,7 @@ ObjectType Object::type() {
   return *(ObjectType *)(*(uintptr_t *)(data + characterDataType));
 }
 
-RiotString Object::name() { return MEMBER<RiotString>(objName); }
+std::string_view Object::name() { return pMEMBER<const char>(objName); }
 
 FLOAT3 Object::position() { return MEMBER<FLOAT3>(objPosition); }
 

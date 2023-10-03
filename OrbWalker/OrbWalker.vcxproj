@@ -66,7 +66,7 @@
     <ClCompile Include="class\datastack.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="class\objlist.cpp" />
-    <ClCompile Include="class\Spell.cpp" />
+    <ClCompile Include="class\spell.cpp" />
     <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="draw\render.cpp" />

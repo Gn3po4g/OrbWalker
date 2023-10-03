@@ -4,10 +4,6 @@
 
 #include "agent/orb.hpp"
 
-#include "config.hpp"
-
-#include "agent/orb.hpp"
-
 namespace config {
 std::string fileName = "setting.json"s;
 json configJson = json();
@@ -34,7 +30,7 @@ void Load() {
 void Save() {
   const auto self = orb->self;
   auto out = std::ofstream(fileName);
-  if(!out.good()) { return; }
+  if(!out.good()) return;
   if(self) {
     configJson[self->dataStack()->baseSkin.model + ".currentSkinIndex"] = currentSkin;
     configJson["showAttackRange"] = showAttackRange;
