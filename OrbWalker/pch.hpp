@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUGMODE
+//#define DEBUGMODE
 
 #include <Windows.h>
 
