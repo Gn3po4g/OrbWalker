@@ -18,9 +18,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{375d0d5a-7b76-47fb-97c7-ec2287185ae9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\config">
-      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\util">
       <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
     </Filter>
@@ -29,6 +26,9 @@
     </Filter>
     <Filter Include="source\agent">
       <UniqueIdentifier>{67edf1eb-9aff-4950-95a8-4e28b8af4c3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\config">
+      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="agent\script.cpp">
       <Filter>source\agent</Filter>
+    </ClCompile>
+    <ClCompile Include="memory\global.cpp">
+      <Filter>source\memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +222,9 @@
     </ClInclude>
     <ClInclude Include="agent\script.hpp">
       <Filter>source\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\global.hpp">
+      <Filter>source\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

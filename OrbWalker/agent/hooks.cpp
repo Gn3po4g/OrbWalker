@@ -101,6 +101,7 @@ HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags
 Hooks::Hooks() {
   config::Load();
   skin::Load();
+  orb = new Orb();
   kiero::init(kiero::RenderType::D3D11);
   kiero::bind(8, (void **)&oPresent, Present);
 }

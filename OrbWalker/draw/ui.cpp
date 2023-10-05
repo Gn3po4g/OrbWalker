@@ -6,6 +6,7 @@
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
+#include "memory/global.hpp"
 
 namespace ui {
 auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
@@ -24,7 +25,6 @@ auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text
 
 void Update() {
   using namespace config;
-  const auto self = orb->self;
   static int gear{};
   if(ImGui::IsKeyPressed(menuKey)) {
     showMenu = !showMenu;
@@ -66,7 +66,7 @@ void Update() {
       const auto playerHash{FNV(self->dataStack()->baseSkin.model)};
       if(const auto it{std::ranges::find_if(
            skin::specialSkins,
-           [playerHash, self](const skin::SpecialSkin &x) {
+           [playerHash](const skin::SpecialSkin &x) {
              auto skin = self->dataStack()->baseSkin.skin;
              return x.champHash == playerHash && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
            }

@@ -5,12 +5,7 @@
 #include "agent/orb.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
-
-#include "render.hpp"
-
-#include "agent/orb.hpp"
-#include "config/config.hpp"
-#include "memory/function.hpp"
+#include "memory/global.hpp"
 
 namespace render {
 void RenderCircleWorld(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
@@ -28,7 +23,6 @@ void RenderCircleWorld(const FLOAT3 &worldPos, float radius, uint32_t color, flo
 
 void DrawAttackRange() {
   if(!config::showAttackRange) return;
-  const auto self = orb->self;
   RenderCircleWorld(self->position(), orb->script->draw_range(), 0xffffffff, 1.f);
 }
 

@@ -19,28 +19,10 @@ enum CharacterState : uint16_t {
   NoRender = 1 << 15
 };
 
-enum ObjectType : uint64_t {
-  Hero = 7957694998179309635,
-  Ward = 5989923982968774999,
-  Minion_Lane = 8944270284747073869,
-  Minion_Lane_Siege = 7306920423476651374,
-  Minion_Lane_Ranged = 7306930284704785774,
-  Minion_Lane_Melee = 7306365152824092014,
-  Minion_Lane_Super = 8243118342183806318,
-  Monster = 2338042707385937741,
-  Monster_Epic = 2340781521963538015,
-  Monster_Dragon = 2336927746459059295,
-  Special = 2336349411965497427,
-  Special_Void = 2340781521963538015,
-  Turret = 8247626263119950931,
-  UNKNOWN = 5980780305148018688,
-  Less = 126939457912832
-};
-
 template <typename T> bool IsValidPtr(T addr) { return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff; }
 
-struct UINT2 {
-  unsigned int x, y;
+struct INT2 {
+  int x, y;
 
   ImVec2 ToImVec() const { return ImVec2(static_cast<float>(x), static_cast<float>(y)); }
 };

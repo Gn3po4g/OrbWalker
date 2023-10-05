@@ -2,8 +2,6 @@
 
 #include "struct.hpp"
 
-#include "struct.hpp"
-
 using SpellInput = Spell::SpellInput;
 
 int16_t Spell::level() { return MEMBER<int16_t>(0x28); }

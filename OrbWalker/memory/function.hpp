@@ -13,7 +13,7 @@ bool CanSendInput();
 
 void PrintMessage(std::string_view, std::string_view);
 
-UINT2 WorldToScreen(FLOAT3 position);
+INT2 WorldToScreen(FLOAT3 position);
 
 void AttackObject(Object* target);
 

@@ -4,22 +4,28 @@
 
 #include "config/config.hpp"
 #include "memory/function.hpp"
+#include "memory/global.hpp"
 #include "memory/offset.hpp"
+
+std::map<std::string_view, Script *> scripts{
+  //{"Ashe",       new Ashe()      },
+  //{"Cassiopeia", new Cassiopeia()},
+  {"Graves",     new Graves()    },
+  {"Kaisa",      new Kaisa()     },
+  {"Zeri",       new Zeri()      }
+};
 
 Orb *orb;
 
 Orb::Orb()
-    : self(*(Object **)offset->oLocalPlayer), heros(*(ObjList **)offset->oHeroList),
-      minions(*(ObjList **)offset->oMinionList), turrets(*(ObjList **)offset->oTurretList), script(new Script()),
-      markedObject(nullptr), orbState(OrbState::Off) {
-  if(scripts.contains(self->name())) script = scripts[self->name()];
-}
+    : markedObject(nullptr), orbState(OrbState::Off),
+      script(scripts.contains(self->name()) ? scripts[self->name()] : new Script()) {}
 
 void Orb::check_marked_object() {
   if(markedObject && (!markedObject->IsAlive() || !markedObject->visible())) { markedObject = nullptr; }
   if(ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-    auto obj = *(Object **)(*(uintptr_t *)(offset->oObjUnderMouse) + 0x18);
-    if(heros->Contains(obj) && obj->IsEnemy()) {
+    auto obj = *objUnderMouse;
+    if(obj->IsHero() && obj->IsEnemy()) {
       markedObject = obj;
     } else {
       markedObject = nullptr;

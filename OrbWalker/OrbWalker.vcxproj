@@ -72,6 +72,7 @@
     <ClCompile Include="draw\render.cpp" />
     <ClCompile Include="draw\ui.cpp" />
     <ClCompile Include="memory\function.cpp" />
+    <ClCompile Include="memory\global.cpp" />
     <ClCompile Include="memory\offset.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -104,6 +105,7 @@
     <ClInclude Include="draw\render.hpp" />
     <ClInclude Include="draw\ui.hpp" />
     <ClInclude Include="memory\function.hpp" />
+    <ClInclude Include="memory\global.hpp" />
     <ClInclude Include="memory\offset.hpp" />
     <ClInclude Include="memory\spoofcall.h" />
     <ClInclude Include="pch.hpp" />

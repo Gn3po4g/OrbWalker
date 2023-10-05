@@ -1,16 +1,12 @@
 #include "pch.hpp"
 
-#include "agent/orb.hpp"
-#include "class/struct.hpp"
-#include "config/config.hpp"
-#include "memory/offset.hpp"
 #include "skinchanger.hpp"
 
 #include "agent/orb.hpp"
 #include "class/struct.hpp"
 #include "config/config.hpp"
 #include "memory/offset.hpp"
-#include "skinchanger.hpp"
+#include "memory/global.hpp"
 
 namespace skin {
 using namespace std;
@@ -36,7 +32,7 @@ void ChangeSkinForObject(Object *obj, int32_t skin) noexcept {
 }
 
 void Load() {
-  const auto &champions = *(vector<Champion *> *)(*(uintptr_t *)(offset->oChampionManager) + 0x18);
+  const auto &champions = *(vector<Champion *> *)(*(uintptr_t *)oChampionManager + 0x18);
   for(const auto &champion : champions) {
     vector<int32_t> skinsIds;
     for(auto &sk : std::span(champion->skins().data, champion->skins().size)) { skinsIds.push_back(sk.skinId); }
@@ -46,7 +42,7 @@ void Load() {
       const auto name = champion->championName();
       const auto skinDisplayname = format("game_character_skin_displayname_{}_{}", name.str, i);
       using fnTranslateString = const char *(__fastcall *)(const char *);
-      fnTranslateString TranslateString = fnTranslateString(offset->oTranslateString);
+      fnTranslateString TranslateString = (fnTranslateString)oTranslateString;
       string translatedName = i > 0 ? TranslateString(skinDisplayname.data()) : name.str;
       if(translatedName == skinDisplayname) { continue; }
       if(const auto it{tempSkinList.find(translatedName)}; it == tempSkinList.end()) {
@@ -75,10 +71,9 @@ void Load() {
 }
 
 void Update() {
-  const auto self = orb->self;
   if(!self) { return; }
   static std::once_flag changeSkin;
-  std::call_once(changeSkin, [self]() {
+  std::call_once(changeSkin, []() {
     if(config::currentSkin > 0) {
       const auto &values{championsSkins[FNV(self->dataStack()->baseSkin.model)]};
       self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
@@ -129,7 +124,7 @@ void Update() {
       }
     }
   }
-  for(auto minion : span(orb->minions->data, orb->minions->size)) {
+  for(auto minion : span(minions->data, minions->size)) {
     const auto hash = FNV(minion->dataStack()->baseSkin.model);
     const auto playerHash = FNV(self->dataStack()->baseSkin.model);
     if(const auto owner = minion->GetOwner(); owner) {

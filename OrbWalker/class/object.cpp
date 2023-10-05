@@ -3,37 +3,24 @@
 #include "struct.hpp"
 
 #include "agent/orb.hpp"
+#include "memory/global.hpp"
 #include "memory/offset.hpp"
 
 int32_t Object::index() { return MEMBER<int32_t>(objIndex); }
 
 int32_t Object::team() { return MEMBER<int32_t>(objTeam); }
 
-bool Object::visible() { return MEMBER<bool>(objVisible); }
-
-bool Object::targetable() { return MEMBER<bool>(objTargetable); }
-
-CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
-
-ObjectType Object::type() {
-  const auto addr = MEMBER<uintptr_t>(objCharacterData);
-  if(!IsValidPtr(addr)) { return (ObjectType)0; }
-  const auto data = *(uintptr_t *)(addr + characterDataData);
-  return *(ObjectType *)(*(uintptr_t *)(data + characterDataType));
-}
-
-std::string_view Object::name() { return pMEMBER<const char>(objName); }
-
 FLOAT3 Object::position() { return MEMBER<FLOAT3>(objPosition); }
 
-float Object::health() { return MEMBER<float>(objHealth); }
+bool Object::visible() { return MEMBER<bool>(objVisible); }
 
 float Object::mana() { return MEMBER<float>(objMana); }
 
-float Object::mana_cost(int index) {
-  if(index < 0 || index > 3) return 0.f;
-  return MEMBER<float>(objManaCost + index * 0x18);
-}
+bool Object::targetable() { return MEMBER<bool>(objTargetable); }
+
+float Object::health() { return MEMBER<float>(objHealth); }
+
+CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
 
 DataStack *Object::dataStack() { return pMEMBER<DataStack>(objDataStack); }
 
@@ -41,40 +28,72 @@ uintptr_t Object::spell_cast() { return MEMBER<uintptr_t>(0x2A20); }
 
 std::vector<Buff *> Object::buffs() { return MEMBER<std::vector<Buff *>>(objBuff); }
 
+std::string_view Object::name() {
+  if(MEMBER<uint64_t>(objName + 0x18) > 15) return MEMBER<const char *>(objName);
+  return pMEMBER<const char>(objName);
+}
+
 // float Object::attackdamage() {
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
 // }
 
 float Object::AttackDelay() {
   using fnAttackDelay = float(__fastcall *)(Object *);
-  return ((fnAttackDelay)offset->oAttackDelay)(this);
+  return ((fnAttackDelay)oAttackDelay)(this);
 }
 
 float Object::AttackWindup() {
   using fnAttackWindup = float(__fastcall *)(Object *, int);
-  return ((fnAttackWindup)offset->oAttackWindup)(this, 0x40);
+  return ((fnAttackWindup)oAttackWindup)(this, 0x40);
 }
 
 float Object::BonusRadius() {
-  using fnBonusRadius = float(__fastcall *)(Object *);
-  return ((fnBonusRadius)offset->oBonusRadius)(this);
+  // using fnBonusRadius = float(__fastcall *)(Object *);
+  // return ((fnBonusRadius)oBonusRadius)(this);
+  return CallVirtual<36, float>();
 }
 
 float Object::RealAttackRange() { return MEMBER<float>(objAttackRange) + BonusRadius(); }
 
 bool Object::IsAlive() {
-  using fnIsAlive = bool(__fastcall *)(Object *);
-  return ((fnIsAlive)offset->oIsAlive)(this);
+  // using fnIsAlive = bool(__fastcall *)(Object *);
+  // return ((fnIsAlive)oIsAlive)(this);
+  return CallVirtual<133, bool>();
 }
 
-bool Object::IsEnemy() { return team() != orb->self->team(); }
+bool Object::IsEnemy() { return team() != self->team(); }
 
 bool Object::IsTargetableToTeam() {
   using fnIsTargetableToTeam = bool(__fastcall *)(Object *);
-  return ((fnIsTargetableToTeam)offset->oIsTargetableToTeam)(this);
+  return ((fnIsTargetableToTeam)oIsTargetableToTeam)(this);
 }
 
 bool Object::IsValidTarget() { return visible() && targetable() && IsEnemy() && IsAlive() && IsTargetableToTeam(); }
+
+bool Object::IsHero() { return std::count(heros->data, heros->data + heros->size, this); }
+
+bool Object::IsTurret() { return std::count(turrets->data, turrets->data + turrets->size, this); }
+
+bool Object::IsLaneMinion() {
+  //void **vtable = *(reinterpret_cast<void ***>(this));
+  //auto foo = reinterpret_cast<bool (*)(Object *)>(vtable[0xE3]);
+  //if(foo == nullptr) return false;
+  //return foo(this);
+   return true;
+}
+
+bool Object::IsJungle() {
+  // return CallVirtual<0xEA,bool>((uintptr_t)this);
+  // try {
+  //  return CallVirtual<234, bool>();
+  //} catch(std::exception e) { return false; }
+  return true;
+}
+
+float Object::get_mana_cost(int index) {
+  if(index < 0 || index > 3) return 0.f;
+  return MEMBER<float>(objManaCost + index * 0x18);
+}
 
 Spell *Object::GetSpell(int index) { return pMEMBER<Spell *>(objSpell)[index]; }
 
@@ -110,5 +129,5 @@ void Object::ChangeSkin(const char *model, int32_t skin) {
 
 Object *Object::GetOwner() {
   using fnGetOwner = Object *(__fastcall *)(Object *);
-  return ((fnGetOwner)(offset->oGetOwner))(this);
+  return ((fnGetOwner)oGetOwner)(this);
 }

@@ -27,9 +27,15 @@ struct SkinData {
 
 class IMEMBER {
 protected:
-  template <typename Type> inline Type MEMBER(uintptr_t offset) { return *reinterpret_cast<Type *>(this + offset); }
+  template <size_t index, typename ReturnType, typename... Args> ReturnType CallVirtual(Args... args) {
+    using Fn = ReturnType(__fastcall *)(uintptr_t, Args...);
+    const auto function{(*reinterpret_cast<Fn **>(this))[index]};
+    return function((uintptr_t)this, args...);
+  }
 
-  template <typename Type> inline Type *pMEMBER(uintptr_t offset) { return reinterpret_cast<Type *>(this + offset); }
+  template <typename Type> Type MEMBER(uintptr_t offset) { return *reinterpret_cast<Type *>(this + offset); }
+
+  template <typename Type> Type *pMEMBER(uintptr_t offset) { return reinterpret_cast<Type *>(this + offset); }
 };
 
 class Buff : IMEMBER {
@@ -86,28 +92,33 @@ class Object : IMEMBER {
 public:
   int32_t index();
   int32_t team();
-  bool visible();
-  bool targetable();
-  CharacterState state();
-  std::string_view name();
-  ObjectType type();
   FLOAT3 position();
-  float health();
+  bool visible();
   float mana();
-  float mana_cost(int);
+  bool targetable();
+  float health();
+  CharacterState state();
   DataStack *dataStack();
   uintptr_t spell_cast();
   std::vector<Buff *> buffs();
+  std::string_view name();
+
   // float attackdamage();
   float AttackDelay();
   float AttackWindup();
   float BonusRadius();
   float RealAttackRange();
+
   bool IsAlive();
   bool IsEnemy();
   bool IsTargetableToTeam();
   bool IsValidTarget();
-  // bool HasBuff(std::string_view);
+  bool IsHero();
+  bool IsTurret();
+  bool IsLaneMinion();
+  bool IsJungle();
+
+  float get_mana_cost(int);
   Spell *GetSpell(int);
   bool CheckSpecialSkins(const char *, int32_t);
   void ChangeSkin(const char *, int32_t);
@@ -118,7 +129,6 @@ class ObjList : public RiotArray<Object *> {
 public:
   std::vector<Object *> objects_in_range(float, bool);
   Object *best_object_in_range(float, bool);
-  bool Contains(Object *);
 };
 
 constexpr std::string_view keyMap[] = {

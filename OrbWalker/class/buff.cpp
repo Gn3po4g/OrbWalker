@@ -2,8 +2,6 @@
 
 #include "struct.hpp"
 
-#include "struct.hpp"
-
 std::string_view Buff::name() {
   auto addr = MEMBER<uintptr_t>(0x10);
   if(!addr) return ""sv;

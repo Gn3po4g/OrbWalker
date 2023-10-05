@@ -4,13 +4,12 @@
 
 #include "agent/orb.hpp"
 #include "config/config.hpp"
-
-std::set<ObjectType> hashes{ObjectType::Hero, ObjectType::Minion_Lane, ObjectType::Monster, ObjectType::Turret};
+#include "memory/global.hpp"
 
 std::vector<Object *> ObjList::objects_in_range(float range, bool collision) {
   return std::span(data, size) | std::views::filter([&](Object *obj) {
-           return obj->IsValidTarget() /*&& hashes.contains(obj->type())*/
-               && obj->position() - orb->self->position() <= range + (collision ? obj->BonusRadius() : 0.f);
+           return obj->IsValidTarget()
+               && obj->position() - self->position() <= range + (collision ? obj->BonusRadius() : 0.f);
          })
        | std::ranges::to<std::vector>();
 }
@@ -22,7 +21,7 @@ Object *ObjList::best_object_in_range(float range, bool collision) {
     if(config::targeting == Targeting::health_lowest) {
       return obj->health();
     } else if(config::targeting == Targeting::distance_closest) {
-      return obj->position() - orb->self->position();
+      return obj->position() - self->position();
     } else {
       return obj->health();
     }
@@ -30,5 +29,3 @@ Object *ObjList::best_object_in_range(float range, bool collision) {
   if(target == list.end()) return nullptr;
   else return *target;
 }
-
-bool ObjList::Contains(Object *obj) { return std::find(data, data + size, obj) != data + size; }
