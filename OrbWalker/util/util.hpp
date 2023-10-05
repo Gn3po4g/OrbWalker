@@ -19,6 +19,52 @@ enum CharacterState : uint16_t {
   NoRender = 1 << 15
 };
 
+enum CharacterHash : uint32_t {
+  SRU_ChaosMinionMelee = 0xB87BB4C7,
+  SRU_ChaosMinionRanged = 0xD86EA814,
+  SRU_ChaosMinionSiege = 0x6B0C5C0,
+  SRU_ChaosMinionSuper = 0x3A6B38CE,
+  SRU_OrderMinionMelee = 0xD11193B9,
+  SRU_OrderMinionRanged = 0xC44285A2,
+  SRU_OrderMinionSiege = 0x1F46A4B2,
+  SRU_OrderMinionSuper = 0x530117C0,
+  SRU_Plant_Vision = 0x4D61E805,
+  SRU_Plant_Satchel = 0xE8814FF5,
+  SRU_Plant_Health = 0xC3479CD9,
+  SRU_Gromp = 0xD1C19B7E,
+  SRU_Krug = 0xA20205E2,
+  SRU_KrugMini = 0xF8123C99,
+  SRU_KrugMiniMini = 0xA8245C50,
+  SRU_Murkwolf = 0x621947DC,
+  SRU_MurkwolfMini = 0x9A1D4493,
+  SRU_Razorbeak = 0x244E9932,
+  SRU_RazorbeakMini = 0xA2C97FE9,
+  SRU_Blue = 0xFC505223,
+  SRU_Red = 0x9CA35508,
+  Sru_Crab = 0x2DB77AF9,
+  SRU_Dragon_Air = 0x11D34E07,
+  SRU_Dragon_Earth = 0x606DCD87,
+  SRU_Dragon_Fire = 0x99A947D9,
+  SRU_Dragon_Water = 0x27F996F4,
+  SRU_Dragon_Hextech = 0xA076EECE,
+  SRU_Dragon_Chemtech = 0xF956A026,
+  SRU_Dragon_Elder = 0x5944E907,
+  SRU_RiftHerald = 0xDDAF53D2,
+  SRU_Baron = 0x68AC12C9,
+  HA_ChaosMinionMelee = 0xD1BBDB04,
+  HA_ChaosMinionRanged = 0x35751117,
+  HA_ChaosMinionSiege = 0x1FF0EBFD,
+  HA_ChaosMinionSuper = 0x53AB5F0B,
+  HA_OrderMinionMelee = 0xEA51B9F6,
+  HA_OrderMinionRanged = 0x2148EEA5,
+  HA_OrderMinionSiege = 0x3886CAEF,
+  HA_OrderMinionSuper = 0x6C413DFD,
+  JammerDevice = 0x8223B6BA,
+  SightWard = 0x7C1BCAD9,
+  YellowTrinket = 0x40D7E043,
+  BlueTrinket = 0xE20532FD,
+};
+
 template <typename T> bool IsValidPtr(T addr) { return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff; }
 
 struct INT2 {

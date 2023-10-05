@@ -2,7 +2,6 @@
 
 #include "hooks.hpp"
 
-#include "agent/orb.hpp"
 #include "agent/script.hpp"
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
@@ -84,7 +83,7 @@ HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 
-  orb->update();
+  script->update();
   render::Update();
   ui::Update();
   skin::Update();
@@ -101,7 +100,7 @@ HRESULT WINAPI Present(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags
 Hooks::Hooks() {
   config::Load();
   skin::Load();
-  orb = new Orb();
+  LoadScript();
   kiero::init(kiero::RenderType::D3D11);
   kiero::bind(8, (void **)&oPresent, Present);
 }

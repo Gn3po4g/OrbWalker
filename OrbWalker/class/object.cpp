@@ -2,7 +2,6 @@
 
 #include "struct.hpp"
 
-#include "agent/orb.hpp"
 #include "memory/global.hpp"
 #include "memory/offset.hpp"
 
@@ -22,9 +21,15 @@ float Object::health() { return MEMBER<float>(objHealth); }
 
 CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
 
+uint32_t Object::skin_hash() {
+  const auto data = MEMBER<uintptr_t>(objCharData);
+  if(!IsValidPtr(data)) return 0;
+  return *(uint32_t *)(data + 0x18);
+}
+
 DataStack *Object::dataStack() { return pMEMBER<DataStack>(objDataStack); }
 
-uintptr_t Object::spell_cast() { return MEMBER<uintptr_t>(0x2A20); }
+SpellCast *Object::spell_cast() { return MEMBER<SpellCast *>(objSpellCast); }
 
 std::vector<Buff *> Object::buffs() { return MEMBER<std::vector<Buff *>>(objBuff); }
 
@@ -48,17 +53,15 @@ float Object::AttackWindup() {
 }
 
 float Object::BonusRadius() {
-  // using fnBonusRadius = float(__fastcall *)(Object *);
-  // return ((fnBonusRadius)oBonusRadius)(this);
-  return CallVirtual<36, float>();
+  using fnBonusRadius = float(__fastcall *)(Object *);
+  return (*(fnBonusRadius **)this)[36](this);
 }
 
 float Object::RealAttackRange() { return MEMBER<float>(objAttackRange) + BonusRadius(); }
 
 bool Object::IsAlive() {
-  // using fnIsAlive = bool(__fastcall *)(Object *);
-  // return ((fnIsAlive)oIsAlive)(this);
-  return CallVirtual<133, bool>();
+  using fnIsAlive = bool(__fastcall *)(Object *);
+  return (*(fnIsAlive **)this)[133](this);
 }
 
 bool Object::IsEnemy() { return team() != self->team(); }
@@ -72,22 +75,32 @@ bool Object::IsValidTarget() { return visible() && targetable() && IsEnemy() && 
 
 bool Object::IsHero() { return std::count(heros->data, heros->data + heros->size, this); }
 
-bool Object::IsTurret() { return std::count(turrets->data, turrets->data + turrets->size, this); }
-
-bool Object::IsLaneMinion() {
-  //void **vtable = *(reinterpret_cast<void ***>(this));
-  //auto foo = reinterpret_cast<bool (*)(Object *)>(vtable[0xE3]);
-  //if(foo == nullptr) return false;
-  //return foo(this);
-   return true;
+bool Object::IsBuilding() {
+  return std::count(turrets->data, turrets->data + turrets->size, this)
+      || std::count(inhibs->data, inhibs->data + inhibs->size, this);
 }
 
-bool Object::IsJungle() {
-  // return CallVirtual<0xEA,bool>((uintptr_t)this);
-  // try {
-  //  return CallVirtual<234, bool>();
-  //} catch(std::exception e) { return false; }
-  return true;
+bool Object::IsPlant() {
+  switch(skin_hash()) {
+  case CharacterHash::SRU_Plant_Health:
+  case CharacterHash::SRU_Plant_Satchel:
+  case CharacterHash::SRU_Plant_Vision:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool Object::IsWard() {
+  switch(skin_hash()) {
+  case CharacterHash::JammerDevice:
+  case CharacterHash::SightWard:
+  case CharacterHash::BlueTrinket:
+  case CharacterHash::YellowTrinket:
+    return true;
+  default:
+    return false;
+  }
 }
 
 float Object::get_mana_cost(int index) {
@@ -95,7 +108,7 @@ float Object::get_mana_cost(int index) {
   return MEMBER<float>(objManaCost + index * 0x18);
 }
 
-Spell *Object::GetSpell(int index) { return pMEMBER<Spell *>(objSpell)[index]; }
+Spell *Object::GetSpell(uint32_t index) { return pMEMBER<Spell *>(objSpell)[index]; }
 
 bool Object::CheckSpecialSkins(const char *model, int32_t skin) {
   const auto stack{dataStack()};

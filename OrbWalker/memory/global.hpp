@@ -8,7 +8,8 @@ inline Object *self{};
 inline ObjList *heros{};
 inline ObjList *minions{};
 inline ObjList *turrets{};
-inline Object** objUnderMouse{};
+inline ObjList *inhibs{};
+inline Object **objUnderMouse{};
 
 void Init();
 } // namespace global

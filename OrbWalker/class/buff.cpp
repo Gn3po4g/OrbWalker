@@ -11,3 +11,7 @@ std::string_view Buff::name() {
 float Buff::starttime() { return MEMBER<float>(0x18); }
 
 float Buff::endtime() { return MEMBER<float>(0x1C); }
+
+uint32_t Buff::count() { return MEMBER<uint32_t>(0x3C); }
+
+uint32_t Buff::count_alt() { return MEMBER<uint32_t>(0x38); }

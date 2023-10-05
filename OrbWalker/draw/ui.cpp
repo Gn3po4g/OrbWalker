@@ -2,7 +2,7 @@
 
 #include "ui.hpp"
 
-#include "agent/orb.hpp"
+#include "agent/script.hpp"
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
@@ -33,8 +33,8 @@ void Update() {
   if(!showMenu) { return; }
   ImGui::Begin(
     "Settings", nullptr,
-    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar
-      | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize
+    ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoResize*/ | ImGuiWindowFlags_NoScrollbar
+      | ImGuiWindowFlags_NoScrollWithMouse /*| ImGuiWindowFlags_AlwaysAutoResize*/
   );
   if(ImGui::BeginTabBar(
        "TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip
@@ -86,15 +86,20 @@ void Update() {
       ImGui::HotKey("Next Skin Key", nextSkinKey);
       ImGui::EndTabItem();
     }
-#ifdef DEBUGMODE
+//#define UI_DEBUG
+#ifdef UI_DEBUG
     if(ImGui::BeginTabItem("Infos")) {
       ImGui::LabelText("##GameTime", "GameTime: %fs", function::GameTime());
-      ImGui::LabelText("##LocalPlayer", "LocalPlayer: %p", orb->self);
-      ImGui::LabelText("##HeroList", "HeroList: %p", orb->heros);
-      ImGui::LabelText("##name", "name: %s", orb->self->name().data());
-      ImGui::LabelText("##AttackDelay", "AttackDelay: %f", orb->self->AttackDelay());
-      ImGui::LabelText("##AttackWindup", "AttackWindup: %f", orb->self->AttackWindup());
-      ImGui::LabelText("##Target", "Target: %p", orb->markedObject);
+      ImGui::LabelText("##LocalPlayer", "LocalPlayer: %p", self);
+      ImGui::LabelText("##name", "name: %s", self->name().data());
+      const auto time = function::GameTime();
+      for(auto &buff : self->buffs()) {
+        if(buff->starttime() <= time && time <= buff->endtime() && buff->name().size() > 1 && buff->count() && buff->count_alt()) {
+          ImGui::LabelText(
+            ("##" + std::string(buff->name())).data(), "buffname: %s\taddr: %p", buff->name().data(), buff
+          );
+        }
+      }
       ImGui::EndTabItem();
     }
 #endif // DEBUGMODE

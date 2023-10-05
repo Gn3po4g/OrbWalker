@@ -1,10 +1,17 @@
 #pragma once
 
+#include "class/struct.hpp"
+
 constexpr float interval = .033f;
 
 class Script {
 public:
+  Object *markedObject{};
+
   void update();
+  virtual float draw_range();
+
+protected:
   virtual void extra_update();
   virtual bool can_attack();
   virtual bool can_do_action();
@@ -12,16 +19,21 @@ public:
   virtual bool is_attacking();
   virtual void idle();
   virtual void attack();
-  virtual float draw_range();
 
-protected:
   float game_time{};
   float last_attack_time{-FLT_MAX};
   float last_action_time{-FLT_MAX};
-  uintptr_t last_spell_cast{};
+  enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 
+  void check_marked_object();
+  void check_orb_state();
+  Object *get_target(float, bool);
   bool has_buff(std::string_view name);
 };
+
+extern Script *script;
+
+void LoadScript();
 
 class Ashe : public Script {
   void extra_update() override;
@@ -44,6 +56,11 @@ public:
 class Kaisa : public Script {
 public:
   bool can_attack() override;
+};
+
+class Vayne : public Script {
+public:
+  void extra_update() override;
 };
 
 class Zeri : public Script {

@@ -5,8 +5,6 @@
 #include "offset.hpp"
 #include "spoofcall.h"
 
-#include "agent/orb.hpp"
-
 #pragma section(".text")
 __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
 void *trampoline = (void *)jmp_rbx_0;
@@ -35,11 +33,11 @@ INT2 WorldToScreen(FLOAT3 in) {
 }
 
 void AttackObject(Object *target) {
-  using fnIssueOrder = bool(__fastcall *)(uintptr_t, int64_t, uint8_t, char, int, int, char);
+  using fnIssueOrder = bool(__fastcall *)(uintptr_t, int64_t, bool, bool, int, int, char);
   const auto pos = WorldToScreen(target->position());
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
   fnIssueOrder IssueOrder = (fnIssueOrder)oIssueOrder;
-  spoof_call(trampoline, IssueOrder, hudInput, 2ll, (uint8_t)0, '\1', pos.x, pos.y, '\0');
+  spoof_call(trampoline, IssueOrder, hudInput, 2ll, false, false, pos.x, pos.y, '\0');
 }
 
 void Move2Mouse() {
@@ -51,7 +49,8 @@ void Move2Mouse() {
   }
 }
 
-bool CastSpell(int index) {
+bool CastSpell(uint32_t index) {
+  if(index > 13) { return false; }
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
   auto spell = self->GetSpell(index);
   auto targetInfo = spell->spellInput();
@@ -71,7 +70,8 @@ bool CastSpell(int index) {
   return true;
 }
 
-bool CastSpell(Object *target, int index) {
+bool CastSpell(Object *target, uint32_t index) {
+  if(index > 13) { return false; }
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
   auto spell = self->GetSpell(index);
   auto targetInfo = spell->spellInput();
@@ -91,8 +91,8 @@ bool CastSpell(Object *target, int index) {
   return true;
 }
 
-bool CastSpell(FLOAT3 pos, int index) {
-  if(index < 0 || index > 14) { return false; }
+bool CastSpell(FLOAT3 pos, uint32_t index) {
+  if(index > 13) { return false; }
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
   auto spell = self->GetSpell(index);
   auto targetInfo = spell->spellInput();

@@ -2,7 +2,7 @@
 
 #include "render.hpp"
 
-#include "agent/orb.hpp"
+#include "agent/script.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
 #include "memory/global.hpp"
@@ -23,11 +23,11 @@ void RenderCircleWorld(const FLOAT3 &worldPos, float radius, uint32_t color, flo
 
 void DrawAttackRange() {
   if(!config::showAttackRange) return;
-  RenderCircleWorld(self->position(), orb->script->draw_range(), 0xffffffff, 1.f);
+  RenderCircleWorld(self->position(), script->draw_range(), 0xffffffff, 1.f);
 }
 
 void DrawMarkedObject() {
-  const auto obj = orb->markedObject;
+  const auto obj = script->markedObject;
   if(!obj) return;
   RenderCircleWorld(obj->position(), obj->BonusRadius(), 0xff0c9d00, 5.f);
 }

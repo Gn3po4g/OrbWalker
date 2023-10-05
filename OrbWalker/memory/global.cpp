@@ -10,6 +10,7 @@ void Init() {
   heros = *(ObjList **)oHeroList;
   minions = *(ObjList **)oMinionList;
   turrets = *(ObjList **)oTurretList;
+  inhibs = *(ObjList **)oInhibList;
   objUnderMouse = (Object **)(*(uintptr_t *)oObjUnderMouse + 0x18);
 }
 } // namespace global

@@ -1,11 +1,11 @@
 #pragma once
 
 namespace config {
-constexpr enum class Targeting : int {
+enum class Targeting : int {
   health_lowest,
   distance_closest,
 };
-constexpr const char* targetingStr[] = {
+inline const char* targetingStr[] = {
   "health-lowest",
   "distance-closest",
 };

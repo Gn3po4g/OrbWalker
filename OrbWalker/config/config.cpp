@@ -2,7 +2,6 @@
 
 #include "config.hpp"
 
-#include "agent/orb.hpp"
 #include "memory/global.hpp"
 
 namespace config {

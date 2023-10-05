@@ -4,10 +4,6 @@
 
 #include "memory/offset.hpp"
 
-#include "struct.hpp"
-
-#include "memory/offset.hpp"
-
 void DataStack::update(bool change) {
   using fnUpdate = int64_t(__fastcall *)(DataStack *, bool);
   ((fnUpdate)oDataStackUpdate)(this, change);

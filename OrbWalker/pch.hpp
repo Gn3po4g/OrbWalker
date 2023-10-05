@@ -1,7 +1,5 @@
 #pragma once
 
-//#define DEBUGMODE
-
 #include <Windows.h>
 
 #include <Psapi.h>
@@ -10,13 +8,10 @@
 
 #include <algorithm>
 #include <cstddef>
-#include <format>
 #include <fstream>
-#include <functional>
 #include <map>
 #include <mutex>
 #include <ranges>
-#include <set>
 #include <span>
 #include <sstream>
 #include <string>

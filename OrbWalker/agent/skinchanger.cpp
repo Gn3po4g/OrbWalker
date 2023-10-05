@@ -2,11 +2,10 @@
 
 #include "skinchanger.hpp"
 
-#include "agent/orb.hpp"
 #include "class/struct.hpp"
 #include "config/config.hpp"
-#include "memory/offset.hpp"
 #include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 namespace skin {
 using namespace std;
@@ -40,7 +39,7 @@ void Load() {
     map<string, int32_t> tempSkinList;
     for(const auto &i : skinsIds) {
       const auto name = champion->championName();
-      const auto skinDisplayname = format("game_character_skin_displayname_{}_{}", name.str, i);
+      const auto skinDisplayname = "game_character_skin_displayname_"s + name.str + '_' + to_string(i);
       using fnTranslateString = const char *(__fastcall *)(const char *);
       fnTranslateString TranslateString = (fnTranslateString)oTranslateString;
       string translatedName = i > 0 ? TranslateString(skinDisplayname.data()) : name.str;

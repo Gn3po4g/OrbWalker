@@ -27,11 +27,11 @@ struct SkinData {
 
 class IMEMBER {
 protected:
-  template <size_t index, typename ReturnType, typename... Args> ReturnType CallVirtual(Args... args) {
-    using Fn = ReturnType(__fastcall *)(uintptr_t, Args...);
-    const auto function{(*reinterpret_cast<Fn **>(this))[index]};
-    return function((uintptr_t)this, args...);
-  }
+  // template <size_t index, typename ReturnType, typename... Args> ReturnType CallVirtual(Args... args) {
+  //   using Fn = ReturnType(__fastcall *)(uintptr_t, Args...);
+  //   const auto function{(*reinterpret_cast<Fn **>(this))[index]};
+  //   return function((uintptr_t)this, args...);
+  // }
 
   template <typename Type> Type MEMBER(uintptr_t offset) { return *reinterpret_cast<Type *>(this + offset); }
 
@@ -43,7 +43,15 @@ public:
   std::string_view name();
   float starttime();
   float endtime();
+  uint32_t count();
+  uint32_t count_alt();
 };
+
+//class CharData : IMEMBER {
+//public:
+//  uint64_t type() {return MEMBER<uint32_t>(0x7a9);}
+//  uint32_t skin_hash() { return MEMBER<uint32_t>(0x18); }
+//};
 
 class Spell : IMEMBER {
 public:
@@ -60,6 +68,12 @@ public:
   float readyTime();
   SpellInput *spellInput();
   uintptr_t spellInfo();
+};
+
+class SpellCast : IMEMBER {
+public:
+  int32_t type();
+  int32_t id();
 };
 
 class Champion : IMEMBER {
@@ -98,8 +112,9 @@ public:
   bool targetable();
   float health();
   CharacterState state();
+  uint32_t skin_hash();
   DataStack *dataStack();
-  uintptr_t spell_cast();
+  SpellCast* spell_cast();
   std::vector<Buff *> buffs();
   std::string_view name();
 
@@ -114,12 +129,12 @@ public:
   bool IsTargetableToTeam();
   bool IsValidTarget();
   bool IsHero();
-  bool IsTurret();
-  bool IsLaneMinion();
-  bool IsJungle();
+  bool IsBuilding();
+  bool IsPlant();
+  bool IsWard();
 
   float get_mana_cost(int);
-  Spell *GetSpell(int);
+  Spell *GetSpell(uint32_t);
   bool CheckSpecialSkins(const char *, int32_t);
   void ChangeSkin(const char *, int32_t);
   Object *GetOwner();

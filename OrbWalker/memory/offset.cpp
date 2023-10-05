@@ -43,8 +43,9 @@ struct {
   {oLocalPlayer,        "48 8B 0D ? ? ? ? 48 85 C9 0F 84 ? ? ? ? 48 83 7B ? ?",                 3},
   {oObjUnderMouse,      "48 8B 05 ? ? ? ? 48 8B F9 33 C9 48 8B DA",                             3},
   {oHeroList,           "48 8B 05 ? ? ? ? 45 33 E4 0F 57 C0",                                   3},
-  {oTurretList,         "48 8B 1D ? ? ? ? 48 8B 5B 28",                                         3},
   {oMinionList,         "48 89 0D ? ? ? ? 48 8D 05 ? ? ? ? 33 D2 48 89 01 48 8D 05 ? ? ? ?",    3},
+  {oTurretList,         "48 8B 1D ? ? ? ? 48 8B 5B 28",                                         3},
+  {oInhibList,          "48 8B 05 ? ? ? ? 48 89 7C 24 ? 48 8B 58 08",                           3},
   {oChatClient,         "41 FF D1 48 8B 0D ? ? ? ? 0F B6 D8",                                   6},
   {oHudInstance,        "48 8B 0D ? ? ? ? 8B 57 10",                                            3},
   {oViewPort,           "48 8B 3D ? ? ? ? FF 90 ? ? ? ?",                                       3},
@@ -56,9 +57,9 @@ struct {
   {oCastSpell,          "48 89 4C 24 ? 55 41 55",                                               0},
   {oAttackDelay,        "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?",                                 1},
   {oAttackWindup,       "E8 ? ? ? ? 48 8B CE F3 0F 11 83 ? ? ? ?",                              1},
- //{oIsAlive,            "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?",                              1},
+  {oIsAlive,            "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?",                              1},
   {oIsTargetableToTeam, "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 41",                    0},
- //{oBonusRadius,        "E8 ? ? ? ? 0F 28 F8 48 8B D6",                                         1},
+  {oBonusRadius,        "E8 ? ? ? ? 0F 28 F8 48 8B D6",                                         1},
   {oWorldToScreen,      "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8",                              1},
   {oDataStackUpdate,    "88 54 24 10 53 55 56 57 41 54 41 55 41 56 41",                         0},
   {oDataStackPush,      "E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0",                    1},
@@ -70,7 +71,7 @@ void Init() {
   for(auto &[what, pattern, addition] : sigs) {
     auto address = FindAddress(pattern);
     while(!address) {
-#ifdef DEBUGMODE
+#ifdef OFFSET_DEBUG
       MessageBoxA(NULL, ("Unable to find " + pattern).data(), "", MB_OK);
 #endif
       this_thread::sleep_for(100ms);
