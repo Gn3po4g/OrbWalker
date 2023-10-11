@@ -33,9 +33,7 @@ DataStack *Object::dataStack() { return pMEMBER<DataStack>(objDataStack); }
 
 std::vector<Buff *> Object::buffs() { return MEMBER<std::vector<Buff *>>(objBuff); }
 
-std::string Object::name() {
-  return MEMBER<RiotString16>(objName);
-}
+std::string Object::name() { return MEMBER<RiotString16>(objName); }
 
 // float Object::attackdamage() {
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
@@ -53,16 +51,16 @@ float Object::AttackWindup() {
 
 float Object::BonusRadius() {
   using fnBonusRadius = float(__fastcall *)(Object *);
-  auto fn = (*(fnBonusRadius **)this)[37];
-  if(is_code_ptr(fn)) { return fn(this); }
-  return 0.f;
+  try {
+    return (*(fnBonusRadius **)this)[37](this);
+  } catch(...) { return 0.f; }
 }
 
 bool Object::IsAlive() {
   using fnIsAlive = bool(__fastcall *)(Object *);
-  auto fn = (*(fnIsAlive **)this)[134];
-  if(is_code_ptr(fn)) { return fn(this); }
-  return false;
+  try {
+    return (*(fnIsAlive **)this)[134](this);
+  } catch(...) { return false; }
 }
 
 bool Object::IsEnemy() { return team() != self->team(); }
@@ -104,8 +102,8 @@ bool Object::IsWard() {
   }
 }
 
-float Object::get_mana_cost(int index) {
-  if(index < 0 || index > 3) return 0.f;
+float Object::get_mana_cost(size_t index) {
+  if(index >= 4) return 0.f;
   return MEMBER<float>(objManaCost + index * 0x18);
 }
 

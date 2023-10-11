@@ -34,7 +34,7 @@ public:
   bool IsPlant();
   bool IsWard();
 
-  float get_mana_cost(int);
+  float get_mana_cost(size_t);
   Spell *GetSpell(uint32_t);
   bool CheckSpecialSkins(const char *, int32_t);
   void ChangeSkin(const char *, int32_t);
