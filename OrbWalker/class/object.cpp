@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include "struct.hpp"
+#include "object.hpp"
 
 #include "memory/global.hpp"
 #include "memory/offset.hpp"
@@ -19,6 +19,8 @@ bool Object::targetable() { return MEMBER<bool>(objTargetable); }
 
 float Object::health() { return MEMBER<float>(objHealth); }
 
+float Object::attack_range() { return MEMBER<float>(objAttackRange); }
+
 CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
 
 uint32_t Object::skin_hash() {
@@ -29,13 +31,10 @@ uint32_t Object::skin_hash() {
 
 DataStack *Object::dataStack() { return pMEMBER<DataStack>(objDataStack); }
 
-SpellCast *Object::spell_cast() { return MEMBER<SpellCast *>(objSpellCast); }
-
 std::vector<Buff *> Object::buffs() { return MEMBER<std::vector<Buff *>>(objBuff); }
 
-std::string_view Object::name() {
-  if(MEMBER<uint64_t>(objName + 0x18) > 15) return MEMBER<const char *>(objName);
-  return pMEMBER<const char>(objName);
+std::string Object::name() {
+  return MEMBER<RiotString16>(objName);
 }
 
 // float Object::attackdamage() {
@@ -54,14 +53,16 @@ float Object::AttackWindup() {
 
 float Object::BonusRadius() {
   using fnBonusRadius = float(__fastcall *)(Object *);
-  return (*(fnBonusRadius **)this)[36](this);
+  auto fn = (*(fnBonusRadius **)this)[37];
+  if(is_code_ptr(fn)) { return fn(this); }
+  return 0.f;
 }
-
-float Object::RealAttackRange() { return MEMBER<float>(objAttackRange) + BonusRadius(); }
 
 bool Object::IsAlive() {
   using fnIsAlive = bool(__fastcall *)(Object *);
-  return (*(fnIsAlive **)this)[133](this);
+  auto fn = (*(fnIsAlive **)this)[134];
+  if(is_code_ptr(fn)) { return fn(this); }
+  return false;
 }
 
 bool Object::IsEnemy() { return team() != self->team(); }

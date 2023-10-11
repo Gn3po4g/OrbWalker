@@ -65,7 +65,10 @@ enum CharacterHash : uint32_t {
   BlueTrinket = 0xE20532FD,
 };
 
-template <typename T> bool IsValidPtr(T addr) { return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff; }
+template <typename T>
+bool IsValidPtr(T addr) {
+  return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff;
+}
 
 struct INT2 {
   int x, y;
@@ -96,8 +99,59 @@ private:
   bool _m;
 };
 
+template <typename T>
+struct RiotArray {
+  uintptr_t unused;
+  T *data;
+  int32_t size;
+  int32_t capacity;
+};
+
+struct RiotString8 {
+  const char *str;
+  int32_t size;
+  int32_t capacity;
+
+  std::string get() { return std::string(str, size); }
+  operator const char *() { return str; }
+};
+
+struct RiotString16 {
+  union {
+    const char *p_str;
+    const char str[16];
+  };
+  int64_t size;
+  int64_t capacity;
+
+  operator std::string() {
+    if(size >= 16) return std::string(p_str, size);
+    else return std::string(str, size);
+  }
+};
+
+struct SkinData {
+  int32_t skinId;
+  int32_t unknown;
+  RiotString8 skinName;
+};
+
+class IMEMBER {
+protected:
+  template <typename Type>
+  Type MEMBER(uintptr_t offset) {
+    return *reinterpret_cast<Type *>(this + offset);
+  }
+
+  template <typename Type>
+  Type *pMEMBER(uintptr_t offset) {
+    return reinterpret_cast<Type *>(this + offset);
+  }
+};
+
 #pragma pack(push, 4)
-template <typename T> class xor_value {
+template <typename T>
+class xor_value {
   bool xor_key_was_init{0};
   std::uint8_t bytes_xor_count;
   std::uint8_t bytes_xor_count_8;

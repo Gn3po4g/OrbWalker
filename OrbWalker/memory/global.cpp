@@ -5,6 +5,8 @@
 
 namespace global {
 void Init() {
+  swap_chain = *(IDXGISwapChain **)(((uintptr_t(__fastcall *)())oMaterialRegistry)() + 0x1C0);
+
   game_state = (GameState *)(*(uintptr_t *)oGameState + 0xC);
   self = *(Object **)oLocalPlayer;
   heros = *(ObjList **)oHeroList;

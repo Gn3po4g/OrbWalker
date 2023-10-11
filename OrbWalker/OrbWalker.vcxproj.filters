@@ -8,13 +8,6 @@
     <Filter Include="source\memory">
       <UniqueIdentifier>{69a3290e-f86c-43f3-a311-67e2e07d9de3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\draw">
-      <UniqueIdentifier>{caaa4414-6311-4076-8a0c-2f3afc38efcc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="kiero">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{375d0d5a-7b76-47fb-97c7-ec2287185ae9}</UniqueIdentifier>
     </Filter>
@@ -30,26 +23,11 @@
     <Filter Include="source\config">
       <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\agent\champion">
+      <UniqueIdentifier>{e4cc1269-c0ad-46e5-87f5-d01572f444b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Kiero\kiero.cpp">
-      <Filter>kiero</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\buffer.c">
-      <Filter>kiero</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hde\hde32.c">
-      <Filter>kiero</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hde\hde64.c">
-      <Filter>kiero</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hook.c">
-      <Filter>kiero</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\trampoline.c">
-      <Filter>kiero</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -74,19 +52,13 @@
     <ClCompile Include="memory\offset.cpp">
       <Filter>source\memory</Filter>
     </ClCompile>
-    <ClCompile Include="draw\render.cpp">
-      <Filter>source\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="draw\ui.cpp">
-      <Filter>source\draw</Filter>
-    </ClCompile>
     <ClCompile Include="config\config.cpp">
       <Filter>source\config</Filter>
     </ClCompile>
     <ClCompile Include="class\object.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
-    <ClCompile Include="agent\hooks.cpp">
+    <ClCompile Include="agent\hook.cpp">
       <Filter>source\agent</Filter>
     </ClCompile>
     <ClCompile Include="agent\skinchanger.cpp">
@@ -101,10 +73,10 @@
     <ClCompile Include="class\buff.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
-    <ClCompile Include="class\objlist.cpp">
+    <ClCompile Include="class\obj_list.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
-    <ClCompile Include="class\datastack.cpp">
+    <ClCompile Include="class\data_stack.cpp">
       <Filter>source\class</Filter>
     </ClCompile>
     <ClCompile Include="class\spell.cpp">
@@ -119,38 +91,11 @@
     <ClCompile Include="memory\global.cpp">
       <Filter>source\memory</Filter>
     </ClCompile>
-    <ClCompile Include="class\spellcast.cpp">
-      <Filter>source\class</Filter>
+    <ClCompile Include="agent\ui.cpp">
+      <Filter>source\agent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Kiero\kiero.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\include\MinHook.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\buffer.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\hde\hde32.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\hde\hde64.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\hde\pstdint.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\hde\table32.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\hde\table64.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Kiero\minhook\src\trampoline.h">
-      <Filter>kiero</Filter>
-    </ClInclude>
     <ClInclude Include="pch.hpp">
       <Filter>source</Filter>
     </ClInclude>
@@ -184,12 +129,6 @@
     <ClInclude Include="memory\spoofcall.h">
       <Filter>source\memory</Filter>
     </ClInclude>
-    <ClInclude Include="draw\render.hpp">
-      <Filter>source\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\ui.hpp">
-      <Filter>source\draw</Filter>
-    </ClInclude>
     <ClInclude Include="util\util.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
@@ -199,7 +138,7 @@
     <ClInclude Include="util\constant.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
-    <ClInclude Include="agent\hooks.hpp">
+    <ClInclude Include="agent\hook.hpp">
       <Filter>source\agent</Filter>
     </ClInclude>
     <ClInclude Include="agent\skinchanger.hpp">
@@ -211,9 +150,6 @@
     <ClInclude Include="util\json.hpp">
       <Filter>source\util</Filter>
     </ClInclude>
-    <ClInclude Include="class\struct.hpp">
-      <Filter>source\class</Filter>
-    </ClInclude>
     <ClInclude Include="memory\function.hpp">
       <Filter>source\memory</Filter>
     </ClInclude>
@@ -222,6 +158,51 @@
     </ClInclude>
     <ClInclude Include="memory\global.hpp">
       <Filter>source\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="util\vmt_hook.hpp">
+      <Filter>source\util</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\ui.hpp">
+      <Filter>source\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\zeri.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\vayne.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\kaisa.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\graves.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\cassiopeia.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\ashe.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\all.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="class\buff.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\champion.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\data_stack.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\object.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\spell.hpp">
+      <Filter>source\class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\obj_list.hpp">
+      <Filter>source\class</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

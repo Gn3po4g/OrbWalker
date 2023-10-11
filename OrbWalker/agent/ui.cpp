@@ -5,7 +5,6 @@
 #include "agent/script.hpp"
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
-#include "memory/function.hpp"
 #include "memory/global.hpp"
 
 namespace ui {
@@ -16,10 +15,26 @@ auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text
   return true;
 };
 
-auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text) noexcept {
+auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text) {
   const auto &v = *(std::vector<const char *> *)vec;
   if(idx < 0 || idx > (int32_t)v.size()) { return false; }
   *out_text = v[idx];
+  return true;
+};
+
+auto selector_getter = [](void *vec, const int32_t idx, const char **out_text) {
+  // if(idx >= config::Selector::count) return false;
+  using config::Selector;
+  switch(idx) {
+  case Selector::health_lowest:
+    *out_text = "health_lowest";
+    break;
+  case Selector::distance_closest:
+    *out_text = "distance_closest";
+    break;
+  default:
+    return false;
+  }
   return true;
 };
 
@@ -41,11 +56,11 @@ void Update() {
      )) {
     if(ImGui::BeginTabItem("Script")) {
       ImGui::Text("Drawing Setting:");
-      ImGui::Checkbox("Show Attack Range", &config::showAttackRange);
+      ImGui::Checkbox("Show Attack Range", &showAttackRange);
       ImGui::Separator();
-      ImGui::Text("Targeting Setting:");
+      ImGui::Text("Selector Setting:");
       ImGui::PushItemWidth(150);
-      ImGui::Combo("Current Method", (int *)&targeting, targetingStr, IM_ARRAYSIZE(targetingStr));
+      ImGui::Combo("Current Method", &selector, selector_getter, nullptr, Selector::count);
       ImGui::PopItemWidth();
       ImGui::Separator();
       ImGui::Text("Key Setting:");
@@ -56,12 +71,8 @@ void Update() {
     if(ImGui::BeginTabItem("Skin")) {
       ImGui::Text("Skin Setting:");
       auto &values{skin::championsSkins[FNV(self->dataStack()->baseSkin.model)]};
-      if(ImGui::Combo(
-           "Current Skin", &config::currentSkin, vector_getter_skin, (void *)&values, (int)values.size() + 1
-         )) {
-        if(config::currentSkin > 0) {
-          self->ChangeSkin(values[config::currentSkin - 1].modelName, values[config::currentSkin - 1].skinId);
-        }
+      if(ImGui::Combo("Current Skin", &currentSkin, vector_getter_skin, (void *)&values, (int)values.size() + 1)) {
+        if(currentSkin > 0) { self->ChangeSkin(values[currentSkin - 1].modelName, values[currentSkin - 1].skinId); }
       }
       const auto playerHash{FNV(self->dataStack()->baseSkin.model)};
       if(const auto it{std::ranges::find_if(
@@ -92,17 +103,15 @@ void Update() {
       ImGui::LabelText("##GameTime", "GameTime: %fs", function::GameTime());
       ImGui::LabelText("##LocalPlayer", "LocalPlayer: %p", self);
       ImGui::LabelText("##name", "name: %s", self->name().data());
-      const auto time = function::GameTime();
-      for(auto &buff : self->buffs()) {
-        if(buff->starttime() <= time && time <= buff->endtime() && buff->name().size() > 1 && buff->count() && buff->count_alt()) {
-          ImGui::LabelText(
-            ("##" + std::string(buff->name())).data(), "buffname: %s\taddr: %p", buff->name().data(), buff
-          );
-        }
+      // const auto time = function::GameTime();
+      for(auto buff : self->buffs()) {
+        if(buff->name() != "" && buff->starttime() <= function::GameTime() && buff->endtime() >= function::GameTime())
+          ImGui::LabelText(("##buff" + buff->name()).data(), "%s", buff->name().data());
       }
+
       ImGui::EndTabItem();
     }
-#endif // DEBUGMODE
+#endif
     if(ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", menuKey);
       ImGui::Separator();
@@ -116,24 +125,21 @@ void Update() {
 
 namespace ImGui {
 bool SetToPressedKey(ImGuiKey &key) {
-  for(int i = ImGuiKey::ImGuiKey_Tab; i <= ImGuiKey::ImGuiKey_KeypadEqual; ++i) {
-    if(ImGui::IsKeyPressed(ImGuiKey(i))) {
-      if(i == ImGuiKey_Escape) {
-        key = ImGuiKey_None;
-      } else {
-        key = ImGuiKey(i);
-      }
+  for(auto &[_key, _value] : keyMap) {
+    if(ImGui::IsKeyPressed(_key)) {
+      if(_key == ImGuiKey_Escape) key = ImGuiKey_None;
+      else key = _key;
       return true;
     }
   }
   return false;
 }
 
-const char *ToString(ImGuiKey key) {
+const char *ToString(ImGuiKey &key) {
   if(key == ImGuiKey_None) {
     return "NONE";
   } else {
-    return keyMap[key - ImGuiKey_Tab].data();
+    return keyMap[key].data();
   }
 }
 

@@ -15,14 +15,14 @@ void Load() {
   if(json j = json::parse(in, nullptr, false, true); j.is_discarded()) return;
   else configJson = j;
 
-  if(self) currentSkin = configJson.value(self->dataStack()->baseSkin.model + ".currentSkinIndex", 0);
+  if(self) currentSkin = configJson.value(self->dataStack()->baseSkin.model.get() + ".currentSkinIndex", 0);
   showAttackRange = configJson.value("showAttackRange", true);
   kiteKey = configJson.value("kiteKey", ImGuiKey_Space);
   cleanKey = configJson.value("cleanKey", ImGuiKey_V);
   prevSkinKey = configJson.value("prevSkinKey", ImGuiKey_PageUp);
   nextSkinKey = configJson.value("nextSkinKey", ImGuiKey_PageDown);
   menuKey = configJson.value("menuKey", ImGuiKey_Insert);
-  targeting = configJson.value("targeting", Targeting::health_lowest);
+  selector = configJson.value("selector", Selector::health_lowest);
   in.close();
 }
 
@@ -30,14 +30,14 @@ void Save() {
   auto out = std::ofstream(fileName);
   if(!out.good()) return;
   if(self) {
-    configJson[self->dataStack()->baseSkin.model + ".currentSkinIndex"] = currentSkin;
+    configJson[self->dataStack()->baseSkin.model.get() + ".currentSkinIndex"] = currentSkin;
     configJson["showAttackRange"] = showAttackRange;
     configJson["kiteKey"] = kiteKey;
     configJson["cleanKey"] = cleanKey;
     configJson["prevSkinKey"] = prevSkinKey;
     configJson["nextSkinKey"] = nextSkinKey;
     configJson["menuKey"] = menuKey;
-    configJson["targeting"] = targeting;
+    configJson["selector"] = selector;
   }
   out << configJson.dump();
   out.close();

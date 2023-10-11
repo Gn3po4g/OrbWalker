@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include "struct.hpp"
+#include "spell.hpp"
 
 using SpellInput = Spell::SpellInput;
 
@@ -23,3 +23,8 @@ void SpellInput::SetEndPos(FLOAT3 pos) { *pMEMBER<FLOAT3>(0x24) = pos; }
 void SpellInput::SetClickedPos(FLOAT3 pos) { *pMEMBER<FLOAT3>(0x30) = pos; }
 
 void SpellInput::SetUnkPos(FLOAT3 pos) { *pMEMBER<FLOAT3>(0x3C) = pos; }
+
+
+int32_t SpellCast::type() { return MEMBER<int32_t>(0x10); }
+
+int32_t SpellCast::id() { return MEMBER<int32_t>(0x8); }

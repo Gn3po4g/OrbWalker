@@ -1,8 +1,11 @@
 #pragma once
 
-#include "class/struct.hpp"
+#include "class/object.hpp"
+#include "class/obj_list.hpp"
 
 inline namespace global {
+inline IDXGISwapChain* swap_chain{};
+
 inline GameState *game_state{};
 inline Object *self{};
 inline ObjList *heros{};

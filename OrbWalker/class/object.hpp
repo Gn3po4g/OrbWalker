@@ -1,0 +1,42 @@
+#pragma once
+
+#include "buff.hpp"
+#include "data_stack.hpp"
+#include "spell.hpp"
+
+class Object : IMEMBER {
+public:
+  int32_t index();
+  int32_t team();
+  FLOAT3 position();
+  bool visible();
+  float mana();
+  bool targetable();
+  float health();
+  float attack_range();
+  CharacterState state();
+  uint32_t skin_hash();
+  DataStack *dataStack();
+  std::vector<Buff *> buffs();
+  std::string name();
+
+  // float attackdamage();
+  float AttackDelay();
+  float AttackWindup();
+  float BonusRadius();
+
+  bool IsAlive();
+  bool IsEnemy();
+  bool IsTargetableToTeam();
+  bool IsValidTarget();
+  bool IsHero();
+  bool IsBuilding();
+  bool IsPlant();
+  bool IsWard();
+
+  float get_mana_cost(int);
+  Spell *GetSpell(uint32_t);
+  bool CheckSpecialSkins(const char *, int32_t);
+  void ChangeSkin(const char *, int32_t);
+  Object *GetOwner();
+};

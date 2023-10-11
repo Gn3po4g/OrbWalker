@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include "agent/hooks.hpp"
+#include "agent/hook.hpp"
 #include "memory/offset.hpp"
 #include "memory/global.hpp"
 
@@ -17,19 +17,20 @@ bool WINAPI HideThread(HANDLE hThread) noexcept {
   } __except(TRUE) { return false; }
 }
 
-void Start(void *) {
+void Start() {
   HideThread(GetCurrentThread());
   offset::Init();
   while(*game_state != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  hooks = new Hooks();
-  std::unique_lock<std::mutex> lkRun(hooks->mRun);
-  hooks->cvRun.wait(lkRun);
+  hook = new Hook();
+  std::unique_lock<std::mutex> lkRun(hook->mRun);
+  hook->cvRun.wait(lkRun);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {
   if(dwReason == DLL_PROCESS_ATTACH) {
     DisableThreadLibraryCalls(hModule);
-    _beginthread(Start, 0, nullptr);
+    //_beginthread(Start, 0, nullptr);
+    std::thread(Start).detach();
   }
   return TRUE;
 }

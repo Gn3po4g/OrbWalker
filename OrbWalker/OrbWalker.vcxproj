@@ -37,40 +37,18 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\Kiero\kiero.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\buffer.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hde\hde32.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hde\hde64.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\hook.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="..\Kiero\minhook\src\trampoline.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="agent\hooks.cpp" />
+    <ClCompile Include="agent\hook.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
+    <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
     <ClCompile Include="class\champion.cpp" />
-    <ClCompile Include="class\datastack.cpp" />
+    <ClCompile Include="class\data_stack.cpp" />
     <ClCompile Include="class\object.cpp" />
-    <ClCompile Include="class\objlist.cpp" />
+    <ClCompile Include="class\obj_list.cpp" />
     <ClCompile Include="class\spell.cpp" />
-    <ClCompile Include="class\spellcast.cpp" />
     <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="draw\render.cpp" />
-    <ClCompile Include="draw\ui.cpp" />
     <ClCompile Include="memory\function.cpp" />
     <ClCompile Include="memory\global.cpp" />
     <ClCompile Include="memory\offset.cpp" />
@@ -87,22 +65,24 @@
     <ClInclude Include="..\Imgui\imstb_rectpack.h" />
     <ClInclude Include="..\Imgui\imstb_textedit.h" />
     <ClInclude Include="..\Imgui\imstb_truetype.h" />
-    <ClInclude Include="..\Kiero\kiero.h" />
-    <ClInclude Include="..\Kiero\minhook\include\MinHook.h" />
-    <ClInclude Include="..\Kiero\minhook\src\buffer.h" />
-    <ClInclude Include="..\Kiero\minhook\src\hde\hde32.h" />
-    <ClInclude Include="..\Kiero\minhook\src\hde\hde64.h" />
-    <ClInclude Include="..\Kiero\minhook\src\hde\pstdint.h" />
-    <ClInclude Include="..\Kiero\minhook\src\hde\table32.h" />
-    <ClInclude Include="..\Kiero\minhook\src\hde\table64.h" />
-    <ClInclude Include="..\Kiero\minhook\src\trampoline.h" />
-    <ClInclude Include="agent\hooks.hpp" />
+    <ClInclude Include="agent\champion\all.hpp" />
+    <ClInclude Include="agent\champion\ashe.hpp" />
+    <ClInclude Include="agent\champion\cassiopeia.hpp" />
+    <ClInclude Include="agent\champion\graves.hpp" />
+    <ClInclude Include="agent\champion\kaisa.hpp" />
+    <ClInclude Include="agent\champion\vayne.hpp" />
+    <ClInclude Include="agent\champion\zeri.hpp" />
+    <ClInclude Include="agent\hook.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />
-    <ClInclude Include="class\struct.hpp" />
+    <ClInclude Include="agent\ui.hpp" />
+    <ClInclude Include="class\buff.hpp" />
+    <ClInclude Include="class\champion.hpp" />
+    <ClInclude Include="class\data_stack.hpp" />
+    <ClInclude Include="class\object.hpp" />
+    <ClInclude Include="class\obj_list.hpp" />
+    <ClInclude Include="class\spell.hpp" />
     <ClInclude Include="config\config.hpp" />
-    <ClInclude Include="draw\render.hpp" />
-    <ClInclude Include="draw\ui.hpp" />
     <ClInclude Include="memory\function.hpp" />
     <ClInclude Include="memory\global.hpp" />
     <ClInclude Include="memory\offset.hpp" />
@@ -112,6 +92,7 @@
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\json.hpp" />
     <ClInclude Include="util\util.hpp" />
+    <ClInclude Include="util\vmt_hook.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -150,6 +131,9 @@
     <IntDir>$(SolutionDir)Out\$(Configuration)\</IntDir>
     <TargetName>Hid</TargetName>
     <LinkIncremental>false</LinkIncremental>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <ClangTidyChecks>-*,cppcoreguidelines-*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

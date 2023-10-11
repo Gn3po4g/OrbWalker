@@ -6,7 +6,7 @@ inline uintptr_t oGameState{}, oGameTime{}, oLocalPlayer{}, oObjUnderMouse{}, oH
 
   oPrintChat{}, oWorldToScreen{}, oIssueOrder{}, oIssueMove{}, oCastSpell{}, oAttackDelay{}, oAttackWindup{},
   oIsAlive{}, oIsTargetableToTeam{}, oBonusRadius{}, oDataStackUpdate{}, oDataStackPush{}, oGetOwner{},
-  oTranslateString{};
+  oTranslateString{}, oMaterialRegistry{};
 
 void Init();
 } // namespace offset
