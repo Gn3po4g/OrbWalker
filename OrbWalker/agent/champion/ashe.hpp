@@ -4,8 +4,7 @@
 
 class Ashe : public Script {
   void run(SpellCast *spell_cast, Object *obj) override {
-    std::string name = *(RiotString16 *)(*(uintptr_t *)spell_cast + 0x28);
-    if(spell_cast->type() == -1 || name == "AsheQAttack") last_attack_time = game_time;
-    if(name == "AsheQ") last_attack_time = -FLT_MAX;
+    Script::run(spell_cast, obj);
+    if(spell_cast->slot() == SpellSlot_Q) last_attack_time = -FLT_MAX;
   }
 };

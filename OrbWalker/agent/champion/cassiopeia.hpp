@@ -6,7 +6,7 @@
 
 class Cassiopeia : public Script {
   bool can_attack() override {
-    return self->state() & CharacterState::CanCast && self->GetSpell(2)->level() > 0
+    return self->state() & CanCast && self->GetSpell(2)->level() > 0
         && self->get_mana_cost(2) <= self->mana();
   };
   bool is_reloading() override { return game_time < self->GetSpell(2)->readyTime() - interval; };

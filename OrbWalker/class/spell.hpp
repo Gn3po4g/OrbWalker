@@ -20,5 +20,8 @@ public:
 class SpellCast : IMEMBER {
 public:
   int32_t type();
-  int32_t id();
+  int32_t slot();
+  std::string name();
+
+  bool is_attack();
 };

@@ -1,41 +1,17 @@
 #include "pch.hpp"
 
-#include "champion/all.hpp"
 #include "script.hpp"
 
 #include "config/config.hpp"
 #include "memory/function.hpp"
 #include "memory/global.hpp"
 
-std::map<std::string_view, Script *> scripts{
-  {"Aphelios",   new Aphelios()  },
-  {"Ashe",       new Ashe()      },
-  {"Cassiopeia", new Cassiopeia()},
-  {"Graves",     new Graves()    },
-  {"Kaisa",      new Kaisa()     },
-  {"Vayne",      new Vayne()     },
-  {"Zeri",       new Zeri()      }
-};
-
 Script *script;
 
-void LoadScript() {
-  if(scripts.contains(self->name())) script = scripts[self->name()];
-  else script = new Script();
-}
-
 void Script::run(SpellCast *spell_cast, Object *obj) {
-  std::string name = *(RiotString16 *)(*(uintptr_t *)spell_cast + 0x28);
-  std::vector<std::string> attack_spells{
-    "CaitlynPassiveMissile", "LucianPassiveAttack", "KogMawBioArcaneBarrageAttack", "SivirWAttack",
-    "TwitchSprayAndPrayAttack","XayahPassiveAttack"};
-  if(spell_cast->type() == -1 || std::ranges::count(attack_spells, name)) last_attack_time = game_time;
-   //PrintMessage(0xFFFFFF, std::format("{}", name));
-  //  PrintMessage(0xFFFFFF, std::format("{:x}\t{:x}", spell_cast->id(), spell_cast->type()));
-  //   uint16_t id = *(uint16_t *)((uintptr_t)a3 + 0x11C);
-  //   int32_t type = *(int32_t *)((uintptr_t)a3 + 0x8);
-  //      FLOAT3 start = *(FLOAT3 *)((uintptr_t)a3 + 0xA4);
-  //      FLOAT3 end = *(FLOAT3 *)((uintptr_t)a3 + 0xB0);
+  if(spell_cast->is_attack()) last_attack_time = game_time;
+  // PrintMessage(0xFFFFFF, std::format("{}", name));
+  // PrintMessage(0xFFFFFF, std::format("{:x}", (uintptr_t)spell_cast));
 }
 
 void Script::update() {
@@ -57,7 +33,7 @@ void Script::update() {
   }
 }
 
-bool Script::can_attack() { return self->state() & CharacterState::CanAttack; }
+bool Script::can_attack() { return self->state() & CanAttack; }
 
 bool Script::can_do_action() {
   if(game_time < last_action_time + interval) return false;

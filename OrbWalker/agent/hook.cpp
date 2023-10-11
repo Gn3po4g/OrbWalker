@@ -3,6 +3,7 @@
 #include "hook.hpp"
 
 #include "agent/script.hpp"
+#include "agent/champion/all.hpp"
 #include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
 #include "config/config.hpp"
@@ -53,7 +54,7 @@ void init_all(IDXGISwapChain *pSwapChain) {
 
   config::Load();
   skin::Load();
-  LoadScript();
+  script = get_script(self->name());
 
   PrintMessage(0x00FFFF, "Noroby's League of Legends script loaded");
 }

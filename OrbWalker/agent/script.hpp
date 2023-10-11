@@ -7,8 +7,6 @@ constexpr float interval = 1.f / 30;
 
 class Script {
 public:
-  Object *markedObject{};
-
   void update();
   virtual void run(SpellCast *spell_cast, Object *obj);
 
@@ -24,6 +22,7 @@ protected:
   float game_time{};
   float last_attack_time{-FLT_MAX};
   float last_action_time{-FLT_MAX};
+  Object *markedObject{};
   enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 
   void check_marked_object();
@@ -33,5 +32,3 @@ protected:
 };
 
 extern Script *script;
-
-void LoadScript();
