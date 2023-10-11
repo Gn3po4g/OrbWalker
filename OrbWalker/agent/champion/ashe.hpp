@@ -1,9 +1,11 @@
 #pragma once
 
- #include "agent/script.hpp"
+#include "agent/script.hpp"
 
 class Ashe : public Script {
-	//void check_attack(SpellCast *) override {
-	//  if(spell_cast->type() == -1 || is_attack_spell(spell_cast)) last_attack_time = game_time;
-	//}
+  void run(SpellCast *spell_cast, Object *obj) override {
+    std::string name = *(RiotString16 *)(*(uintptr_t *)spell_cast + 0x28);
+    if(spell_cast->type() == -1 || name == "AsheQAttack") last_attack_time = game_time;
+    if(name == "AsheQ") last_attack_time = -FLT_MAX;
+  }
 };

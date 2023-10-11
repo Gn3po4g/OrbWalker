@@ -38,7 +38,9 @@
       </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="agent\hook.cpp" />
-    <ClCompile Include="agent\script.cpp" />
+    <ClCompile Include="agent\script.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="agent\skinchanger.cpp" />
     <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
@@ -66,6 +68,7 @@
     <ClInclude Include="..\Imgui\imstb_textedit.h" />
     <ClInclude Include="..\Imgui\imstb_truetype.h" />
     <ClInclude Include="agent\champion\all.hpp" />
+    <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\ashe.hpp" />
     <ClInclude Include="agent\champion\cassiopeia.hpp" />
     <ClInclude Include="agent\champion\graves.hpp" />

@@ -8,6 +8,7 @@
 #include "memory/global.hpp"
 
 std::map<std::string_view, Script *> scripts{
+  {"Aphelios",   new Aphelios()  },
   {"Ashe",       new Ashe()      },
   {"Cassiopeia", new Cassiopeia()},
   {"Graves",     new Graves()    },
@@ -26,20 +27,8 @@ void LoadScript() {
 void Script::run(SpellCast *spell_cast, Object *obj) {
   std::string name = *(RiotString16 *)(*(uintptr_t *)spell_cast + 0x28);
   std::vector<std::string> attack_spells{
-    "AsheQAttack",
-    "ApheliosCalibrumAttack",
-    "ApheliosCalibrumAttackOverride",
-    "ApheliosGravitumAttack",
-    "ApheliosInfernumAttack",
-    "ApheliosSeverumAttack",
-    "CaitlynPassiveMissile",
-    "KaisaPAttack",
-    "KaisaEPAttack",
-    "LucianPassiveAttack",
-    "KogMawBioArcaneBarrageAttack",
-    "SivirWAttack",
-    "TwitchSprayAndPrayAttack",
-    "VayneTumbleAttack"};
+    "CaitlynPassiveMissile", "LucianPassiveAttack", "KogMawBioArcaneBarrageAttack", "SivirWAttack",
+    "TwitchSprayAndPrayAttack"};
   if(spell_cast->type() == -1 || std::ranges::count(attack_spells, name)) last_attack_time = game_time;
   // PrintMessage(0xFFFFFF, std::format("{}", name));
   //  PrintMessage(0xFFFFFF, std::format("{:x}\t{:x}", spell_cast->id(), spell_cast->type()));

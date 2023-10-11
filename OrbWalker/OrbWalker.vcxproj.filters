@@ -204,6 +204,9 @@
     <ClInclude Include="class\obj_list.hpp">
       <Filter>source\class</Filter>
     </ClInclude>
+    <ClInclude Include="agent\champion\aphelios.hpp">
+      <Filter>source\agent\champion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
