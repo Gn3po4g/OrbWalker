@@ -30,7 +30,7 @@ void Script::run(SpellCast *spell_cast, Object *obj) {
     "CaitlynPassiveMissile", "LucianPassiveAttack", "KogMawBioArcaneBarrageAttack", "SivirWAttack",
     "TwitchSprayAndPrayAttack","XayahPassiveAttack"};
   if(spell_cast->type() == -1 || std::ranges::count(attack_spells, name)) last_attack_time = game_time;
-   PrintMessage(0xFFFFFF, std::format("{}", name));
+   //PrintMessage(0xFFFFFF, std::format("{}", name));
   //  PrintMessage(0xFFFFFF, std::format("{:x}\t{:x}", spell_cast->id(), spell_cast->type()));
   //   uint16_t id = *(uint16_t *)((uintptr_t)a3 + 0x11C);
   //   int32_t type = *(int32_t *)((uintptr_t)a3 + 0x8);
