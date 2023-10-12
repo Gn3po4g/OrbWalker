@@ -134,11 +134,11 @@ void Draw(std::function<void()> fun) {
 
 void Circle(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
   ImGuiWindow *window = ImGui::GetCurrentWindow();
-  const int numPoints = 314;
+  const int numPoints = 200;
   ImVec2 points[numPoints]{};
   float theta = 0.f;
   for(int i = 0; i < numPoints; i++, theta += IM_PI * 2 / numPoints) {
-    FLOAT3 worldSpace = {worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
+    FLOAT3 worldSpace {worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
     ImVec2 screenSpace = WorldToScreen(worldSpace).ToImVec();
     points[i] = screenSpace;
   }
