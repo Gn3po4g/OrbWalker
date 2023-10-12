@@ -1,25 +1,27 @@
 #pragma once
 
-namespace config {
-enum Selector : int {
-  health_lowest,
-  distance_closest,
-  count
+enum selector : int { health_lowest, distance_closest, count };
+
+class config {
+public:
+  static config &inst();
+
+  bool show_menu;
+
+  bool show_attack_range;
+  int selector;
+  ImGuiKey kite_key;
+  ImGuiKey clean_key;
+
+  int current_skin;
+  ImGuiKey prev_skin_key;
+  ImGuiKey next_skin_key;
+
+  ImGuiKey menu_key;
+
+  void save();
+
+private:
+  config();
+  inline static std::unique_ptr<config> instance_;
 };
-
-inline bool showMenu{true};
-
-inline bool showAttackRange{true};
-inline int selector{};
-inline ImGuiKey kiteKey{ImGuiKey_Space};
-inline ImGuiKey cleanKey{ImGuiKey_V};
-
-inline int currentSkin{};
-inline ImGuiKey prevSkinKey{ImGuiKey_PageUp};
-inline ImGuiKey nextSkinKey{ImGuiKey_PageDown};
-
-inline ImGuiKey menuKey{ImGuiKey_Insert};
-
-void Load();
-void Save();
-} // namespace config

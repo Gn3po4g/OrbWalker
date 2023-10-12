@@ -1,12 +1,12 @@
 #include "pch.hpp"
 
+#include <d3d11.h>
+
 #include "hook.hpp"
 
 #include "agent/script.hpp"
-#include "agent/champion/all.hpp"
 #include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
-#include "config/config.hpp"
 #include "memory/function.hpp"
 #include "memory/global.hpp"
 
@@ -28,14 +28,14 @@ ID3D11RenderTargetView *pRenderTargetView{};
 
 void init_all(IDXGISwapChain *pSwapChain) {
   pSwapChain->GetDevice(IID_PPV_ARGS(&pDevice));
-  if(!pDevice) throw -1;
+  if(!pDevice) throw std::exception();
   pDevice->GetImmediateContext(&pDeviceContext);
   DXGI_SWAP_CHAIN_DESC sd{};
   pSwapChain->GetDesc(&sd);
   window = sd.OutputWindow;
   ID3D11Texture2D *pBackBuffer{};
   pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-  if(!pBackBuffer) throw -1;
+  if(!pBackBuffer) throw std::exception();
   pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
   pBackBuffer->Release();
   oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
@@ -46,15 +46,12 @@ void init_all(IDXGISwapChain *pSwapChain) {
   io.IniFilename = nullptr;
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   io.Fonts->AddFontFromFileTTF(
-    "C:\\Windows\\Fonts\\HarmonyOS_Sans_SC_Regular.ttf", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull()
+    R"(C:\Windows\Fonts\HarmonyOS_Sans_SC_Regular.ttf)", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull()
   );
+  ui::LoadTheme();
 
   ImGui_ImplWin32_Init(window);
   ImGui_ImplDX11_Init(pDevice, pDeviceContext);
-
-  config::Load();
-  skin::Load();
-  script = get_script(self->name());
 
   PrintMessage(0x00FFFF, "Noroby's League of Legends script loaded");
 }
@@ -63,10 +60,11 @@ void do_in_present() {
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
-
-  script->update();
+  
   ui::Update();
-  skin::Update();
+
+  script::inst().update();
+  skin::inst().update();
 
   ImGui::EndFrame();
   ImGui::Render();
@@ -78,7 +76,7 @@ void do_in_present() {
 struct present {
   static HRESULT WINAPI hooked(IDXGISwapChain *p_swap_chain, UINT sync_interval, UINT flags) {
     try {
-      std::call_once(init, [&]() { init_all(p_swap_chain); });
+      std::call_once(init, [&] { init_all(p_swap_chain); });
       do_in_present();
     } catch(...) {}
     return original(p_swap_chain, sync_interval, flags);
@@ -89,7 +87,7 @@ vmt_hook *swap_chain_hook{};
 
 struct on_process_spell {
   static void __fastcall hooked(__int64 thisptr, int arg, SpellCast *spell_cast, Object *obj) {
-    if(arg == 0xc) script->run(spell_cast, obj);
+    if(arg == 0xc) script::inst().run(spell_cast, obj);
     return original(thisptr, arg, spell_cast, obj);
   }
   inline static decltype(&hooked) original{};

@@ -23,12 +23,6 @@ float Object::attack_range() { return MEMBER<float>(objAttackRange); }
 
 CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
 
-uint32_t Object::skin_hash() {
-  const auto data = MEMBER<uintptr_t>(objCharData);
-  if(!IsValidPtr(data)) return 0;
-  return *(uint32_t *)(data + 0x18);
-}
-
 DataStack *Object::dataStack() { return pMEMBER<DataStack>(objDataStack); }
 
 std::vector<Buff *> Object::buffs() { return MEMBER<std::vector<Buff *>>(objBuff); }
@@ -41,33 +35,30 @@ std::string Object::name() { return MEMBER<RiotString16>(objName); }
 
 float Object::AttackDelay() {
   using fnAttackDelay = float(__fastcall *)(Object *);
-  return ((fnAttackDelay)oAttackDelay)(this);
+  return reinterpret_cast<fnAttackDelay>(oAttackDelay)(this);
 }
 
 float Object::AttackWindup() {
   using fnAttackWindup = float(__fastcall *)(Object *, int);
-  return ((fnAttackWindup)oAttackWindup)(this, 0x40);
+  return reinterpret_cast<fnAttackWindup>(oAttackWindup)(this, 0x40);
 }
 
 float Object::BonusRadius() {
   using fnBonusRadius = float(__fastcall *)(Object *);
-  try {
-    return (*(fnBonusRadius **)this)[37](this);
-  } catch(...) { return 0.f; }
+  if(IsBuilding()) return 88.4f;
+  return (*reinterpret_cast<fnBonusRadius **>(this))[37](this);
 }
 
 bool Object::IsAlive() {
   using fnIsAlive = bool(__fastcall *)(Object *);
-  try {
-    return (*(fnIsAlive **)this)[134](this);
-  } catch(...) { return false; }
+  return (*reinterpret_cast<fnIsAlive **>(this))[134](this);
 }
 
 bool Object::IsEnemy() { return team() != self->team(); }
 
 bool Object::IsTargetableToTeam() {
   using fnIsTargetableToTeam = bool(__fastcall *)(Object *);
-  return ((fnIsTargetableToTeam)oIsTargetableToTeam)(this);
+  return reinterpret_cast<fnIsTargetableToTeam>(oIsTargetableToTeam)(this);
 }
 
 bool Object::IsValidTarget() { return visible() && targetable() && IsEnemy() && IsAlive() && IsTargetableToTeam(); }
@@ -80,10 +71,10 @@ bool Object::IsBuilding() {
 }
 
 bool Object::IsPlant() {
-  switch(skin_hash()) {
-  case CharacterHash::SRU_Plant_Health:
-  case CharacterHash::SRU_Plant_Satchel:
-  case CharacterHash::SRU_Plant_Vision:
+  switch(FNV(dataStack()->baseSkin.model)) {
+  case FNVC("SRU_Plant_Health"):
+  case FNVC("SRU_Plant_Satchel"):
+  case FNVC("SRU_Plant_Vision"):
     return true;
   default:
     return false;
@@ -91,11 +82,13 @@ bool Object::IsPlant() {
 }
 
 bool Object::IsWard() {
-  switch(skin_hash()) {
-  case CharacterHash::JammerDevice:
-  case CharacterHash::SightWard:
-  case CharacterHash::BlueTrinket:
-  case CharacterHash::YellowTrinket:
+  switch(FNV(dataStack()->baseSkin.model)) {
+  case FNVC("DominationScout"):
+  case FNVC("JammerDevice"):
+  case FNVC("SightWard"):
+  case FNVC("YellowTrinket"):
+  case FNVC("VisionWard"):
+  case FNVC("BlueTrinket"):
     return true;
   default:
     return false;
@@ -109,37 +102,7 @@ float Object::get_mana_cost(size_t index) {
 
 Spell *Object::GetSpell(uint32_t index) { return pMEMBER<Spell *>(objSpell)[index]; }
 
-bool Object::CheckSpecialSkins(const char *model, int32_t skin) {
-  const auto stack{dataStack()};
-  const auto champName{FNV(stack->baseSkin.model)};
-  if(champName == FNV("Katarina") && (skin >= 29 && skin <= 36)) {
-    stack->baseSkin.gear = 0;
-  } else if(champName == FNV("Renekton") && (skin >= 26 && skin <= 32)) {
-    stack->baseSkin.gear = 0;
-  } else if(champName == FNV("MissFortune") && skin == 16) {
-    stack->baseSkin.gear = 0;
-  } else if(champName == FNV("Lux") || champName == FNV("Sona")) {
-    if((skin == 7 && champName == FNV("Lux")) || (skin == 6 && champName == FNV("Sona"))) {
-      stack->stack.clear();
-      stack->push(model, skin);
-      return true;
-    } else {
-      stack->stack.clear();
-    }
-  } else if(stack->baseSkin.gear != int8_t(-1) && champName != FNV("Kayn")) {
-    stack->baseSkin.gear = int8_t(-1);
-  }
-  return false;
-}
-
-void Object::ChangeSkin(const char *model, int32_t skin) {
-  const auto stack{dataStack()};
-  pMEMBER<xor_value<int32_t>>(objSkinId)->encrypt(skin);
-  stack->baseSkin.skin = skin;
-  if(!CheckSpecialSkins(model, skin)) { stack->update(true); }
-}
-
 Object *Object::GetOwner() {
   using fnGetOwner = Object *(__fastcall *)(Object *);
-  return ((fnGetOwner)oGetOwner)(this);
+  return reinterpret_cast<fnGetOwner>(oGetOwner)(this);
 }

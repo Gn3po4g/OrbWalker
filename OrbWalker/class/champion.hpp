@@ -4,5 +4,5 @@ class Champion : IMEMBER {
 public:
   RiotString8 championName();
 
-  RiotArray<SkinData> skins();
+  std::vector<int32_t> skins_id();
 };

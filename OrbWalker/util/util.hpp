@@ -3,6 +3,11 @@ bool IsValidPtr(T addr) {
   return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff;
 }
 
+template<typename T>
+T Read(uintptr_t addr) {
+	return *reinterpret_cast<T*>(addr);
+}
+
 struct INT2 {
   int x, y;
 
@@ -45,8 +50,8 @@ struct RiotString8 {
   int32_t size;
   int32_t capacity;
 
-  std::string get() { return std::string(str, size); }
-  operator const char *() { return str; }
+  std::string get() const { return std::string(str, size); }
+  operator const char *() const { return str; }
 };
 
 struct RiotString16 {
@@ -57,16 +62,10 @@ struct RiotString16 {
   int64_t size;
   int64_t capacity;
 
-  operator std::string() {
+  operator std::string() const {
     if(size >= 16) return std::string(p_str, size);
     else return std::string(str, size);
   }
-};
-
-struct SkinData {
-  int32_t skinId;
-  int32_t unknown;
-  RiotString8 skinName;
 };
 
 class IMEMBER {

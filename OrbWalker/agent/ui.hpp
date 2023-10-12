@@ -1,6 +1,7 @@
 #pragma once
 
 namespace ui {
+void LoadTheme();
 void Update();
 } // namespace ui
 

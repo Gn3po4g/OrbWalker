@@ -1,5 +1,7 @@
 #include "pch.hpp"
 
+#include <Windows.h>
+
 #include "agent/hook.hpp"
 #include "memory/offset.hpp"
 #include "memory/global.hpp"

@@ -15,7 +15,6 @@ public:
   float health();
   float attack_range();
   CharacterState state();
-  uint32_t skin_hash();
   DataStack *dataStack();
   std::vector<Buff *> buffs();
   std::string name();
@@ -36,7 +35,5 @@ public:
 
   float get_mana_cost(size_t);
   Spell *GetSpell(uint32_t);
-  bool CheckSpecialSkins(const char *, int32_t);
-  void ChangeSkin(const char *, int32_t);
   Object *GetOwner();
 };

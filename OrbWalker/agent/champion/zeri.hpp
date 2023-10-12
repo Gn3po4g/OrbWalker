@@ -1,10 +1,10 @@
 #pragma once
 
  #include "agent/script.hpp"
- #include "memory/function.hpp"
+#include "memory/function.hpp"
  #include "memory/global.hpp"
 
-class Zeri : public Script {
+class Zeri : public script {
 public:
   bool can_attack() override { return self->state() & CanCast; };
   bool is_reloading() override { return game_time < self->GetSpell(0)->readyTime() - interval; };

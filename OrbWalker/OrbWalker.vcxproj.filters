@@ -168,9 +168,6 @@
     <ClInclude Include="agent\champion\zeri.hpp">
       <Filter>source\agent\champion</Filter>
     </ClInclude>
-    <ClInclude Include="agent\champion\vayne.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
     <ClInclude Include="agent\champion\kaisa.hpp">
       <Filter>source\agent\champion</Filter>
     </ClInclude>
@@ -178,9 +175,6 @@
       <Filter>source\agent\champion</Filter>
     </ClInclude>
     <ClInclude Include="agent\champion\cassiopeia.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\ashe.hpp">
       <Filter>source\agent\champion</Filter>
     </ClInclude>
     <ClInclude Include="agent\champion\all.hpp">
@@ -203,12 +197,6 @@
     </ClInclude>
     <ClInclude Include="class\obj_list.hpp">
       <Filter>source\class</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\aphelios.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\lucian.hpp">
-      <Filter>source\agent\champion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

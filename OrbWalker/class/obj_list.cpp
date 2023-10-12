@@ -20,12 +20,8 @@ vector<Object *> ObjList::objects_in_range(float range, bool collision) {
 Object *ObjList::best_object_in_range(float range, bool collision) {
   const auto &list = objects_in_range(range, collision);
   auto target = ranges::min_element(list, {}, [](Object *obj) {
-    using config::Selector;
-    if(config::selector == Selector::distance_closest) {
-      return obj->position() - self->position();
-    } else {
-      return obj->health();
-    }
+    if(config::inst().selector == distance_closest) { return obj->position() - self->position(); }
+    return obj->health();
   });
   return target == list.end() ? nullptr : *target;
 }

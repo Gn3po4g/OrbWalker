@@ -1,10 +1,6 @@
 #pragma once
 
-#include <Windows.h>
-
-#include <Psapi.h>
-#include <d3d11.h>
-#include <dxgi.h>
+#define NOMINMAX
 
 #include <algorithm>
 #include <cstddef>

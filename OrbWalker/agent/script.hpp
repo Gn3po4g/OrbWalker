@@ -1,16 +1,18 @@
 #pragma once
 
 #include "class/object.hpp"
-#include "memory/function.hpp"
 
 constexpr float interval = 1.f / 30;
 
-class Script {
+class script {
 public:
+  static script &inst();
   void update();
   virtual void run(SpellCast *spell_cast, Object *obj);
 
 protected:
+  script() = default;
+
   virtual bool can_attack();
   virtual bool can_do_action();
   virtual bool is_reloading();
@@ -29,6 +31,7 @@ protected:
   void check_orb_state();
   Object *get_target(float, bool);
   bool has_buff(std::string_view);
-};
 
-extern Script *script;
+private:
+  inline static std::unique_ptr<script> instance_;
+};

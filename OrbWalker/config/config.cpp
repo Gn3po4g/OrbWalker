@@ -4,42 +4,47 @@
 
 #include "memory/global.hpp"
 
-namespace config {
-std::string fileName = "setting.json"s;
-json configJson = json();
+std::string file_name = "setting.json"s;
+json config_json = json::object();
 
-void Load() {
-  auto in = std::ifstream(fileName);
+config &config::inst() {
+  static std::once_flag singleton;
+  std::call_once(singleton, [&] { instance_.reset(new config); });
+  return *instance_;
+}
+
+config::config() : show_menu(true) {
+  auto in = std::ifstream(file_name);
   if(!in.good()) return;
 
-  if(json j = json::parse(in, nullptr, false, true); j.is_discarded()) return;
-  else configJson = j;
+  if(const json j = json::parse(in, nullptr, false, true); !j.is_discarded()) config_json = j;
 
-  if(self) currentSkin = configJson.value(self->dataStack()->baseSkin.model.get() + ".currentSkinIndex", 0);
-  showAttackRange = configJson.value("showAttackRange", true);
-  kiteKey = configJson.value("kiteKey", ImGuiKey_Space);
-  cleanKey = configJson.value("cleanKey", ImGuiKey_V);
-  prevSkinKey = configJson.value("prevSkinKey", ImGuiKey_PageUp);
-  nextSkinKey = configJson.value("nextSkinKey", ImGuiKey_PageDown);
-  menuKey = configJson.value("menuKey", ImGuiKey_Insert);
-  selector = configJson.value("selector", Selector::health_lowest);
+  if(self) {
+    current_skin = config_json.value(self->dataStack()->baseSkin.model.get() + ".current_skin", 0);
+    show_attack_range = config_json.value("show_attack_range", true);
+    kite_key = config_json.value("kite_key", ImGuiKey_Space);
+    clean_key = config_json.value("clean_key", ImGuiKey_V);
+    prev_skin_key = config_json.value("prev_skin_key", ImGuiKey_PageUp);
+    next_skin_key = config_json.value("next_skin_key", ImGuiKey_PageDown);
+    menu_key = config_json.value("menu_key", ImGuiKey_Insert);
+    selector = config_json.value("selector", health_lowest);
+  }
   in.close();
 }
 
-void Save() {
-  auto out = std::ofstream(fileName);
+void config::save() {
+  auto out = std::ofstream(file_name);
   if(!out.good()) return;
   if(self) {
-    configJson[self->dataStack()->baseSkin.model.get() + ".currentSkinIndex"] = currentSkin;
-    configJson["showAttackRange"] = showAttackRange;
-    configJson["kiteKey"] = kiteKey;
-    configJson["cleanKey"] = cleanKey;
-    configJson["prevSkinKey"] = prevSkinKey;
-    configJson["nextSkinKey"] = nextSkinKey;
-    configJson["menuKey"] = menuKey;
-    configJson["selector"] = selector;
+    config_json[self->dataStack()->baseSkin.model.get() + ".current_skin"] = current_skin;
+    config_json["show_attack_range"] = show_attack_range;
+    config_json["kite_key"] = kite_key;
+    config_json["clean_key"] = clean_key;
+    config_json["prev_skin_key"] = prev_skin_key;
+    config_json["next_skin_key"] = next_skin_key;
+    config_json["menu_key"] = menu_key;
+    config_json["selector"] = selector;
   }
-  out << configJson.dump();
+  out << config_json.dump(2);
   out.close();
 }
-} // namespace config

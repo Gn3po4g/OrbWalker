@@ -1,3 +1,5 @@
+#include "Windows.h"
+
 inline auto is_code_ptr(void *ptr) -> bool {
   auto flags{PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY};
 

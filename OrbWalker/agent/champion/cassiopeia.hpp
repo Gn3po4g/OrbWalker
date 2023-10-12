@@ -1,10 +1,10 @@
 #pragma once
 
  #include "agent/script.hpp"
- #include "memory/function.hpp"
+#include "memory/function.hpp"
  #include "memory/global.hpp"
 
-class Cassiopeia : public Script {
+class Cassiopeia : public script {
   bool can_attack() override {
     return self->state() & CanCast && self->GetSpell(2)->level() > 0
         && self->get_mana_cost(2) <= self->mana();

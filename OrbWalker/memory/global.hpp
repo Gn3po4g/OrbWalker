@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dxgi.h>
+
 #include "class/object.hpp"
 #include "class/obj_list.hpp"
 
