@@ -16,7 +16,7 @@ vector<ByteWithMask> pattern2bytes(const string &input) {
   for(string s; ss >> s;) {
     try {
       result.emplace_back(stoi(s, nullptr, 16), true);
-    } catch(exception e) { result.emplace_back(); }
+    } catch(...) { result.emplace_back(); }
   }
   return result;
 }
@@ -68,7 +68,7 @@ struct {
   {oDataStackUpdate,    "88 54 24 10 53 55 56 57 41 54 41 55 41 56 41",                         0},
   {oDataStackPush,      "E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0",                    1},
   {oGetOwner,           "E8 ? ? ? ? 4C 3B F8 0F 94 C0",                                         1},
-  {oTranslateString,    "E8 ? ? ? ? BA ? ? ? ? E9 ? ? ? ? 8B 84 24 ? ? ? ?",                    1},
+  {oTranslateString,    "E8 ? ? ? ? 0F 57 DB 4C 8B C0 F3 0F 5A DE",                             1},
   {oMaterialRegistry,   "E8 ? ? ? ? 8B 57 44",                                                  1}
 };
 
@@ -76,9 +76,9 @@ void Init() {
   for(auto &[what, pattern, addition] : sigs) {
     auto address = FindAddress(pattern);
     while(!address) {
-#ifdef OFFSET_DEBUG
-      MessageBoxA(NULL, ("Unable to find " + pattern).data(), "", MB_OK);
-#endif
+
+      // MessageBoxA(NULL, ("Unable to find " + pattern).data(), "", MB_OK);
+
       this_thread::sleep_for(100ms);
       address = FindAddress(pattern);
     }

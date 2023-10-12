@@ -14,5 +14,7 @@ void Init() {
   turrets = *(ObjList **)oTurretList;
   inhibs = *(ObjList **)oInhibList;
   objUnderMouse = (Object **)(*(uintptr_t *)oObjUnderMouse + 0x18);
+
+  vmt_in_obj = (void *)((uintptr_t)self + 0x1198);
 }
 } // namespace global

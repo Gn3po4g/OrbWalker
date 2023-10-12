@@ -86,7 +86,7 @@
     <ClInclude Include="memory\function.hpp" />
     <ClInclude Include="memory\global.hpp" />
     <ClInclude Include="memory\offset.hpp" />
-    <ClInclude Include="memory\spoofcall.h" />
+    <ClInclude Include="memory\spoof_call.h" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="util\constant.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />

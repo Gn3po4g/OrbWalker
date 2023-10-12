@@ -3,7 +3,7 @@
 #include "function.hpp"
 #include "global.hpp"
 #include "offset.hpp"
-#include "spoofcall.h"
+#include "spoof_call.h"
 
 #pragma section(".text")
 __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
@@ -37,7 +37,7 @@ void AttackObject(Object *target) {
   const auto pos = WorldToScreen(target->position());
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
   fnIssueOrder IssueOrder = (fnIssueOrder)oIssueOrder;
-  spoof_call(trampoline, IssueOrder, hudInput, 2ll, false, false, pos.x, pos.y, false);
+  spoof_call(trampoline, IssueOrder, hudInput, 0ll, false, false, pos.x, pos.y, false);
 }
 
 void Move2Mouse() {
@@ -134,7 +134,7 @@ void Draw(std::function<void()> fun) {
 
 void Circle(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
   ImGuiWindow *window = ImGui::GetCurrentWindow();
-  const int numPoints = 100;
+  const int numPoints = 314;
   ImVec2 points[numPoints]{};
   float theta = 0.f;
   for(int i = 0; i < numPoints; i++, theta += IM_PI * 2 / numPoints) {

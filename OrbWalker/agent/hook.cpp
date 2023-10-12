@@ -60,7 +60,7 @@ void do_in_present() {
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
-  
+
   ui::Update();
 
   script::inst().update();
@@ -97,6 +97,6 @@ vmt_hook *on_process_spell_hook{};
 Hook::Hook() {
   swap_chain_hook = new vmt_hook(swap_chain);
   swap_chain_hook->hook<present>(8);
-  on_process_spell_hook = new vmt_hook((void *)((uintptr_t)self + 0x1198));
+  on_process_spell_hook = new vmt_hook(vmt_in_obj);
   on_process_spell_hook->hook<on_process_spell>(30);
 }

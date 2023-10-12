@@ -16,5 +16,7 @@ inline ObjList *turrets{};
 inline ObjList *inhibs{};
 inline Object **objUnderMouse{};
 
+inline void* vmt_in_obj{};
+
 void Init();
 } // namespace global

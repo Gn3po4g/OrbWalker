@@ -126,7 +126,7 @@
     <ClInclude Include="memory\offset.hpp">
       <Filter>source\memory</Filter>
     </ClInclude>
-    <ClInclude Include="memory\spoofcall.h">
+    <ClInclude Include="memory\spoof_call.h">
       <Filter>source\memory</Filter>
     </ClInclude>
     <ClInclude Include="util\util.hpp">

@@ -45,7 +45,7 @@ float Object::AttackWindup() {
 
 float Object::BonusRadius() {
   using fnBonusRadius = float(__fastcall *)(Object *);
-  if(IsBuilding()) return 88.4f;
+  // if(IsBuilding()) return 88.4f;
   return (*reinterpret_cast<fnBonusRadius **>(this))[37](this);
 }
 
@@ -61,16 +61,17 @@ bool Object::IsTargetableToTeam() {
   return reinterpret_cast<fnIsTargetableToTeam>(oIsTargetableToTeam)(this);
 }
 
-bool Object::IsValidTarget() { return visible() && targetable() && IsEnemy() && IsAlive() && IsTargetableToTeam(); }
+bool Object::IsValidTarget() { return IsEnemy() && IsTargetableToTeam(); }
 
-bool Object::IsHero() { return std::count(heros->data, heros->data + heros->size, this); }
+bool Object::IsHero() { return std::ranges::count(std::span(heros->data, heros->size), this); }
 
 bool Object::IsBuilding() {
-  return std::count(turrets->data, turrets->data + turrets->size, this)
-      || std::count(inhibs->data, inhibs->data + inhibs->size, this);
+  return std::ranges::count(std::span(turrets->data, turrets->size), this)
+      || std::ranges::count(std::span(inhibs->data, inhibs->size), this);
 }
 
 bool Object::IsPlant() {
+  if(!std::ranges::count(std::span(minions->data, minions->size), this)) return false;
   switch(FNV(dataStack()->baseSkin.model)) {
   case FNVC("SRU_Plant_Health"):
   case FNVC("SRU_Plant_Satchel"):
@@ -82,6 +83,7 @@ bool Object::IsPlant() {
 }
 
 bool Object::IsWard() {
+  if(!std::ranges::count(std::span(minions->data, minions->size), this)) return false;
   switch(FNV(dataStack()->baseSkin.model)) {
   case FNVC("DominationScout"):
   case FNVC("JammerDevice"):

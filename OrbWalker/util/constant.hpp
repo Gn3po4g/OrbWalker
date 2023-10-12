@@ -33,8 +33,8 @@ enum SpellSlot : int32_t {
   SpellSlot_Recall,
   SpellSlot_Other,
   // SpellSlot_SpecialAttack = 45,
-  SpellSlot_BasicAttack1 = 64,
-  SpellSlot_BasicAttack2 = 65,
+  //SpellSlot_BasicAttack1 = 64,
+  //SpellSlot_BasicAttack2 = 65,
 };
 
 enum CharacterState : uint16_t {
