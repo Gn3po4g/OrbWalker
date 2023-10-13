@@ -1,3 +1,5 @@
+#pragma once
+
 namespace detail {
 template <typename Type, Type OffsetBasis, Type Prime>
 struct size_dependant_data {

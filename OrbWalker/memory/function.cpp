@@ -26,9 +26,10 @@ void PrintMessage(size_t color, std::string_view msg) {
 }
 
 INT2 WorldToScreen(FLOAT3 in) {
-  using fnWorldToScreen = uintptr_t(__fastcall *)(uintptr_t, FLOAT3 *, FLOAT3 *);
+  // using fnWorldToScreen = uintptr_t(__fastcall *)(uintptr_t, FLOAT3 *, FLOAT3 *);
   FLOAT3 out;
-  ((fnWorldToScreen)oWorldToScreen)(*(uintptr_t *)oViewPort + 0x270, &in, &out);
+  //((fnWorldToScreen)oWorldToScreen)(*(uintptr_t *)oViewPort + 0x270, &in, &out);
+  call_function<uintptr_t>(oWorldToScreen, *(uintptr_t *)oViewPort + 0x270, &in, &out);
   return {(int)out.x, (int)out.y};
 }
 
@@ -138,7 +139,7 @@ void Circle(const FLOAT3 &worldPos, float radius, uint32_t color, float thicknes
   ImVec2 points[numPoints]{};
   float theta = 0.f;
   for(int i = 0; i < numPoints; i++, theta += IM_PI * 2 / numPoints) {
-    FLOAT3 worldSpace {worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
+    FLOAT3 worldSpace{worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
     ImVec2 screenSpace = WorldToScreen(worldSpace).ToImVec();
     points[i] = screenSpace;
   }

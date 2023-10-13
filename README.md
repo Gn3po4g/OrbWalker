@@ -2,9 +2,9 @@
 
 # Feature
 1. Skin Changer(thanks to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
-1. Show attack range.
-1. Hold space to attack champions, hold v to clean line(configurable).
-1. Left-click to lock on target.
+2. Show attack range.
+3. Hold space to attack champions, hold v to clean line(configurable).
+4. Left-click to lock on target.
 
 # Build:
 

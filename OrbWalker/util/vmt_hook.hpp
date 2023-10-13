@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Windows.h"
 
 inline auto is_code_ptr(void *ptr) -> bool {

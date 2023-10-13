@@ -1,3 +1,5 @@
+#pragma once
+
 constexpr auto objIndex = 0x10;
 constexpr auto objTeam = 0x3C;
 constexpr auto objPosition = 0x220;

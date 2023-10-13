@@ -1,11 +1,26 @@
+#pragma once
+
 template <typename T>
 bool IsValidPtr(T addr) {
   return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff;
 }
 
-template<typename T>
+template <typename T>
 T Read(uintptr_t addr) {
-	return *reinterpret_cast<T*>(addr);
+  return *reinterpret_cast<T *>(addr);
+}
+
+template <typename ReturnType, typename... Args>
+ReturnType call_function(uintptr_t func, Args... args) {
+  using func_t = ReturnType(__fastcall *)(Args...);
+  return reinterpret_cast<func_t>(func)(std::forward<Args>(args)...);
+}
+
+template <size_t Index, typename ReturnType, typename... Args>
+ReturnType call_virtual(void *instance, Args... args) {
+  using fn = ReturnType(__fastcall *)(void *, Args...);
+  auto function = (*static_cast<fn **>(instance))[Index];
+  return function(instance, std::forward<Args>(args)...);
 }
 
 struct INT2 {
@@ -81,6 +96,8 @@ protected:
   }
 };
 
+#include <intrin.h>
+
 #pragma pack(push, 4)
 template <typename T>
 class xor_value {
@@ -126,20 +143,20 @@ public:
         bytes_xor_count = (sizeof(T) - bytes_xor_count_8) / 4;
       }
 
-      auto key{::__rdtsc()};
+      auto key{__rdtsc()};
       auto key_index{0};
 
       for(auto i{0u}; i < sizeof(T); i++) {
         *(reinterpret_cast<std::uint8_t *>(&xor_key) + i) = *(reinterpret_cast<std::uint8_t *>(&key) + key_index++);
 
         if(key_index == 8) {
-          key = ::__rdtsc();
+          key = __rdtsc();
           key_index = 0;
         }
       }
 
       value_index = 0;
-      xor_key_was_init = 1;
+      xor_key_was_init = true;
     }
 
     auto xored_value{value};

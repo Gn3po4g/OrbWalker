@@ -6,8 +6,6 @@ class config {
 public:
   static config &inst();
 
-  bool show_menu;
-
   bool show_attack_range;
   int selector;
   ImGuiKey kite_key;

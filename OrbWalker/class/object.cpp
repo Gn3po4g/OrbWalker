@@ -33,33 +33,17 @@ std::string Object::name() { return MEMBER<RiotString16>(objName); }
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
 // }
 
-float Object::AttackDelay() {
-  using fnAttackDelay = float(__fastcall *)(Object *);
-  return reinterpret_cast<fnAttackDelay>(oAttackDelay)(this);
-}
+float Object::AttackDelay() { return call_function<float>(oAttackDelay, this); }
 
-float Object::AttackWindup() {
-  using fnAttackWindup = float(__fastcall *)(Object *, int);
-  return reinterpret_cast<fnAttackWindup>(oAttackWindup)(this, 0x40);
-}
+float Object::AttackWindup() { return call_function<float>(oAttackWindup, this, 0x40); }
 
-float Object::BonusRadius() {
-  using fnBonusRadius = float(__fastcall *)(Object *);
-  // if(IsBuilding()) return 88.4f;
-  return (*reinterpret_cast<fnBonusRadius **>(this))[37](this);
-}
+float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
-bool Object::IsAlive() {
-  using fnIsAlive = bool(__fastcall *)(Object *);
-  return (*reinterpret_cast<fnIsAlive **>(this))[134](this);
-}
+bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 
 bool Object::IsEnemy() { return team() != self->team(); }
 
-bool Object::IsTargetableToTeam() {
-  using fnIsTargetableToTeam = bool(__fastcall *)(Object *);
-  return reinterpret_cast<fnIsTargetableToTeam>(oIsTargetableToTeam)(this);
-}
+bool Object::IsTargetableToTeam() { return call_function<bool>(oIsTargetableToTeam, this); }
 
 bool Object::IsValidTarget() { return IsEnemy() && IsTargetableToTeam(); }
 
@@ -104,7 +88,4 @@ float Object::get_mana_cost(size_t index) {
 
 Spell *Object::GetSpell(uint32_t index) { return pMEMBER<Spell *>(objSpell)[index]; }
 
-Object *Object::GetOwner() {
-  using fnGetOwner = Object *(__fastcall *)(Object *);
-  return reinterpret_cast<fnGetOwner>(oGetOwner)(this);
-}
+Object *Object::GetOwner() { return call_function<Object *>(oGetOwner, this); }
