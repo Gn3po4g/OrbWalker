@@ -47,6 +47,5 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   if(std::ranges::count(reset_attack_spells, spell_cast->name())) last_attack_time = -FLT_MAX;
   // PrintMessage(0xFFFFFF, std::format("{:x}", (uintptr_t)spell_cast));
   // PrintMessage(0xFFFFFF, std::format("{:x}", spell_cast->slot()));
-
   // PrintMessage(0xFFFFFF, std::format("{}", spell_cast->name()));
 }
