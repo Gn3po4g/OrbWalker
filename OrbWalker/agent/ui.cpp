@@ -5,6 +5,7 @@
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
 #include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 namespace ui {
 auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
@@ -31,6 +32,9 @@ auto selector_getter = [](void *vec, const int32_t idx, const char **out_text) {
   case distance_closest:
     *out_text = "distance_closest";
     break;
+  case health_percent_lowest:
+    *out_text = "health_percent_lowest";
+    break;
   default:
     return false;
   }
@@ -44,8 +48,7 @@ void Update() {
   if(ImGui::IsKeyPressed(config.menu_key)) { show_menu ^= true; }
   if(!show_menu) return;
   ImGui::Begin(
-    "Settings",
-    nullptr,
+    "Settings", nullptr,
     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse
       | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing
   );
@@ -55,9 +58,9 @@ void Update() {
       ImGui::Checkbox("Show Attack Range", &config.show_attack_range);
       ImGui::Separator();
       ImGui::Text("Selector Setting:");
-      ImGui::PushItemWidth(150);
+      //ImGui::PushItemWidth(150);
       ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count);
-      ImGui::PopItemWidth();
+      //ImGui::PopItemWidth();
       ImGui::Separator();
       ImGui::Text("Key Setting:");
       ImGui::HotKey("Kite Key", config.kite_key);
@@ -98,21 +101,26 @@ void Update() {
       ImGui::HotKey("Next Skin Key", config.next_skin_key);
       ImGui::EndTabItem();
     }
-// #define UI_DEBUG
-#ifdef UI_DEBUG
-    if(ImGui::BeginTabItem("Infos")) {
-      ImGui::LabelText("##GameTime", "GameTime: %fs", function::GameTime());
-      ImGui::LabelText("##LocalPlayer", "LocalPlayer: %p", self);
-      ImGui::LabelText("##name", "name: %s", self->name().data());
-      // const auto time = function::GameTime();
-      for(auto buff : self->buffs()) {
-        if(buff->name() != "" && buff->starttime() <= function::GameTime() && buff->endtime() >= function::GameTime())
-          ImGui::LabelText(("##buff" + buff->name()).data(), "%s", buff->name().data());
-      }
 
-      ImGui::EndTabItem();
-    }
-#endif
+    // if(ImGui::BeginTabItem("Infos")) {
+    //   auto FindVtFunction = [](const DWORD64 Fn_address) {
+    //     DWORD64 *base = *reinterpret_cast<DWORD64 **>(self);
+    //     int i = 0;
+    //     while(base[i]) {
+    //       if(base[i] == Fn_address) {
+    //         ImGui::Text("Found VT function at %d", i);
+    //         return i;
+    //       }
+    //       i++;
+    //     }
+    //     ImGui::Text("VT Function not found %d", i);
+    //     return -1;
+    //   };
+    //   FindVtFunction(oBonusRadius);
+    //   //FindVtFunction(oAttackWindup);
+    //   ImGui::EndTabItem();
+    // }
+
     if(ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", config.menu_key);
       ImGui::Separator();
@@ -137,23 +145,18 @@ bool SetToPressedKey(ImGuiKey &key) {
   return false;
 }
 
-const char *ToString(const ImGuiKey &key) {
-  if(key == ImGuiKey_None) { return "NONE"; }
-  return keyMap[key].data();
-}
-
 void HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
   static std::map<ImGuiID, bool> activeMap;
   const auto id = GetID(label);
   AlignTextToFramePadding();
-  Text("%s", label);
+  Text(label);
   SameLine(150.f);
   if(activeMap[id]) {
     PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
     Button("...", size);
     PopStyleColor();
     if((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) { activeMap[id] = false; }
-  } else if(Button(ToString(key), size)) {
+  } else if(Button(keyMap[key].data(), size)) {
     activeMap[id] = true;
   }
 }

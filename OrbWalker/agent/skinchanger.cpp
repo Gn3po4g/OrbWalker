@@ -7,7 +7,37 @@
 #include "memory/global.hpp"
 #include "memory/offset.hpp"
 
+#include "memory/function.hpp"
+
 using namespace std;
+
+bool skin_valid(Object *obj) {
+  switch(FNV(obj->dataStack()->baseSkin.model)) {
+  case FNVC("DominationScout"):
+  case FNVC("JammerDevice"):
+  case FNVC("SightWard"):
+  case FNVC("YellowTrinket"):
+  case FNVC("VisionWard"):
+  case FNVC("BlueTrinket"):
+  case FNVC("SRU_Jungle_Companions"):
+    return false;
+  default:
+    return true;
+  }
+}
+
+bool is_companion(uint64_t owner, uint64_t obj) {
+  switch(owner) {
+  case FNVC("Kindred"):
+    return obj == FNVC("KindredWolf");
+  case FNVC("Nunu"):
+    return obj == FNVC("NunuSnowball");
+  case FNVC("Quinn"):
+    return obj == FNVC("QuinnValor");
+  default:
+    return false;
+  }
+}
 
 void ChangeModelForObject(Object *obj, const char *model, int32_t skin) {
   if(skin == -1) { return; }
@@ -29,28 +59,32 @@ void ChangeSkinForObject(Object *obj, int32_t skin) noexcept {
 void skin::ChangeSkin(std::string_view model, int32_t skin_id) {
   static auto CheckSpecialSkins = [&, stack{self->dataStack()}](std::string_view model, int32_t skin_id) {
     const auto champName{FNV(stack->baseSkin.model)};
-    if(std::ranges::any_of(specialSkins, [&](const SpecialSkin &special_skin) {
+    if(std::ranges::count_if(specialSkins, [&](const SpecialSkin &special_skin) {
          return special_skin.champHash == champName && skin_id >= special_skin.skinIdStart
              && skin_id <= special_skin.skinIdEnd;
        })) {
+      // stack->stack.clear();
       stack->baseSkin.gear = 0;
-    } else if(champName == FNVC("Kayn")) {
-      stack->baseSkin.gear = static_cast<int8_t>(-1);
+      stack->update(true);
     } else if(champName == FNVC("Lux") && skin_id == 7 || champName == FNVC("Sona") && skin_id == 6) {
       stack->stack.clear();
       stack->push(model.data(), skin_id);
+    } else if(champName != FNVC("Kayn")) {
+      stack->baseSkin.gear = static_cast<int8_t>(-1);
+      stack->update(true);
     }
   };
   const auto stack{self->dataStack()};
-  ((xor_value<int32_t> *)((uintptr_t)self + objSkinId))->encrypt(skin_id);
+  ((xor_value<int32_t> *)((uintptr_t)self.get() + objSkinId))->encrypt(skin_id);
   stack->baseSkin.skin_id = skin_id;
   CheckSpecialSkins(model, skin_id);
-  stack->update(true);
 }
 
- skin & skin::inst() {
+skin &skin::inst() {
   static std::once_flag singleton;
-  std::call_once(singleton, [&] { instance_.reset(new skin()); });
+  std::call_once(singleton, [&] {
+    instance_.reset(new skin());
+  });
   return *instance_;
 }
 
@@ -58,8 +92,12 @@ skin::skin() {
   const auto &default_skin = self->dataStack()->baseSkin;
   championsSkins.emplace_back(default_skin.model.get(), "Default", default_skin.skin_id);
   const auto champions = Read<vector<Champion *>>(Read<uintptr_t>(oChampionManager) + 0x18);
-  if(const auto it{
-       ranges::find_if(champions, [](Champion *champion) { return self->name() == champion->championName().get(); })};
+  if(const auto it{ranges::find_if(
+       champions,
+       [](Champion *champion) {
+         return self->name() == champion->championName().get();
+       }
+     )};
      it != champions.end()) {
     const auto champion = *it;
     auto skins_id = champion->skins_id();
@@ -99,15 +137,16 @@ skin::skin() {
 
 void skin::update() {
   if(!self) { return; }
+  auto &config = config::inst();
   static std::once_flag init_skin;
-  std::call_once(init_skin, [this] {
-    if(config::inst().current_skin > 0) {
-      const auto &[modelName, skinName, skinId]{championsSkins[config::inst().current_skin]};
+  std::call_once(init_skin, [&] {
+    if(config.current_skin > 0) {
+      const auto &[modelName, skinName, skinId]{championsSkins[config.current_skin]};
       ChangeSkin(modelName, skinId);
     }
   });
   if(ImGui::IsKeyPressed(ImGuiKey_5)) {
-    if(!ImGui::GetIO().KeysDown[ImGuiKey_LeftCtrl]) { return; }
+    if(!ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) { return; }
     const auto player_hash = FNV(self->dataStack()->baseSkin.model);
     if(const auto it = ranges::find_if(
          specialSkins,
@@ -122,17 +161,17 @@ void skin::update() {
       stack->update(true);
     }
   }
-  if(ImGui::IsKeyPressed(config::inst().prev_skin_key)) {
-    config::inst().current_skin = std::max(config::inst().current_skin - 1, 0);
-    const auto &[modelName, skinName, skinId] = championsSkins[config::inst().current_skin];
+  if(ImGui::IsKeyPressed(config.prev_skin_key)) {
+    config.current_skin = std::max(config.current_skin - 1, 0);
+    const auto &[modelName, skinName, skinId] = championsSkins[config.current_skin];
     ChangeSkin(modelName, skinId);
 
-    config::inst().save();
-  } else if(ImGui::IsKeyPressed(config::inst().next_skin_key)) {
-    config::inst().current_skin = std::min(config::inst().current_skin + 1, static_cast<int>(championsSkins.size() - 1));
-    const auto &[modelName, skinName, skinId] = championsSkins[config::inst().current_skin];
+    config.save();
+  } else if(ImGui::IsKeyPressed(config.next_skin_key)) {
+    config.current_skin = std::min(config.current_skin + 1, static_cast<int>(championsSkins.size() - 1));
+    const auto &[modelName, skinName, skinId] = championsSkins[config.current_skin];
     ChangeSkin(modelName, skinId);
-    config::inst().save();
+    config.save();
   }
   if(!self->dataStack()->stack.empty()) {
     if(const auto player_hash{FNV(self->dataStack()->baseSkin.model)};
@@ -147,16 +186,15 @@ void skin::update() {
   for(const auto minion : span(minions->data, minions->size)) {
     const auto hash = FNV(minion->dataStack()->baseSkin.model);
     const auto player_hash = FNV(self->dataStack()->baseSkin.model);
-    if(const auto owner = minion->GetOwner(); owner == self) {
-      if(hash == FNVC("TestCubeRender10Vision") && player_hash == FNVC("Yone")) {
-        ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
-      } else if(hash != FNVC("SRU_Jungle_Companions") && !minion->IsWard()) {
+    if(const auto owner = minion->GetOwner(); owner == self.get()) {
+      if(hash == FNVC("TestCubeRender10Vision")) {
+        if(player_hash == FNVC("Yone")) ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
+        else ChangeSkinForObject(minion, 0);
+      } else if(skin_valid(minion)) {
         ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
       }
       continue;
     }
-    if((hash == FNVC("NunuSnowball") && player_hash == FNVC("Nunu")) || (hash == FNVC("KindredWolf") && player_hash == FNVC("Kindred")) || (hash == FNVC("QuinnValor") && player_hash == FNVC("Quinn"))) {
-      ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id);
-    }
+    if(is_companion(player_hash, hash)) { ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id); }
   }
 }

@@ -3,38 +3,42 @@
 #include "agent/script.hpp"
 #include "memory/global.hpp"
 
+#include "aphelios.hpp"
 #include "cassiopeia.hpp"
 #include "graves.hpp"
 #include "kaisa.hpp"
+#include "sett.hpp"
 #include "zeri.hpp"
 
-constexpr auto reset_attack_spells = std::to_array<std::string_view>({
-  "ApheliosCrescendumAttack", "AsheQ", "LucianE", "VayneTumble"
-});
+constexpr auto reset_attack_spells =
+  std::to_array<std::string_view>({"ApheliosCrescendumAttack", "AsheQ", "LucianE", "SivirW", "JaxW", "VayneTumble"});
 
 script &script::inst() {
   static std::once_flag singleton;
-  std::call_once(
-    singleton,
-    [&] {
-      switch(FNV(self->name().data())) {
-      case FNVC("Cassiopeia"):
-        instance_.reset(new Cassiopeia);
-        break;
-      case FNVC("Graves"):
-        instance_.reset(new Graves);
-        break;
-      case FNVC("Kaisa"):
-        instance_.reset(new Kaisa);
-        break;
-      case FNVC("Zeri"):
-        instance_.reset(new Zeri);
-        break;
-      default:
-        instance_.reset(new script);
-        break;
-      }
-    });
+  std::call_once(singleton, [&] {
+    switch(FNV(self->name().data())) {
+    case FNVC("Aphelios"):
+      instance_.reset(new Aphelios);
+      break;
+    case FNVC("Cassiopeia"):
+      instance_.reset(new Cassiopeia);
+      break;
+    case FNVC("Graves"):
+      instance_.reset(new Graves);
+      break;
+    case FNVC("Kaisa"):
+      instance_.reset(new Kaisa);
+      break;
+    case FNVC("Sett"):
+      instance_.reset(new Sett);
+      break;
+    case FNVC("Zeri"):
+      instance_.reset(new Zeri);
+      break;
+    default:
+      instance_.reset(new script);
+    }
+  });
   return *instance_;
 }
 

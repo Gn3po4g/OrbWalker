@@ -1,210 +1,164 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="source\memory">
-      <UniqueIdentifier>{69a3290e-f86c-43f3-a311-67e2e07d9de3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{375d0d5a-7b76-47fb-97c7-ec2287185ae9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\util">
-      <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\class">
-      <UniqueIdentifier>{2d4aa31f-1a47-4148-87c2-72ca3089edd6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\agent">
+    <Filter Include="agent">
       <UniqueIdentifier>{67edf1eb-9aff-4950-95a8-4e28b8af4c3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\config">
-      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\agent\champion">
+    <Filter Include="agent\champion">
       <UniqueIdentifier>{e4cc1269-c0ad-46e5-87f5-d01572f444b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="class">
+      <UniqueIdentifier>{2d4aa31f-1a47-4148-87c2-72ca3089edd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{69a3290e-f86c-43f3-a311-67e2e07d9de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
     <ClCompile Include="memory\offset.cpp">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </ClCompile>
     <ClCompile Include="config\config.cpp">
-      <Filter>source\config</Filter>
+      <Filter>config</Filter>
     </ClCompile>
     <ClCompile Include="class\object.cpp">
-      <Filter>source\class</Filter>
-    </ClCompile>
-    <ClCompile Include="agent\hook.cpp">
-      <Filter>source\agent</Filter>
-    </ClCompile>
-    <ClCompile Include="agent\skinchanger.cpp">
-      <Filter>source\agent</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\champion.cpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="memory\function.cpp">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </ClCompile>
     <ClCompile Include="class\buff.cpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\obj_list.cpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\data_stack.cpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\spell.cpp">
-      <Filter>source\class</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="agent\script.cpp">
-      <Filter>source\agent</Filter>
+      <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="memory\global.cpp">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\hook.cpp">
+      <Filter>agent</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\script.cpp">
+      <Filter>agent</Filter>
+    </ClCompile>
+    <ClCompile Include="agent\skinchanger.cpp">
+      <Filter>agent</Filter>
     </ClCompile>
     <ClCompile Include="agent\ui.cpp">
-      <Filter>source\agent</Filter>
+      <Filter>agent</Filter>
     </ClCompile>
+    <ClCompile Include="agent\champion\all.cpp">
+      <Filter>agent\champion</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.hpp">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_impl_dx11.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imconfig.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="memory\offset.hpp">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="memory\spoof_call.h">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="util\util.hpp">
-      <Filter>source\util</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="config\config.hpp">
-      <Filter>source\config</Filter>
+      <Filter>config</Filter>
     </ClInclude>
     <ClInclude Include="util\constant.hpp">
-      <Filter>source\util</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\hook.hpp">
-      <Filter>source\agent</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\skinchanger.hpp">
-      <Filter>source\agent</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="util\fnvhash.hpp">
-      <Filter>source\util</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="util\json.hpp">
-      <Filter>source\util</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="memory\function.hpp">
-      <Filter>source\memory</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\script.hpp">
-      <Filter>source\agent</Filter>
+      <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="memory\global.hpp">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="util\vmt_hook.hpp">
-      <Filter>source\util</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\ui.hpp">
-      <Filter>source\agent</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\zeri.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\kaisa.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\graves.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\cassiopeia.hpp">
-      <Filter>source\agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\all.hpp">
-      <Filter>source\agent\champion</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="class\buff.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\champion.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\data_stack.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\object.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\spell.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\obj_list.hpp">
-      <Filter>source\class</Filter>
+      <Filter>class</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\README.md" />
+    <ClInclude Include="agent\hook.hpp">
+      <Filter>agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\script.hpp">
+      <Filter>agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\skinchanger.hpp">
+      <Filter>agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\ui.hpp">
+      <Filter>agent</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\cassiopeia.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\graves.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\kaisa.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\zeri.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="util\encryption.hpp">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.hpp" />
+    <ClInclude Include="agent\champion\aphelios.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\sett.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">
-      <Filter>source\memory</Filter>
+      <Filter>memory</Filter>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

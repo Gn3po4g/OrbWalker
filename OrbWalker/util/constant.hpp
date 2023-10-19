@@ -1,20 +1,21 @@
 #pragma once
 
-constexpr auto objIndex = 0x10;
-constexpr auto objTeam = 0x3C;
-constexpr auto objPosition = 0x220;
-constexpr auto objVisible = 0x320;
-constexpr auto objMana = 0x350;
-constexpr auto objTargetable = 0xEC0;
-constexpr auto objHealth = 0x1068;
-constexpr auto objSkinId = 0x1244;
-constexpr auto objActionState = 0x13D0;
-constexpr auto objAttackRange = 0x16C4;
-constexpr auto objBuff = 0x27D8;
-constexpr auto objManaCost = 0x2A88;
-constexpr auto objSpell = 0x30C8;
-constexpr auto objDataStack = 0x35D0;
-constexpr auto objName = 0x3868;
+constexpr uintptr_t objIndex = 0x10;
+constexpr uintptr_t objTeam = 0x3C;
+constexpr uintptr_t objPosition = 0x220;
+constexpr uintptr_t objVisible = 0x320;
+constexpr uintptr_t objMana = 0x350;
+constexpr uintptr_t objTargetable = 0xEC0;
+constexpr uintptr_t objHealth = 0x1068;
+constexpr uintptr_t objMaxHealth = 0x1080;
+constexpr uintptr_t objSkinId = 0x1244;
+constexpr uintptr_t objActionState = 0x13D0;
+constexpr uintptr_t objAttackRange = 0x16C4;
+constexpr uintptr_t objBuff = 0x27D8;
+constexpr uintptr_t objManaCost = 0x2A88;
+constexpr uintptr_t objSpell = 0x30C8;
+constexpr uintptr_t objDataStack = 0x35D0;
+constexpr uintptr_t objName = 0x3868;
 
 enum GameState : int32_t { Loading, Connecting, Running, Paused, Finished, Exiting };
 

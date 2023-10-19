@@ -19,9 +19,9 @@ void AttackObject(Object *target);
 
 void Move2Mouse();
 
-bool CastSpell(uint32_t);
-bool CastSpell(Object *, uint32_t);
-bool CastSpell(FLOAT3, uint32_t);
+bool CastSpell(SpellSlot);
+bool CastSpell(Object *, SpellSlot);
+bool CastSpell(FLOAT3, SpellSlot);
 
 void Draw(std::function<void()>);
 void Circle(const FLOAT3 &, float, uint32_t, float);

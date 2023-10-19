@@ -7,17 +7,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Imgui\imgui.cpp" />
-    <ClCompile Include="..\Imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\Imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\Imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\Imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="agent\champion\all.cpp" />
     <ClCompile Include="agent\hook.cpp" />
-    <ClCompile Include="agent\script.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
     <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
@@ -36,17 +28,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Imgui\imconfig.h" />
-    <ClInclude Include="..\Imgui\imgui.h" />
-    <ClInclude Include="..\Imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="..\Imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\Imgui\imgui_internal.h" />
-    <ClInclude Include="..\Imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\Imgui\imstb_textedit.h" />
-    <ClInclude Include="..\Imgui\imstb_truetype.h" />
+    <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\cassiopeia.hpp" />
     <ClInclude Include="agent\champion\graves.hpp" />
     <ClInclude Include="agent\champion\kaisa.hpp" />
+    <ClInclude Include="agent\champion\sett.hpp" />
     <ClInclude Include="agent\champion\zeri.hpp" />
     <ClInclude Include="agent\hook.hpp" />
     <ClInclude Include="agent\script.hpp" />
@@ -65,6 +51,7 @@
     <ClInclude Include="memory\spoof_call.h" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="util\constant.hpp" />
+    <ClInclude Include="util\encryption.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\json.hpp" />
     <ClInclude Include="util\util.hpp" />
@@ -75,6 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{f6d942c4-23e6-4fe2-960e-044b848918f2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -104,12 +99,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Out\</OutDir>
-    <IntDir>$(SolutionDir)Out\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Out\$(ProjectName)\</IntDir>
     <TargetName>Hid</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <ClangTidyChecks>-*,cppcoreguidelines-*</ClangTidyChecks>
+    <ClangTidyChecks>clang-analyzer-*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -124,7 +119,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BuildStlModules>false</BuildStlModules>
       <CompileAsWinRT>false</CompileAsWinRT>
-      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ImGui;$(ProjectDir)</AdditionalIncludeDirectories>
       <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
@@ -133,6 +128,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>true</EnableUAC>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -20,6 +20,7 @@ protected:
   virtual void idle();
   virtual void attack();
   virtual float real_range();
+  virtual bool in_attack_range(Object *);
 
   float game_time{};
   float last_attack_time{-FLT_MAX};
@@ -29,8 +30,10 @@ protected:
 
   void check_marked_object();
   void check_orb_state();
-  Object *get_target(float, bool);
-  bool has_buff(std::string_view);
+  bool has_buff(Object *obj, std::string_view);
+  bool in_skill_range(Object *, float);
+  Object *get_attack_target();
+  Object *get_skill_target(float);
 
 private:
   inline static std::unique_ptr<script> instance_;

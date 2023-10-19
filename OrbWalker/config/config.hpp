@@ -1,6 +1,6 @@
 #pragma once
 
-enum selector : int { health_lowest, distance_closest, count };
+enum selector : int { health_lowest, distance_closest, health_percent_lowest, count };
 
 class config {
 public:

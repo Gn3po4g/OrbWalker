@@ -1,22 +1,20 @@
 #pragma once
 
-#include <dxgi.h>
-
-#include "class/object.hpp"
 #include "class/obj_list.hpp"
+#include "class/object.hpp"
 
 inline namespace global {
-inline IDXGISwapChain* swap_chain{};
+inline void *swap_chain{};
 
-inline GameState *game_state{};
-inline Object *self{};
-inline ObjList *heros{};
-inline ObjList *minions{};
-inline ObjList *turrets{};
-inline ObjList *inhibs{};
-inline Object **objUnderMouse{};
+inline std::unique_ptr<GameState> game_state;
+inline std::unique_ptr<Object> self;
+inline std::unique_ptr<ObjList> heros;
+inline std::unique_ptr<ObjList> minions;
+inline std::unique_ptr<ObjList> turrets;
+inline std::unique_ptr<ObjList> inhibs;
+inline std::unique_ptr<Object *> objUnderMouse;
 
-inline void* vmt_in_obj{};
+inline void *vmt_in_obj{};
 
 void Init();
 } // namespace global

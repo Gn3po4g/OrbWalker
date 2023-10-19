@@ -87,6 +87,7 @@ void Update();
 namespace ImGui {
 
 inline std::map<ImGuiKey, std::string_view> keyMap = {
+  {ImGuiKey_None,           "None"          },
   {ImGuiKey_Tab,            "Tab"           },
   {ImGuiKey_LeftArrow,      "LeftArrow"     },
   {ImGuiKey_RightArrow,     "RightArrow"    },

@@ -1,22 +1,22 @@
 #pragma once
 
-#include "Windows.h"
-
-inline auto is_code_ptr(void *ptr) -> bool {
-  auto flags{PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY};
-
-  MEMORY_BASIC_INFORMATION out;
-  VirtualQuery(ptr, &out, sizeof(out));
-
-  return out.Type && !(out.Protect & (PAGE_GUARD | PAGE_NOACCESS)) && out.Protect & flags;
-}
+// #include "Windows.h"
+//
+// inline auto is_code_ptr(void *ptr) -> bool {
+//   auto flags{PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY};
+//
+//   MEMORY_BASIC_INFORMATION out;
+//   VirtualQuery(ptr, &out, sizeof(out));
+//
+//   return out.Type && !(out.Protect & (PAGE_GUARD | PAGE_NOACCESS)) && out.Protect & flags;
+// }
 
 class vmt_hook {
 public:
   vmt_hook(void *base) : m_base((void ***)base) {
     m_old_vmt = *m_base;
     size_t size{};
-    while(m_old_vmt[size] && is_code_ptr(m_old_vmt[size])) { ++size; }
+    while(m_old_vmt[size] /*&& is_code_ptr(m_old_vmt[size])*/) { ++size; }
     m_new_vmt = (new void *[size + 1]) + 1;
     std::copy_n(m_old_vmt - 1, size + 1, m_new_vmt - 1);
     *m_base = m_new_vmt;

@@ -1,13 +1,16 @@
 #pragma once
 
-class Hook {
+class hook {
 public:
-  std::mutex mRun;
-  std::condition_variable cvRun;
+  static hook &inst();
+  void install();
 
-  Hook();
+  inline static std::mutex mRun;
+  //std::condition_variable cvRun;
+
+private:
+  hook() = default;
+  inline static std::unique_ptr<hook> instance_;
 };
-
-extern Hook *hook;
 
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

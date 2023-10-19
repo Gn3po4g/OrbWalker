@@ -13,6 +13,7 @@ public:
   float mana();
   bool targetable();
   float health();
+  float max_health();
   float attack_range();
   CharacterState state();
   DataStack *dataStack();
@@ -28,12 +29,12 @@ public:
   bool IsEnemy();
   bool IsTargetableToTeam();
   bool IsValidTarget();
-  bool IsHero();
-  bool IsBuilding();
-  bool IsPlant();
-  bool IsWard();
+  //bool IsHero();
+  //bool IsBuilding();
+  //bool IsPlant();
+  //bool IsWard();
 
-  float get_mana_cost(size_t);
-  Spell *GetSpell(uint32_t);
+  float get_mana_cost(SpellSlot);
+  Spell *GetSpell(SpellSlot);
   Object *GetOwner();
 };

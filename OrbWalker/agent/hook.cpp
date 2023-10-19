@@ -10,8 +10,6 @@
 #include "memory/function.hpp"
 #include "memory/global.hpp"
 
-Hook *hook;
-
 std::once_flag init;
 
 HWND window{};
@@ -46,7 +44,7 @@ void init_all(IDXGISwapChain *pSwapChain) {
   io.IniFilename = nullptr;
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   io.Fonts->AddFontFromFileTTF(
-    R"(C:\Windows\Fonts\HarmonyOS_Sans_SC_Regular.ttf)", 16, nullptr, io.Fonts->GetGlyphRangesChineseFull()
+    R"(C:\Windows\Fonts\HarmonyOS_Sans_SC_Regular.ttf)", 18, nullptr, io.Fonts->GetGlyphRangesChineseFull()
   );
   ui::LoadTheme();
 
@@ -86,7 +84,7 @@ struct present {
 vmt_hook *swap_chain_hook{};
 
 struct on_process_spell {
-  static void __fastcall hooked(__int64 thisptr, int arg, SpellCast *spell_cast, Object *obj) {
+  static void __fastcall hooked(uintptr_t thisptr, int arg, SpellCast *spell_cast, Object *obj) {
     if(arg == 0xc) script::inst().run(spell_cast, obj);
     return original(thisptr, arg, spell_cast, obj);
   }
@@ -94,7 +92,13 @@ struct on_process_spell {
 };
 vmt_hook *on_process_spell_hook{};
 
-Hook::Hook() {
+hook &hook::inst() {
+  static std::once_flag singleton;
+  std::call_once(singleton, [&] { instance_.reset(new hook); });
+  return *instance_;
+}
+
+void hook::install() {
   swap_chain_hook = new vmt_hook(swap_chain);
   swap_chain_hook->hook<present>(8);
   on_process_spell_hook = new vmt_hook(vmt_in_obj);
