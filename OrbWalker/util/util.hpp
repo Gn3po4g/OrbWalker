@@ -5,17 +5,17 @@
 //   return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff;
 // }
 
-//template <typename T>
-//class mem_getter {
-//public:
-//  mem_getter(uintpr_t base) : m_base(base) {}
-//  T operator()() { return *(T *)m_base; }
-//  uintptr_t m_base;
-//};
+// template <typename T>
+// class mem_getter {
+// public:
+//   mem_getter(uintpr_t base) : m_base(base) {}
+//   T operator()() { return *(T *)m_base; }
+//   uintptr_t m_base;
+// };
 
-template <typename T>
-T Read(uintptr_t addr) {
-  return *reinterpret_cast<T *>(addr);
+template <typename T ,typename U>
+T Read(U addr) {
+  return *reinterpret_cast<T *>((uintptr_t)addr);
 }
 
 template <typename ReturnType, typename... Args>
@@ -69,25 +69,24 @@ struct RiotArray {
 };
 
 struct RiotString8 {
-  const char *str;
-  int32_t size;
-  int32_t capacity;
+  const char *m_str;
+  int32_t m_size;
+  int32_t m_capacity;
 
-  std::string get() const { return std::string(str, size); }
-  operator const char *() const { return str; }
+  std::string str() const { return std::string(m_str, m_size); }
 };
 
 struct RiotString16 {
   union {
     const char *p_str;
-    const char str[16];
+    const char m_str[16];
   };
-  int64_t size;
-  int64_t capacity;
+  int64_t m_size;
+  int64_t m_capacity;
 
-  operator std::string() const {
-    if(size >= 16) return std::string(p_str, size);
-    else return std::string(str, size);
+  std::string str() const {
+    if (m_size >= 16) return std::string(p_str, m_size);
+    else return std::string(m_str, m_size);
   }
 };
 

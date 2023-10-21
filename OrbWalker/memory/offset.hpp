@@ -5,8 +5,8 @@ inline uintptr_t oGameState{}, oGameTime{}, oLocalPlayer{}, oObjUnderMouse{}, oH
   oInhibList{}, oChatClient{}, oHudInstance{}, oViewPort{}, oChampionManager{},
 
   oPrintChat{}, oWorldToScreen{}, oIssueOrder{}, oIssueMove{}, oCastSpell{}, oAttackDelay{}, oAttackWindup{},
-  oIsAlive{}, oIsTargetableToTeam{}, oBonusRadius{}, oDataStackUpdate{}, oDataStackPush{}, oGetOwner{},
-  oTranslateString{}, oMaterialRegistry{};
+  oIsAlive{}, oIsTargetableToTeam{}, oBonusRadius{}, oCompareTypeFlags, oDataStackUpdate{}, oDataStackPush{},
+  oGetOwner{}, oTranslateString{}, oMaterialRegistry{};
 
 void Init();
 } // namespace offset

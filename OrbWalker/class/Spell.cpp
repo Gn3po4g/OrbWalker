@@ -28,6 +28,6 @@ int32_t SpellCast::type() { return MEMBER<int32_t>(0x10); }
 
 int32_t SpellCast::slot() { return MEMBER<int32_t>(0x11C); }
 
-std::string SpellCast::name() { return *(RiotString16 *)(*(uintptr_t *)this + 0x28); }
+std::string SpellCast::name() { return Read<RiotString16>(Read<uintptr_t>(this) + 0x28).str(); }
 
 bool SpellCast::is_attack() { return MEMBER<bool>(0x112) || MEMBER<bool>(0x113) || MEMBER<bool>(0x114); }

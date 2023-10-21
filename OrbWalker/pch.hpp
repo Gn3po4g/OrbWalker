@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <format>
 #include <fstream>
 #include <map>
 #include <mutex>

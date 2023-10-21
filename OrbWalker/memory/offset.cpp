@@ -11,10 +11,10 @@ namespace offset {
 vector<ByteWithMask> pattern2bytes(string_view input) {
   vector<ByteWithMask> result;
   stringstream ss(input.data());
-  for(string s; ss >> s;) {
+  for (string s; ss >> s;) {
     try {
       result.emplace_back(stoi(s, nullptr, 16), true);
-    } catch(...) { result.emplace_back(); }
+    } catch (...) { result.emplace_back(); }
   }
   return result;
 }
@@ -26,11 +26,11 @@ uintptr_t FindAddress(const string &pattern) {
   const auto begin = (uint8_t *)moduleInfo.lpBaseOfDll;
   const auto size = moduleInfo.SizeOfImage;
   MEMORY_BASIC_INFORMATION mbi{};
-  for(auto cur = begin; cur < begin + size; cur += mbi.RegionSize) {
-    if(!VirtualQuery(cur, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT || mbi.Protect == PAGE_NOACCESS) continue;
+  for (auto cur = begin; cur < begin + size; cur += mbi.RegionSize) {
+    if (!VirtualQuery(cur, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT || mbi.Protect == PAGE_NOACCESS) continue;
     const auto startAddr = (uint8_t *)mbi.BaseAddress, endAddr = startAddr + mbi.RegionSize;
     const auto result = search(startAddr, endAddr, byteArr.begin(), byteArr.end());
-    if(result != endAddr) return (uintptr_t)result;
+    if (result != endAddr) return (uintptr_t)result;
   }
   return 0;
 }
@@ -54,6 +54,7 @@ struct {
   {oChampionManager,  "48 8B 0D ? ? ? ? 48 69 D0 ? ? 00 00 48 8B 05",                         3},
 
   {oPrintChat,        "E8 ? ? ? ? 4C 8B C3 B2 01",                                            1},
+  {oWorldToScreen,    "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8",                              1},
   {oIssueOrder,       "45 33 C0 E8 ? ? ? ? 48 83 C4 48",                                      4},
   {oIssueMove,        "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B F1 41 0F B6 F9", 0},
   {oCastSpell,        "48 89 4C 24 ? 55 41 55",                                               0},
@@ -62,7 +63,7 @@ struct {
  //{oIsAlive,            "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?",                              1},
   //{oIsTargetableToTeam, "40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 84 C0 74 41",                    0},
   //{oBonusRadius,        "E8 ? ? ? ? 0F 28 F8 48 8B D6",                                         1},
-  {oWorldToScreen,    "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8",                              1},
+  {oCompareTypeFlags, "E8 ? ? ? ? 84 C0 0F 84 ? ? ? ? 4D 85 F6",                              1},
   {oDataStackUpdate,  "88 54 24 10 53 55 56 57 41 54 41 55 41 56 41",                         0},
   {oDataStackPush,    "E8 ? ? ? ? 48 8D 8D ? ? 00 00 E8 ? ? ? ? 48 85 C0",                    1},
   {oGetOwner,         "E8 ? ? ? ? 4C 3B F8 0F 94 C0",                                         1},
@@ -71,16 +72,16 @@ struct {
 };
 
 void Init() {
-  for(auto &[what, pattern, addition] : sigs) {
+  for (auto &[what, pattern, addition] : sigs) {
     auto address = FindAddress(pattern);
-    while(!address) {
+    while (!address) {
 
-      //MessageBoxA(NULL, ("Unable to find " + pattern).data(), "", MB_OK);
+      // MessageBoxA(NULL, ("Unable to find " + pattern).data(), "", MB_OK);
 
       this_thread::sleep_for(100ms);
       address = FindAddress(pattern);
     }
-    if(!addition) {
+    if (!addition) {
       what = address;
     } else {
       address += addition;

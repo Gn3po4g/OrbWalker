@@ -152,6 +152,12 @@
     <ClInclude Include="agent\champion\sett.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
+    <ClInclude Include="agent\champion\caitlyn.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\azir.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">

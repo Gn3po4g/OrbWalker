@@ -29,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent\champion\aphelios.hpp" />
+    <ClInclude Include="agent\champion\azir.hpp" />
+    <ClInclude Include="agent\champion\caitlyn.hpp" />
     <ClInclude Include="agent\champion\cassiopeia.hpp" />
     <ClInclude Include="agent\champion\graves.hpp" />
     <ClInclude Include="agent\champion\kaisa.hpp" />

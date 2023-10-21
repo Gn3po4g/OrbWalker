@@ -16,5 +16,5 @@ public:
   Data baseSkin;
 
   void update(bool);
-  void push(const char *, int32_t);
+  void push(std::string_view, int32_t);
 };

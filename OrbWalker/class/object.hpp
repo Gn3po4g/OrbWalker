@@ -34,6 +34,7 @@ public:
   //bool IsPlant();
   //bool IsWard();
 
+  bool compare_type_flags(TypeFlag);
   float get_mana_cost(SpellSlot);
   Spell *GetSpell(SpellSlot);
   Object *GetOwner();

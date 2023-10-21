@@ -13,7 +13,7 @@ class Cassiopeia : public script {
   bool is_attacking() override { return false; };
   void attack() override {
     auto obj = get_skill_target(real_range());
-    if(obj && can_attack() && can_do_action()) {
+    if (obj && can_attack() && can_do_action()) {
       CastSpell(obj, SpellSlot_E);
     } else idle();
   };

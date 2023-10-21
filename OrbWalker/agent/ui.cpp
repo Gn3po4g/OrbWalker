@@ -78,12 +78,12 @@ void Update() {
         config.save();
       }
       // ImGui::PopItemWidth();
-      const auto player_hash{FNV(self->dataStack()->baseSkin.model)};
+      const auto player_hash{FNV(self->dataStack()->baseSkin.model.str())};
       if(const auto it{std::ranges::find_if(
            skin::inst().specialSkins,
            [player_hash](const skin::SpecialSkin &x) {
              const auto skin_id = self->dataStack()->baseSkin.skin_id;
-             return x.champHash == player_hash && (x.skinIdStart <= skin_id && x.skinIdEnd >= skin_id);
+             return x.champName == player_hash && (x.skinIdStart <= skin_id && x.skinIdEnd >= skin_id);
            }
          )};
          it != skin::inst().specialSkins.end()) {
