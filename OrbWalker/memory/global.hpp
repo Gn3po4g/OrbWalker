@@ -6,7 +6,6 @@
 inline namespace global {
 inline void *swap_chain{};
 
-inline std::unique_ptr<GameState> game_state;
 inline std::unique_ptr<Object> self;
 inline std::unique_ptr<ObjList> heros;
 inline std::unique_ptr<ObjList> minions;

@@ -3,6 +3,7 @@
 #include "data_stack.hpp"
 
 #include "memory/offset.hpp"
+#include "memory/function.hpp"
 
 void DataStack::update(bool change) {
   // using fnUpdate = int64_t(__fastcall *)(DataStack *, bool);

@@ -8,5 +8,5 @@ inline uintptr_t oGameState{}, oGameTime{}, oLocalPlayer{}, oObjUnderMouse{}, oH
   oIsAlive{}, oIsTargetableToTeam{}, oBonusRadius{}, oCompareTypeFlags, oDataStackUpdate{}, oDataStackPush{},
   oGetOwner{}, oTranslateString{}, oMaterialRegistry{};
 
-void Init();
+bool Init();
 } // namespace offset

@@ -24,4 +24,5 @@ public:
   std::string name();
 
   bool is_attack();
+  bool is_attack_reset();
 };

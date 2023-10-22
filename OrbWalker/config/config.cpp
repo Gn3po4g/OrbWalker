@@ -19,7 +19,7 @@ config::config() {
     const json j = json::parse(in, nullptr, false, true);
     if(!j.is_discarded()) config_json = j;
   }
-  current_skin = self ? config_json.value(self->name() + ".current_skin", 0) : 0;
+  current_skin = config_json.value(self->name() + ".current_skin", 0);
   show_attack_range = config_json.value("show_attack_range", true);
   kite_key = config_json.value("kite_key", ImGuiKey_Space);
   clean_key = config_json.value("clean_key", ImGuiKey_V);
@@ -33,7 +33,7 @@ config::config() {
 void config::save() {
   auto out = std::ofstream(file_name);
   if(!out.good()) return;
-  if(self) { config_json[self->name() + ".current_skin"] = current_skin; }
+  config_json[self->name() + ".current_skin"] = current_skin;
   config_json["show_attack_range"] = show_attack_range;
   config_json["kite_key"] = kite_key;
   config_json["clean_key"] = clean_key;

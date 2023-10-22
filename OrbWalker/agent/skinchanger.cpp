@@ -135,7 +135,6 @@ skin::skin() {
 }
 
 void skin::update() {
-  if (!self) { return; }
   auto &config = config::inst();
   static std::once_flag init_skin;
   std::call_once(init_skin, [&] {

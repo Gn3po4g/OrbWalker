@@ -12,7 +12,5 @@ std::vector<int32_t> Champion::skins_id() {
   };
   using std::span, std::ranges::to, std::views::transform;
   const auto [unused, data, size, capacity] = MEMBER<RiotArray<SkinData>>(0xE0);
-  return span(data, size)
-       | transform([](const SkinData &skin) { return skin.skin_id; })
-       | to<std::vector>();
+  return span(data, size) | transform([](const SkinData &skin) { return skin.skin_id; }) | to<std::vector>();
 }

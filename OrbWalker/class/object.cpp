@@ -4,6 +4,7 @@
 
 #include "memory/global.hpp"
 #include "memory/offset.hpp"
+#include "memory/function.hpp"
 
 int32_t Object::index() { return MEMBER<int32_t>(objIndex); }
 

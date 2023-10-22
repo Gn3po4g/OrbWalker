@@ -3,19 +3,13 @@
 #include "function.hpp"
 #include "global.hpp"
 #include "offset.hpp"
-#include "spoof_call.h"
-
-#pragma section(".text")
-__declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
-void *trampoline = (void *)jmp_rbx_0;
 
 namespace function {
+float GameTime() { return Read<float>(oGameTime); }
 
-float GameTime() { return *(float *)oGameTime; }
+bool IsChatOpen() { return Read<bool>(*(uintptr_t *)oChatClient + 0xC90); }
 
-bool IsChatOpen() { return *(bool *)(*(uintptr_t *)oChatClient + 0xC90); }
-
-bool IsLeagueInBackground() { return *(bool *)(*(uintptr_t *)oHudInstance + 0xB9); }
+bool IsLeagueInBackground() { return Read<bool>(*(uintptr_t *)oHudInstance + 0xB9); }
 
 bool CanSendInput() { return self && self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
@@ -31,17 +25,15 @@ INT2 WorldToScreen(FLOAT3 in) {
 }
 
 void AttackObject(Object *target) {
-  using fnIssueOrder = bool(__fastcall *)(uintptr_t, uint8_t, uint8_t, uint8_t, int, int, uint8_t);
   const auto pos = WorldToScreen(target->position());
   auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
-  spoof_call(trampoline, (fnIssueOrder)oIssueOrder, hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
+  call_function<bool>(oIssueOrder, hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
 }
 
 void Move2Mouse() {
-  using fnIssueMove = bool(__fastcall *)(uintptr_t, int, int, uint8_t, uint8_t, uint8_t);
   if(POINT pos; GetCursorPos(&pos)) {
     auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x28);
-    spoof_call(trampoline, (fnIssueMove)oIssueMove, hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 1ui8);
+    call_function<bool>(oIssueMove, hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 1ui8);
   }
 }
 
@@ -59,10 +51,7 @@ bool CastSpell(SpellSlot slot) {
   targetInfo->SetClickedPos(self->position());
   targetInfo->SetUnkPos(self->position());
 
-  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
-  fnHudCastSpell HudCastSpell = (fnHudCastSpell)oCastSpell;
-  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
-
+  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
   return true;
 }
 
@@ -80,10 +69,7 @@ bool CastSpell(Object *target, SpellSlot slot) {
   targetInfo->SetClickedPos(target->position());
   targetInfo->SetUnkPos(target->position());
 
-  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
-  fnHudCastSpell HudCastSpell = (fnHudCastSpell)oCastSpell;
-  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
-
+  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
   return true;
 }
 
@@ -101,9 +87,7 @@ bool CastSpell(FLOAT3 pos, SpellSlot slot) {
   targetInfo->SetClickedPos(pos);
   targetInfo->SetUnkPos(pos);
 
-  typedef void(__fastcall * fnHudCastSpell)(uintptr_t, uintptr_t);
-  fnHudCastSpell HudCastSpell = (fnHudCastSpell)oCastSpell;
-  spoof_call(trampoline, HudCastSpell, hudInput, spell->spellInfo());
+  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
   return true;
 }
 

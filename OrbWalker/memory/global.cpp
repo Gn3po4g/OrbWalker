@@ -3,12 +3,13 @@
 #include "global.hpp"
 #include "offset.hpp"
 
+#include "memory/function.hpp"
+
 namespace global {
 void Init() {
   // swap_chain = *(IDXGISwapChain **)(((uintptr_t(__fastcall *)())oMaterialRegistry)() + 0x1C0);
   swap_chain = Read<void *>(call_function<uintptr_t>(oMaterialRegistry) + 0x1C0);
 
-  game_state.reset((GameState *)(Read<uintptr_t>(oGameState) + 0xC));
   self.reset(Read<Object *>(oLocalPlayer));
   heros.reset(Read<ObjList *>(oHeroList));
   minions.reset(Read<ObjList *>(oMinionList));

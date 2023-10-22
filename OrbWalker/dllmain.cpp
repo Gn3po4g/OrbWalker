@@ -6,24 +6,24 @@
 
 bool WINAPI HideThread(HANDLE hThread) {
   using fn = NTSTATUS(NTAPI *)(HANDLE, UINT, PVOID, ULONG);
+
   const auto ntdllModule = GetModuleHandle(TEXT("ntdll.dll"));
-  if(!ntdllModule) return false;
+  if (!ntdllModule) return false;
   const auto NtSetInformationThread = (fn)GetProcAddress(ntdllModule, "NtSetInformationThread");
-  if(!NtSetInformationThread) return false;
+  if (!NtSetInformationThread) return false;
   return NtSetInformationThread(hThread, 0x11u, nullptr, 0ul) == 0;
 }
 
 void Start() {
   HideThread(GetCurrentThread());
-  offset::Init();
-  while(*game_state != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  if (!offset::Init()) return;
   hook::inst().install();
   std::unique_lock lkRun(hook::mRun);
   std::condition_variable().wait(lkRun);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {
-  if(dwReason == DLL_PROCESS_ATTACH) {
+  if (dwReason == DLL_PROCESS_ATTACH) {
     DisableThreadLibraryCalls(hModule);
     std::thread(Start).detach();
   }

@@ -31,3 +31,10 @@ int32_t SpellCast::slot() { return MEMBER<int32_t>(0x11C); }
 std::string SpellCast::name() { return Read<RiotString16>(Read<uintptr_t>(this) + 0x28).str(); }
 
 bool SpellCast::is_attack() { return MEMBER<bool>(0x112) || MEMBER<bool>(0x113) || MEMBER<bool>(0x114); }
+
+bool SpellCast::is_attack_reset() {
+  static constexpr auto reset_attack_spells = std::to_array<std::string_view>(
+    {"ApheliosCrescendumAttack", "AsheQ", "DariusNoxianTacticsONH", "LucianE", "SivirW", "JaxW", "VayneTumble"}
+  );
+  return std::ranges::count(reset_attack_spells, name());
+}

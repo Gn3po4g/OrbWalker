@@ -1,19 +1,11 @@
 #pragma once
 
-// template <typename T>
-// bool IsValidPtr(T addr) {
-//   return (uintptr_t)addr > 0x100 && (uintptr_t)addr < 0x7fffffffffff;
-// }
+#include "memory/spoof_call.h"
 
-// template <typename T>
-// class mem_getter {
-// public:
-//   mem_getter(uintpr_t base) : m_base(base) {}
-//   T operator()() { return *(T *)m_base; }
-//   uintptr_t m_base;
-// };
+#pragma section(".text")
+__declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
 
-template <typename T ,typename U>
+template <typename T, typename U>
 T Read(U addr) {
   return *reinterpret_cast<T *>((uintptr_t)addr);
 }
@@ -21,12 +13,12 @@ T Read(U addr) {
 template <typename ReturnType, typename... Args>
 ReturnType call_function(uintptr_t func, Args... args) {
   using func_t = ReturnType(__fastcall *)(Args...);
-  return reinterpret_cast<func_t>(func)(std::forward<Args>(args)...);
+  return spoof_call((void *)jmp_rbx_0, (func_t)func, std::forward<Args>(args)...);
 }
 
 template <size_t Index, typename ReturnType, typename... Args>
 ReturnType call_virtual(void *instance, Args... args) {
-  using fn = ReturnType(__fastcall *)(void *, Args...);
+  using fn      = ReturnType(__fastcall *)(void *, Args...);
   auto function = (*static_cast<fn **>(instance))[Index];
   return function(instance, std::forward<Args>(args)...);
 }

@@ -12,40 +12,28 @@
 #include "sett.hpp"
 #include "zeri.hpp"
 
-constexpr auto reset_attack_spells = std::to_array<std::string_view>(
-  {"ApheliosCrescendumAttack", "AsheQ", "DariusNoxianTacticsONH", "LucianE", "SivirW", "JaxW", "VayneTumble"}
-);
-
 script &script::inst() {
   static std::once_flag singleton;
   std::call_once(singleton, [&] {
     switch (FNV(self->name())) {
     case "Aphelios"_FNV:
-      instance_.reset(new Aphelios);
-      break;
+      return instance_.reset(new Aphelios);
     case "Azir"_FNV:
-      instance_.reset(new Azir);
-      break;
+      return instance_.reset(new Azir);
     case "Caitlyn"_FNV:
-      instance_.reset(new Caitlyn);
-      break;
+      return instance_.reset(new Caitlyn);
     case "Cassiopeia"_FNV:
-      instance_.reset(new Cassiopeia);
-      break;
+      return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
-      instance_.reset(new Graves);
-      break;
+      return instance_.reset(new Graves);
     case "Kaisa"_FNV:
-      instance_.reset(new Kaisa);
-      break;
+      return instance_.reset(new Kaisa);
     case "Sett"_FNV:
-      instance_.reset(new Sett);
-      break;
+      return instance_.reset(new Sett);
     case "Zeri"_FNV:
-      instance_.reset(new Zeri);
-      break;
+      return instance_.reset(new Zeri);
     default:
-      instance_.reset(new script);
+      return instance_.reset(new script);
     }
   });
   return *instance_;
@@ -53,8 +41,8 @@ script &script::inst() {
 
 void script::run(SpellCast *spell_cast, Object *obj) {
   if (spell_cast->is_attack()) last_attack_time = game_time;
-  if (std::ranges::count(reset_attack_spells, spell_cast->name())) last_attack_time = -FLT_MAX;
-  // PrintMessage(0xFFFFFF, std::format("{:x}", (uintptr_t)spell_cast));
-  // PrintMessage(0xFFFFFF, std::format("{:x}", spell_cast->slot()));
-  // PrintMessage(0xFFFFFF, std::format("{}", spell_cast->name()));
+  if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
+  // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
+  //  if (spell_cast->name() == "SivirW")
+  //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
 }
