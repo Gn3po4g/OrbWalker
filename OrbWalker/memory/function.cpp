@@ -26,23 +26,24 @@ INT2 WorldToScreen(FLOAT3 in) {
 
 void AttackObject(Object *target) {
   const auto pos = WorldToScreen(target->position());
-  auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
+  auto hudInput  = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
   call_function<bool>(oIssueOrder, hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
 }
 
 void Move2Mouse() {
-  if(POINT pos; GetCursorPos(&pos)) {
-    auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x28);
-    call_function<bool>(oIssueMove, hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 1ui8);
+  if (POINT pos; GetCursorPos(&pos)) {
+    auto hudInput                = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x28);
+    *(FLOAT3 *)(hudInput + 0x38) = FLOAT3{0, 0, 0};
+    call_function<bool>(oIssueMove, hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 0ui8);
   }
 }
 
 bool CastSpell(SpellSlot slot) {
-  if(slot >= SpellSlot_Other) { return false; }
-  auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell = self->GetSpell(slot);
+  if (slot >= SpellSlot_Other) { return false; }
+  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+  auto spell      = self->GetSpell(slot);
   auto targetInfo = spell->spellInput();
-  if(!targetInfo) { return false; }
+  if (!targetInfo) { return false; }
   // set spell position
   targetInfo->SetCasterHandle(self->index());
   targetInfo->SetTargetHandle(0);
@@ -56,11 +57,11 @@ bool CastSpell(SpellSlot slot) {
 }
 
 bool CastSpell(Object *target, SpellSlot slot) {
-  if(slot >= SpellSlot_Other) { return false; }
-  auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell = self->GetSpell(slot);
+  if (slot >= SpellSlot_Other) { return false; }
+  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+  auto spell      = self->GetSpell(slot);
   auto targetInfo = spell->spellInput();
-  if(!targetInfo || !target) { return false; }
+  if (!targetInfo || !target) { return false; }
   // set spell position
   targetInfo->SetCasterHandle(self->index());
   targetInfo->SetTargetHandle(target->index());
@@ -74,11 +75,11 @@ bool CastSpell(Object *target, SpellSlot slot) {
 }
 
 bool CastSpell(FLOAT3 pos, SpellSlot slot) {
-  if(slot >= SpellSlot_Other) { return false; }
-  auto hudInput = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell = self->GetSpell(slot);
+  if (slot >= SpellSlot_Other) { return false; }
+  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+  auto spell      = self->GetSpell(slot);
   auto targetInfo = spell->spellInput();
-  if(!targetInfo) { return false; }
+  if (!targetInfo) { return false; }
   // set spell position
   targetInfo->SetCasterHandle(self->index());
   targetInfo->SetTargetHandle(0);
@@ -92,7 +93,7 @@ bool CastSpell(FLOAT3 pos, SpellSlot slot) {
 }
 
 void Draw(std::function<void()> draw_fun) {
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO &io{ImGui::GetIO()};
 
   ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0.0f, 0.0f});
@@ -113,14 +114,15 @@ void Draw(std::function<void()> draw_fun) {
 }
 
 void Circle(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
-  ImGuiWindow *window = ImGui::GetCurrentWindow();
-  const int numPoints = 127;
+  ImGuiWindow *window{ImGui::GetCurrentWindow()};
+  const size_t numPoints{127};
   ImVec2 points[numPoints]{};
-  float theta = 0.f;
-  for(int i = 0; i < numPoints; i++, theta += IM_PI * 2 / numPoints) {
+  float theta{0.f};
+  for (size_t i{0}; i < numPoints; i++) {
     FLOAT3 worldSpace{worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
-    ImVec2 screenSpace = WorldToScreen(worldSpace).ToImVec();
+    ImVec2 screenSpace{WorldToScreen(worldSpace).ToImVec()};
     points[i] = screenSpace;
+    theta += IM_PI * 2 / numPoints;
   }
   window->DrawList->AddPolyline(points, numPoints, color, true, thickness);
 }

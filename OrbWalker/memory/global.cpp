@@ -7,7 +7,6 @@
 
 namespace global {
 void Init() {
-  // swap_chain = *(IDXGISwapChain **)(((uintptr_t(__fastcall *)())oMaterialRegistry)() + 0x1C0);
   swap_chain = Read<void *>(call_function<uintptr_t>(oMaterialRegistry) + 0x1C0);
 
   self.reset(Read<Object *>(oLocalPlayer));

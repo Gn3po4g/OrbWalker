@@ -6,10 +6,9 @@
 
 bool WINAPI HideThread(HANDLE hThread) {
   using fn = NTSTATUS(NTAPI *)(HANDLE, UINT, PVOID, ULONG);
-
-  const auto ntdllModule = GetModuleHandle(TEXT("ntdll.dll"));
+  const auto ntdllModule{GetModuleHandle(TEXT("ntdll.dll"))};
   if (!ntdllModule) return false;
-  const auto NtSetInformationThread = (fn)GetProcAddress(ntdllModule, "NtSetInformationThread");
+  const auto NtSetInformationThread{(fn)GetProcAddress(ntdllModule, "NtSetInformationThread")};
   if (!NtSetInformationThread) return false;
   return NtSetInformationThread(hThread, 0x11u, nullptr, 0ul) == 0;
 }

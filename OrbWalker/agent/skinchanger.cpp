@@ -20,6 +20,7 @@ bool skin_valid(uint64_t obj) {
   case "VisionWard"_FNV:
   case "BlueTrinket"_FNV:
   case "SRU_Jungle_Companions"_FNV:
+  case "SRU_RiftHerald_Mercenary"_FNV:
     return false;
   default:
     return true;
@@ -85,9 +86,7 @@ void skin::ChangeSkin(std::string_view model, int32_t skin_id) {
 
 skin &skin::inst() {
   static std::once_flag singleton;
-  std::call_once(singleton, [&] {
-    instance_.reset(new skin());
-  });
+  std::call_once(singleton, [&] { instance_.reset(new skin()); });
   return *instance_;
 }
 
@@ -95,19 +94,15 @@ skin::skin() {
   const auto &default_skin = self->dataStack()->baseSkin;
   championsSkins.emplace_back(default_skin.model.str(), "Default", default_skin.skin_id);
   const auto champions = Read<vector<Champion *>>(Read<uintptr_t>(oChampionManager) + 0x18);
-  if (const auto it{ranges::find_if(
-        champions,
-        [](Champion *champion) {
-          return self->name() == champion->championName().str();
-        }
-      )};
+  if (const auto it{
+        ranges::find_if(champions, [](Champion *champion) { return self->name() == champion->championName().str(); })};
       it != champions.end()) {
     const auto champion = *it;
-    auto skins_id = champion->skins_id();
+    auto skins_id       = champion->skins_id();
     map<string_view, int32_t> tempSkinList;
     for (auto &i : skins_id) {
-      const auto name = champion->championName().str();
-      constexpr auto fmt = "game_character_skin_displayname_{}_{}";
+      const auto name     = champion->championName().str();
+      constexpr auto fmt  = "game_character_skin_displayname_{}_{}";
       auto translatedName = i ? call_function<const char *>(oTranslateString, format(fmt, name, i).data()) : name;
       if (tempSkinList.count(translatedName)) {
         translatedName.append(" Chroma " + to_string(tempSkinList[translatedName]++));
@@ -153,13 +148,13 @@ void skin::update() {
           }
         );
         it != specialSkins.end()) {
-      const auto stack = self->dataStack();
+      const auto stack     = self->dataStack();
       stack->baseSkin.gear = (stack->baseSkin.gear + 1) % it->gears.size();
       stack->update(true);
     }
   }
   if (ImGui::IsKeyPressed(config.prev_skin_key)) {
-    config.current_skin = std::max(config.current_skin - 1, 0);
+    config.current_skin                       = std::max(config.current_skin - 1, 0);
     const auto &[modelName, skinName, skinId] = championsSkins[config.current_skin];
     ChangeSkin(modelName, skinId);
     config.save();
@@ -180,15 +175,13 @@ void skin::update() {
   }
   for (const auto minion : span(minions->data, minions->size)) {
     const auto hash{FNV(minion->dataStack()->baseSkin.model.str())};
-    if (const auto owner{minion->GetOwner()}; owner == self.get()) {
-      if (hash == "TestCubeRender10Vision"_FNV) {
-        if (player_hash == "Yone"_FNV) ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
-      } else if (hash == "SRU_RiftHerald_Mercenary"_FNV) {
-      } else if (skin_valid(hash)) {
-        ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
-      }
+    if (hash == "TestCubeRender10Vision"_FNV && player_hash == "Yone"_FNV) {
+      ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
+    } else if (const auto owner{minion->GetOwner()}; owner == self.get() && skin_valid(hash)) {
+      ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
+    } else if (is_companion(player_hash, hash)) {
+      ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id);
     }
-    if (is_companion(player_hash, hash)) { ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id); }
   }
   for (const auto turret : span(turrets->data, turrets->size)) {
     if (const auto owner = turret->GetOwner(); owner == self.get()) {

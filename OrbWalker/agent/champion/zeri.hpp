@@ -6,7 +6,7 @@
 
 class Zeri : public script {
 public:
-  bool can_attack() override { return self->state() & CanCast; };
+  bool can_attack() override { return self->state() & CanCast && self->state()& CanAttack; };
   bool is_reloading() override { return game_time < self->GetSpell(SpellSlot_Q)->readyTime() - interval; };
   bool is_attacking() override { return false; };
   void attack() override {

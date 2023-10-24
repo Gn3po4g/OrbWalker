@@ -22,16 +22,16 @@ script &script::inst() {
       return instance_.reset(new Azir);
     case "Caitlyn"_FNV:
       return instance_.reset(new Caitlyn);
-    case "Cassiopeia"_FNV:
-      return instance_.reset(new Cassiopeia);
+    //case "Cassiopeia"_FNV:
+    //  return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
       return instance_.reset(new Graves);
     case "Kaisa"_FNV:
       return instance_.reset(new Kaisa);
     case "Sett"_FNV:
       return instance_.reset(new Sett);
-    case "Zeri"_FNV:
-      return instance_.reset(new Zeri);
+    //case "Zeri"_FNV:
+    //  return instance_.reset(new Zeri);
     default:
       return instance_.reset(new script);
     }
