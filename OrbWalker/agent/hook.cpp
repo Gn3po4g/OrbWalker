@@ -10,13 +10,19 @@
 #include "memory/function.hpp"
 #include "memory/global.hpp"
 
+hook &hook::inst() {
+  static std::once_flag singleton;
+  std::call_once(singleton, [&] { instance_.reset(new hook); });
+  return *instance_;
+}
+
 std::once_flag init;
 
 HWND window{};
 WNDPROC oWndProc{};
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-  if(ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) { return true; }
+  if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) { return true; }
   return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
@@ -26,21 +32,21 @@ ID3D11RenderTargetView *pRenderTargetView{};
 
 void init_all(IDXGISwapChain *pSwapChain) {
   pSwapChain->GetDevice(IID_PPV_ARGS(&pDevice));
-  if(!pDevice) throw std::exception();
+  if (!pDevice) throw std::exception();
   pDevice->GetImmediateContext(&pDeviceContext);
   DXGI_SWAP_CHAIN_DESC sd{};
   pSwapChain->GetDesc(&sd);
   window = sd.OutputWindow;
   ID3D11Texture2D *pBackBuffer{};
   pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-  if(!pBackBuffer) throw std::exception();
+  if (!pBackBuffer) throw std::exception();
   pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
   pBackBuffer->Release();
   oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  ImGuiIO &io    = ImGui::GetIO();
   io.IniFilename = nullptr;
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   io.Fonts->AddFontFromFileTTF(
@@ -76,31 +82,42 @@ struct present {
     try {
       std::call_once(init, [&] { init_all(p_swap_chain); });
       do_in_present();
-    } catch(...) {}
+    } catch (...) {}
     return original(p_swap_chain, sync_interval, flags);
   }
   inline static decltype(&hooked) original{};
 };
-vmt_hook *swap_chain_hook{};
 
 struct on_process_spell {
   static void __fastcall hooked(uintptr_t thisptr, int arg, SpellCast *spell_cast, Object *obj) {
-    if(arg == 0xc) script::inst().run(spell_cast, obj);
+    if (arg == 0xc) script::inst().run(spell_cast, obj);
     return original(thisptr, arg, spell_cast, obj);
   }
   inline static decltype(&hooked) original{};
 };
-vmt_hook *on_process_spell_hook{};
 
-hook &hook::inst() {
-  static std::once_flag singleton;
-  std::call_once(singleton, [&] { instance_.reset(new hook); });
-  return *instance_;
-}
+struct get_cursor_pos {
+  static BOOL WINAPI hooked(LPPOINT lpPoint) {
+    auto org = original(lpPoint);
+    if (hook::mMouseX > 0 && hook::mMouseY > 0) {
+      lpPoint->x    = hook::mMouseX;
+      lpPoint->y    = hook::mMouseY;
+      hook::mMouseX = -1;
+      hook::mMouseY = -1;
+    }
+    return org;
+  }
+  inline static decltype(&hooked) original{};
+};
 
 void hook::install() {
-  swap_chain_hook = new vmt_hook(swap_chain);
+  static auto swap_chain_hook = new vmt_hook(swap_chain);
   swap_chain_hook->hook<present>(8);
-  on_process_spell_hook = new vmt_hook(vmt_in_obj);
+  static auto on_process_spell_hook = new vmt_hook(vmt_in_obj);
   on_process_spell_hook->hook<on_process_spell>(30);
+  DetourTransactionBegin();
+  DetourUpdateThread(GetCurrentThread());
+  get_cursor_pos::original = GetCursorPos;
+  DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
+  DetourTransactionCommit();
 }

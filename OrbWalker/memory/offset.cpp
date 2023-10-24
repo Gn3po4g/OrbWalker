@@ -59,7 +59,7 @@ auto sigs = std::to_array<s_sig>({
   {oWorldToScreen,    "E8 ? ? ? ? 49 8D 97 ? ? ? ? 4C 8D 45 D8",                              1},
   {oIssueOrder,       "45 33 C0 E8 ? ? ? ? 48 83 C4 48",                                      4},
   {oIssueMove,        "48 89 5C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B F1 41 0F B6 F9", 0},
-  {oCastSpell,        "48 89 4C 24 ? 55 41 55",                                               0},
+  //{oCastSpell,        "48 89 4C 24 ? 55 41 55",                                               0},
   {oAttackDelay,      "E8 ? ? ? ? 33 C0 F3 0F 11 83 ? ? ? ?",                                 1},
   {oAttackWindup,     "E8 ? ? ? ? 48 8B CE F3 0F 11 83 ? ? ? ?",                              1},
  //{oIsAlive,            "E8 ? ? ? ? 84 C0 74 35 48 8D 8F ? ? ? ?",                              1},

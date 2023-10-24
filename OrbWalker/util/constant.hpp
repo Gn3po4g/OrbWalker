@@ -17,6 +17,12 @@ constexpr size_t objSpell       = 0x30C8;
 constexpr size_t objDataStack   = 0x35D0;
 constexpr size_t objName        = 0x3868;
 
+enum HKey {
+	NO_KEY = 0, ESC, N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9, N_0, MINUS, EQUAL, BS, Tab, Q, W, E, R, T, Y, U, I, O, P, LBRACKET, RBRACKET, ENTER, CTRL, A, S, D, F, G,
+	H, J, K, L, SEMICOLON, SINGLE_QUOTE, TILDE, LSHIFT, BACKSLASH, Z, X, C, V, B, N, M, COMMA, DOT, FRONTSLASH, RSHIFT, PRINT_SCREEN, ALT, SPACE,	CAPS, F1, F2,
+	F3, F4, F5, F6, F7, F8, F9, F10, NUM, SCROLL, HOME, UP, PAGE_UP, NUM_MINUS, LEFT, CENTER, RIGHT, PLUS, END, DOWN, PAGE_DOWN, INSERT, DEL
+};
+
 enum GameState : int32_t { Loading, Connecting, Running, Paused, Finished, Exiting };
 
 enum SpellSlot : int32_t {

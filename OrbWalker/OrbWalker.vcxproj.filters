@@ -19,6 +19,9 @@
     <Filter Include="util">
       <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{b8ce59df-4fe0-4bf3-bad7-f50b7aa287dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="memory\offset.cpp">
@@ -158,6 +161,18 @@
     <ClInclude Include="agent\champion\azir.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
+    <ClInclude Include="..\Lib\Detours\detours.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lib\Imgui\imgui.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lib\Imgui\imgui_impl_dx11.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lib\Imgui\imgui_impl_win32.h">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">
@@ -166,5 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Lib\Detours\detours.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\Lib\Imgui\imgui.lib">
+      <Filter>lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

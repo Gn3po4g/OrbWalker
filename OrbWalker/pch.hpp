@@ -17,10 +17,11 @@
 #include <string_view>
 #include <vector>
 
-#include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
-#include "imgui_internal.h"
+#include "../Lib/Imgui/imgui.h"
+#include "../Lib/Imgui/imgui_impl_dx11.h"
+#include "../Lib/Imgui/imgui_impl_win32.h"
+#include "../Lib/Imgui/imgui_internal.h"
+#include "../Lib/Detours/detours.h"
 
 #include "util/constant.hpp"
 #include "util/fnvhash.hpp"

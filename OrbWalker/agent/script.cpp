@@ -15,7 +15,7 @@ void script::update() {
   Draw([&] {
     if (config::inst().show_attack_range) Circle(self->position(), real_range(), 0xffffffff, 1.5f);
     if (markedObject && markedObject->IsAlive() && markedObject->visible()) {
-      Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 4.5f);
+      Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 3.0f);
     }
   });
 

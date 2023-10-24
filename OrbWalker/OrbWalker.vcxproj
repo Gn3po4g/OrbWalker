@@ -28,6 +28,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Lib\Detours\detours.h" />
+    <ClInclude Include="..\Lib\Imgui\imgui.h" />
+    <ClInclude Include="..\Lib\Imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\Lib\Imgui\imgui_impl_win32.h" />
     <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\azir.hpp" />
     <ClInclude Include="agent\champion\caitlyn.hpp" />
@@ -69,9 +73,8 @@
     <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{f6d942c4-23e6-4fe2-960e-044b848918f2}</Project>
-    </ProjectReference>
+    <Library Include="..\Lib\Detours\detours.lib" />
+    <Library Include="..\Lib\Imgui\imgui.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

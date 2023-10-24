@@ -6,7 +6,7 @@ public:
   void install();
 
   inline static std::mutex mRun;
-  //std::condition_variable cvRun;
+  inline static int mMouseX{-1}, mMouseY{-1};
 
 private:
   hook() = default;

@@ -14,7 +14,8 @@ class Cassiopeia : public script {
   void attack() override {
     auto obj = get_skill_target(real_range());
     if (obj && can_attack() && can_do_action()) {
-      CastSpell(obj, SpellSlot_E);
+      //CastSpell(obj, SpellSlot_E);
+      PressKeyAt(E, obj->position());
     } else idle();
   };
   float real_range() override { return 700.f; };

@@ -4,6 +4,8 @@
 #include "global.hpp"
 #include "offset.hpp"
 
+#include "agent/hook.hpp"
+
 namespace function {
 float GameTime() { return Read<float>(oGameTime); }
 
@@ -38,58 +40,77 @@ void Move2Mouse() {
   }
 }
 
-bool CastSpell(SpellSlot slot) {
-  if (slot >= SpellSlot_Other) { return false; }
-  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell      = self->GetSpell(slot);
-  auto targetInfo = spell->spellInput();
-  if (!targetInfo) { return false; }
-  // set spell position
-  targetInfo->SetCasterHandle(self->index());
-  targetInfo->SetTargetHandle(0);
-  targetInfo->SetStartPos(self->position());
-  targetInfo->SetEndPos(self->position());
-  targetInfo->SetClickedPos(self->position());
-  targetInfo->SetUnkPos(self->position());
+// bool CastSpell(SpellSlot slot) {
+//   if (slot >= SpellSlot_Other) { return false; }
+//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+//   auto spell      = self->GetSpell(slot);
+//   auto targetInfo = spell->spellInput();
+//   if (!targetInfo) { return false; }
+//   // set spell position
+//   targetInfo->SetCasterHandle(self->index());
+//   targetInfo->SetTargetHandle(0);
+//   targetInfo->SetStartPos(self->position());
+//   targetInfo->SetEndPos(self->position());
+//   targetInfo->SetClickedPos(self->position());
+//   targetInfo->SetUnkPos(self->position());
+//
+//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
+//   return true;
+// }
+//
+// bool CastSpell(Object *target, SpellSlot slot) {
+//   if (slot >= SpellSlot_Other) { return false; }
+//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+//   auto spell      = self->GetSpell(slot);
+//   auto targetInfo = spell->spellInput();
+//   if (!targetInfo || !target) { return false; }
+//   // set spell position
+//   targetInfo->SetCasterHandle(self->index());
+//   targetInfo->SetTargetHandle(target->index());
+//   targetInfo->SetStartPos(self->position());
+//   targetInfo->SetEndPos(target->position());
+//   targetInfo->SetClickedPos(target->position());
+//   targetInfo->SetUnkPos(target->position());
+//
+//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
+//   return true;
+// }
+//
+// bool CastSpell(FLOAT3 pos, SpellSlot slot) {
+//   if (slot >= SpellSlot_Other) { return false; }
+//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
+//   auto spell      = self->GetSpell(slot);
+//   auto targetInfo = spell->spellInput();
+//   if (!targetInfo) { return false; }
+//   // set spell position
+//   targetInfo->SetCasterHandle(self->index());
+//   targetInfo->SetTargetHandle(0);
+//   targetInfo->SetStartPos(self->position());
+//   targetInfo->SetEndPos(pos);
+//   targetInfo->SetClickedPos(pos);
+//   targetInfo->SetUnkPos(pos);
+//
+//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
+//   return true;
+// }
 
-  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-  return true;
-}
-
-bool CastSpell(Object *target, SpellSlot slot) {
-  if (slot >= SpellSlot_Other) { return false; }
-  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell      = self->GetSpell(slot);
-  auto targetInfo = spell->spellInput();
-  if (!targetInfo || !target) { return false; }
-  // set spell position
-  targetInfo->SetCasterHandle(self->index());
-  targetInfo->SetTargetHandle(target->index());
-  targetInfo->SetStartPos(self->position());
-  targetInfo->SetEndPos(target->position());
-  targetInfo->SetClickedPos(target->position());
-  targetInfo->SetUnkPos(target->position());
-
-  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-  return true;
-}
-
-bool CastSpell(FLOAT3 pos, SpellSlot slot) {
-  if (slot >= SpellSlot_Other) { return false; }
-  auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-  auto spell      = self->GetSpell(slot);
-  auto targetInfo = spell->spellInput();
-  if (!targetInfo) { return false; }
-  // set spell position
-  targetInfo->SetCasterHandle(self->index());
-  targetInfo->SetTargetHandle(0);
-  targetInfo->SetStartPos(self->position());
-  targetInfo->SetEndPos(pos);
-  targetInfo->SetClickedPos(pos);
-  targetInfo->SetUnkPos(pos);
-
-  call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-  return true;
+void PressKeyAt(HKey key, FLOAT3 pos) {
+  auto PressKey = [](HKey key) {
+    INPUT input{};
+    input.type           = INPUT_KEYBOARD;
+    input.ki.wScan       = key;
+    input.ki.time        = 0;
+    input.ki.dwExtraInfo = 0;
+    input.ki.wVk         = 0;
+    input.ki.dwFlags     = KEYEVENTF_SCANCODE;
+    SendInput(1, &input, sizeof(INPUT));
+    input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+    SendInput(1, &input, sizeof(INPUT));
+  };
+  INT2 p = WorldToScreen(pos);
+  hook::mMouseX = p.x;
+  hook::mMouseY = p.y;
+  PressKey(key);
 }
 
 void Draw(std::function<void()> draw_fun) {
