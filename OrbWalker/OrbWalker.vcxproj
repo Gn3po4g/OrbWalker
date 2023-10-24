@@ -124,16 +124,17 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BuildStlModules>false</BuildStlModules>
       <CompileAsWinRT>false</CompileAsWinRT>
-      <AdditionalIncludeDirectories>$(SolutionDir)ImGui;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Lib;$(ProjectDir)</AdditionalIncludeDirectories>
       <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableUAC>true</EnableUAC>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
