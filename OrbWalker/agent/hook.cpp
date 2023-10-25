@@ -115,9 +115,9 @@ void hook::install() {
   swap_chain_hook->hook<present>(8);
   static auto on_process_spell_hook = new vmt_hook(vmt_in_obj);
   on_process_spell_hook->hook<on_process_spell>(30);
-  DetourTransactionBegin();
-  DetourUpdateThread(GetCurrentThread());
-  get_cursor_pos::original = GetCursorPos;
-  DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
-  DetourTransactionCommit();
+  //DetourTransactionBegin();
+  //DetourUpdateThread(GetCurrentThread());
+  //get_cursor_pos::original = GetCursorPos;
+  //DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
+  //DetourTransactionCommit();
 }
