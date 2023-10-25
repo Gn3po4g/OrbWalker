@@ -21,17 +21,12 @@
     <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="memory\function.cpp" />
-    <ClCompile Include="memory\global.cpp" />
     <ClCompile Include="memory\offset.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Lib\Detours\detours.h" />
-    <ClInclude Include="..\Lib\Imgui\imgui.h" />
-    <ClInclude Include="..\Lib\Imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="..\Lib\Imgui\imgui_impl_win32.h" />
     <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\azir.hpp" />
     <ClInclude Include="agent\champion\caitlyn.hpp" />
@@ -52,11 +47,10 @@
     <ClInclude Include="class\spell.hpp" />
     <ClInclude Include="config\config.hpp" />
     <ClInclude Include="memory\function.hpp" />
-    <ClInclude Include="memory\global.hpp" />
     <ClInclude Include="memory\offset.hpp" />
     <ClInclude Include="memory\spoof_call.h" />
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="util\constant.hpp" />
+    <ClInclude Include="util\enum.hpp" />
     <ClInclude Include="util\encryption.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\json.hpp" />
@@ -71,10 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\Lib\Detours\detours.lib" />
-    <Library Include="..\Lib\Imgui\imgui.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -133,9 +123,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableUAC>true</EnableUAC>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib\Imgui;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

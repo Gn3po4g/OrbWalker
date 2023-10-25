@@ -1,7 +1,7 @@
 #pragma once
 
 #include "agent/script.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 class Aphelios : public script {
   bool in_attack_range(Object *obj) override {

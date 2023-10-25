@@ -8,7 +8,7 @@
 #include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
 #include "memory/function.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 hook &hook::inst() {
   static std::once_flag singleton;

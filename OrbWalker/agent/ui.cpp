@@ -4,7 +4,6 @@
 
 #include "agent/skinchanger.hpp"
 #include "config/config.hpp"
-#include "memory/global.hpp"
 #include "memory/offset.hpp"
 
 namespace ui {

@@ -19,9 +19,6 @@
     <Filter Include="util">
       <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{b8ce59df-4fe0-4bf3-bad7-f50b7aa287dc}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="memory\offset.cpp">
@@ -50,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="class\spell.cpp">
       <Filter>class</Filter>
-    </ClCompile>
-    <ClCompile Include="memory\global.cpp">
-      <Filter>memory</Filter>
     </ClCompile>
     <ClCompile Include="agent\hook.cpp">
       <Filter>agent</Filter>
@@ -85,7 +79,7 @@
     <ClInclude Include="config\config.hpp">
       <Filter>config</Filter>
     </ClInclude>
-    <ClInclude Include="util\constant.hpp">
+    <ClInclude Include="util\enum.hpp">
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="util\fnvhash.hpp">
@@ -95,9 +89,6 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="memory\function.hpp">
-      <Filter>memory</Filter>
-    </ClInclude>
-    <ClInclude Include="memory\global.hpp">
       <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="util\vmt_hook.hpp">
@@ -161,18 +152,6 @@
     <ClInclude Include="agent\champion\azir.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
-    <ClInclude Include="..\Lib\Detours\detours.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Lib\Imgui\imgui.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Lib\Imgui\imgui_impl_dx11.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Lib\Imgui\imgui_impl_win32.h">
-      <Filter>lib</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">
@@ -181,13 +160,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\Lib\Detours\detours.lib">
-      <Filter>lib</Filter>
-    </Library>
-    <Library Include="..\Lib\Imgui\imgui.lib">
-      <Filter>lib</Filter>
-    </Library>
   </ItemGroup>
 </Project>

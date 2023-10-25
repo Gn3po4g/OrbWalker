@@ -2,7 +2,7 @@
 
 #include "config.hpp"
 
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 std::string file_name = "setting.json"s;
 json config_json = json::object();

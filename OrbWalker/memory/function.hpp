@@ -23,7 +23,7 @@ void Move2Mouse();
 // bool CastSpell(Object *, SpellSlot);
 // bool CastSpell(FLOAT3, SpellSlot);
 
-void PressKeyAt(HKey, FLOAT3);
+//void PressKeyAt(HKey, FLOAT3);
 
 void Draw(std::function<void()>);
 void Circle(const FLOAT3 &, float, uint32_t, float);

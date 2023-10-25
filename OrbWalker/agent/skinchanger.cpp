@@ -4,7 +4,6 @@
 
 #include "class/champion.hpp"
 #include "config/config.hpp"
-#include "memory/global.hpp"
 #include "memory/offset.hpp"
 
 #include "memory/function.hpp"

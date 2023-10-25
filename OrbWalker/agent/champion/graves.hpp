@@ -1,6 +1,6 @@
 #pragma once
 
- #include "memory/global.hpp"
+ #include "memory/offset.hpp"
 
 class Graves : public script {
 public:

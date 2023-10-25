@@ -21,9 +21,8 @@
 #include "Imgui/imgui_impl_dx11.h"
 #include "Imgui/imgui_impl_win32.h"
 #include "Imgui/imgui_internal.h"
-#include "Detours/detours.h"
 
-#include "util/constant.hpp"
+#include "util/enum.hpp"
 #include "util/fnvhash.hpp"
 #include "util/json.hpp"
 #include "util/util.hpp"

@@ -4,7 +4,7 @@
 
 #include "config/config.hpp"
 #include "memory/function.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 void script::update() {
   game_time = GameTime();
@@ -25,6 +25,14 @@ void script::update() {
     if (is_reloading()) idle();
     else attack();
   }
+
+  // if (ImGui::IsKeyPressed(ImGuiKey_V)) {
+  //   for (auto buff : self->buffs()) {
+  //     if (buff->starttime() <= game_time && buff->endtime() >= game_time && buff->name() != "") {
+  //       PrintMessage(0xFFFFFF, buff->name());
+  //     }
+  //   }
+  // }
 }
 
 bool script::can_attack() { return self->state() & CanAttack; }
@@ -85,7 +93,7 @@ Object *script::get_skill_target(float range) {
 
 bool script::has_buff(Object *obj, std::string_view name) {
   return std::ranges::any_of(obj->buffs(), [name, this](Buff *buff) {
-    return buff->name() == name && buff->starttime() <= game_time && buff->endtime() >= game_time;
+    return buff->is_valid() && game_time >= buff->starttime() && game_time <= buff->endtime() && buff->name() == name;
   });
 }
 

@@ -1,7 +1,6 @@
 #include "pch.hpp"
 
 #include "agent/hook.hpp"
-#include "memory/global.hpp"
 #include "memory/offset.hpp"
 
 bool WINAPI HideThread(HANDLE hThread) {
@@ -15,7 +14,7 @@ bool WINAPI HideThread(HANDLE hThread) {
 
 void Start() {
   HideThread(GetCurrentThread());
-  if (!offset::Init()) return;
+  if (!Init()) return;
   hook::inst().install();
   std::unique_lock lkRun(hook::mRun);
   std::condition_variable().wait(lkRun);

@@ -2,7 +2,7 @@
 
 #include "agent/script.hpp"
 #include "memory/function.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 class Azir : public script {
   bool in_attack_range(Object *obj) override {

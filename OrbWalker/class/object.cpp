@@ -2,7 +2,7 @@
 
 #include "object.hpp"
 
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 #include "memory/offset.hpp"
 #include "memory/function.hpp"
 

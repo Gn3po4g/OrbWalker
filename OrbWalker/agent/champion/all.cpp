@@ -1,7 +1,7 @@
 ﻿#include "pch.hpp"
 
 #include "agent/script.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 #include "aphelios.hpp"
 #include "azir.hpp"

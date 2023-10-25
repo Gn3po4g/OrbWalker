@@ -3,7 +3,7 @@
 #include "obj_list.hpp"
 
 #include "config/config.hpp"
-#include "memory/global.hpp"
+#include "memory/offset.hpp"
 
 using namespace std;
 
