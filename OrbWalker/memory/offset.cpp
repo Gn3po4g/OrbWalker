@@ -77,7 +77,7 @@ void update_offset(s_sig &sig) {
   auto address{FindAddress(sig.pattern)};
   while (!address) {
 
-    MessageBoxA(NULL, ("Unable to find " + sig.pattern).data(), "", MB_OK);
+    //MessageBoxA(NULL, ("Unable to find " + sig.pattern).data(), "", MB_OK);
 
     this_thread::sleep_for(100ms);
     address = FindAddress(sig.pattern);
