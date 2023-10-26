@@ -42,9 +42,11 @@ std::string Object::name() { return MEMBER<RiotString16>(objName).str(); }
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
 // }
 
-float Object::AttackDelay() { return call_function<float>(oAttackDelay, this); }
+float Object::AttackDelay() { return call_function<float>(RVA(oAttackDelay), this);
+}
 
-float Object::AttackWindup() { return call_function<float>(oAttackWindup, this, 65); }
+float Object::AttackWindup() { return call_function<float>(RVA(oAttackWindup), this, 65);
+}
 
 float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
@@ -59,7 +61,8 @@ bool Object::IsTargetableToTeam() {
 
 bool Object::IsValidTarget() { return IsEnemy() && IsAlive() && visible() && targetable() && IsTargetableToTeam(); }
 
-bool Object::compare_type_flags(TypeFlag flag) { return call_function<bool>(oCompareTypeFlags, this, flag); }
+bool Object::compare_type_flags(TypeFlag flag) { return call_function<bool>(RVA(oCompareTypeFlags), this, flag);
+}
 
 float Object::get_mana_cost(SpellSlot slot) {
   if (slot > SpellSlot_R) return 0.f;
@@ -68,4 +71,5 @@ float Object::get_mana_cost(SpellSlot slot) {
 
 Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }
 
-Object *Object::GetOwner() { return call_function<Object *>(oGetOwner, this); }
+Object *Object::GetOwner() { return call_function<Object *>(RVA(oGetOwner), this);
+}

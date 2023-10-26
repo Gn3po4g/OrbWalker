@@ -1,5 +1,13 @@
 #pragma once
 
+using i8  = int8_t;
+using u8  = uint8_t;
+using i16 = int16_t;
+using u16 = uint16_t;
+using i32 = int32_t;
+using u32 = uint32_t;
+using i64 = int64_t;
+using u64 = uint64_t;
 // enum HKey {
 //	NO_KEY = 0, ESC, N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9, N_0, MINUS, EQUAL, BS, Tab, Q, W, E, R, T, Y, U,
 // I, O, P, LBRACKET, RBRACKET, ENTER, CTRL, A, S, D, F, G, 	H, J, K, L, SEMICOLON, SINGLE_QUOTE, TILDE, LSHIFT,

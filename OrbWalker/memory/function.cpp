@@ -6,36 +6,36 @@
 #include "agent/hook.hpp"
 
 namespace function {
-float GameTime() { return Read<float>(oGameTime); }
+float GameTime() { return Read<float>(RVA(oGameTime)); }
 
-bool IsChatOpen() { return Read<bool>(*(uintptr_t *)oChatClient + 0xC90); }
+bool IsChatOpen() { return Read<bool>(Read<uintptr_t>(RVA(oChatClient)) + 0xC90); }
 
-bool IsLeagueInBackground() { return Read<bool>(*(uintptr_t *)oHudInstance + 0xB9); }
+bool IsLeagueInBackground() { return Read<bool>(Read<uintptr_t>(RVA(oHudInstance)) + 0xB9); }
 
 bool CanSendInput() { return self && self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
 void PrintMessage(size_t color, std::string_view msg) {
   const auto wrapped = std::format("<font color=#{:0>6x}>{}</font>", color & 0xFFFFFF, msg);
-  call_function<void>(oPrintChat, oChatClient, wrapped.data(), 4);
+  call_function<void>(RVA(oPrintChat), RVA(oChatClient), wrapped.data(), 4);
 }
 
 INT2 WorldToScreen(FLOAT3 in) {
   FLOAT3 out;
-  call_function<uintptr_t>(oWorldToScreen, *(uintptr_t *)oViewPort + 0x270, &in, &out);
+  call_function<uintptr_t>(RVA(oWorldToScreen), Read<uintptr_t>(RVA(oViewPort)) + 0x270, &in, &out);
   return {(int)out.x, (int)out.y};
 }
 
 void AttackObject(Object *target) {
   const auto pos = WorldToScreen(target->position());
-  auto hudInput  = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x48);
-  call_function<bool>(oIssueOrder, hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
+  auto hudInput  = Read<uintptr_t>(Read<uintptr_t>(RVA(oHudInstance)) + 0x48);
+  call_function<bool>(RVA(oIssueOrder), hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
 }
 
 void Move2Mouse() {
   if (POINT pos; GetCursorPos(&pos)) {
-    auto hudInput                = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x28);
+    auto hudInput                = Read<uintptr_t>(Read<uintptr_t>(RVA(oHudInstance)) + 0x28);
     *(FLOAT3 *)(hudInput + 0x38) = FLOAT3{0, 0, 0};
-    call_function<bool>(oIssueMove, hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 0ui8);
+    call_function<bool>(RVA(oIssueMove), hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 0ui8);
   }
 }
 
@@ -93,24 +93,24 @@ void Move2Mouse() {
 //   return true;
 // }
 
-//void PressKeyAt(HKey key, FLOAT3 pos) {
-//  auto PressKey = [](HKey key) {
-//    INPUT input{};
-//    input.type           = INPUT_KEYBOARD;
-//    input.ki.wScan       = key;
-//    input.ki.time        = 0;
-//    input.ki.dwExtraInfo = 0;
-//    input.ki.wVk         = 0;
-//    input.ki.dwFlags     = KEYEVENTF_SCANCODE;
-//    SendInput(1, &input, sizeof(INPUT));
-//    input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-//    SendInput(1, &input, sizeof(INPUT));
-//  };
-//  INT2 p = WorldToScreen(pos);
-//  hook::mMouseX = p.x;
-//  hook::mMouseY = p.y;
-//  PressKey(key);
-//}
+// void PressKeyAt(HKey key, FLOAT3 pos) {
+//   auto PressKey = [](HKey key) {
+//     INPUT input{};
+//     input.type           = INPUT_KEYBOARD;
+//     input.ki.wScan       = key;
+//     input.ki.time        = 0;
+//     input.ki.dwExtraInfo = 0;
+//     input.ki.wVk         = 0;
+//     input.ki.dwFlags     = KEYEVENTF_SCANCODE;
+//     SendInput(1, &input, sizeof(INPUT));
+//     input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+//     SendInput(1, &input, sizeof(INPUT));
+//   };
+//   INT2 p = WorldToScreen(pos);
+//   hook::mMouseX = p.x;
+//   hook::mMouseY = p.y;
+//   PressKey(key);
+// }
 
 void Draw(std::function<void()> draw_fun) {
   ImGuiIO &io{ImGui::GetIO()};

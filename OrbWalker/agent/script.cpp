@@ -26,13 +26,13 @@ void script::update() {
     else attack();
   }
 
-  // if (ImGui::IsKeyPressed(ImGuiKey_V)) {
-  //   for (auto buff : self->buffs()) {
-  //     if (buff->starttime() <= game_time && buff->endtime() >= game_time && buff->name() != "") {
-  //       PrintMessage(0xFFFFFF, buff->name());
-  //     }
-  //   }
-  // }
+   //if (ImGui::IsKeyPressed(ImGuiKey_V)) {
+   //  for (auto buff : self->buffs()) {
+   //    if (buff->starttime() <= game_time && buff->endtime() >= game_time && buff->name() != "") {
+   //      PrintMessage(0xFFFFFF, std::format("{}\t{}", buff->count(), buff->name()));
+   //    }
+   //  }
+   //}
 }
 
 bool script::can_attack() { return self->state() & CanAttack; }

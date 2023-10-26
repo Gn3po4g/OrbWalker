@@ -5,6 +5,6 @@ public:
   std::string name();
   float starttime();
   float endtime();
-  uint8_t count();
+  uint32_t count();
   bool is_valid();
 };

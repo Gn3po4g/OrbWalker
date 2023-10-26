@@ -8,6 +8,6 @@ float Buff::starttime() { return MEMBER<float>(0x18); }
 
 float Buff::endtime() { return MEMBER<float>(0x1C); }
 
-uint8_t Buff::count() { return MEMBER<uint8_t>(0x38); }
+uint32_t Buff::count() { return MEMBER<uint32_t>(0x8C); }
 
-bool Buff::is_valid() { return count() && MEMBER<uintptr_t>(0x10) || MEMBER<uint8_t>(0x88); }
+bool Buff::is_valid() { return MEMBER<uint8_t>(0x38) && MEMBER<uintptr_t>(0x10) || MEMBER<uint8_t>(0x88); }

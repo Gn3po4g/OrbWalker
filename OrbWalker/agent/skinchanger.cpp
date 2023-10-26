@@ -92,7 +92,7 @@ skin &skin::inst() {
 skin::skin() {
   const auto &default_skin = self->dataStack()->baseSkin;
   championsSkins.emplace_back(default_skin.model.str(), "Default", default_skin.skin_id);
-  const auto champions = Read<vector<Champion *>>(Read<uintptr_t>(oChampionManager) + 0x18);
+  const auto champions = Read<vector<Champion *>>(Read<uintptr_t>(RVA(oChampionManager)) + 0x18);
   if (const auto it{
         ranges::find_if(champions, [](Champion *champion) { return self->name() == champion->championName().str(); })};
       it != champions.end()) {
@@ -102,7 +102,7 @@ skin::skin() {
     for (auto &i : skins_id) {
       const auto name     = champion->championName().str();
       constexpr auto fmt  = "game_character_skin_displayname_{}_{}";
-      auto translatedName = i ? call_function<const char *>(oTranslateString, format(fmt, name, i).data()) : name;
+      auto translatedName = i ? call_function<const char *>(RVA(oTranslateString), format(fmt, name, i).data()) : name;
       if (tempSkinList.count(translatedName)) {
         translatedName.append(" Chroma " + to_string(tempSkinList[translatedName]++));
       } else {
