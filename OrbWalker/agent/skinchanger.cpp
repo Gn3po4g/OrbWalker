@@ -174,10 +174,12 @@ void skin::update() {
   }
   for (const auto minion : span(minions->data, minions->size)) {
     const auto hash{FNV(minion->dataStack()->baseSkin.model.str())};
-    if (hash == "TestCubeRender10Vision"_FNV && player_hash == "Yone"_FNV) {
-      ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
-    } else if (const auto owner{minion->GetOwner()}; owner == self.get() && skin_valid(hash)) {
-      ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
+    if (const auto owner{minion->GetOwner()}; owner == self.get()) {
+      if (hash == "TestCubeRender10Vision"_FNV && player_hash == "Yone"_FNV) {
+        ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
+      } else if (skin_valid(hash)) {
+        ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
+      }
     } else if (is_companion(player_hash, hash)) {
       ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id);
     }
