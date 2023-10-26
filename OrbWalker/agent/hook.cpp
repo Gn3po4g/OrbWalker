@@ -99,7 +99,7 @@ struct on_process_spell {
 struct get_cursor_pos {
   static BOOL WINAPI hooked(LPPOINT lpPoint) {
     auto org = original(lpPoint);
-    if (hook::mMouseX > 0 && hook::mMouseY > 0) {
+    if (hook::mMouseX != -1 && hook::mMouseY != -1) {
       lpPoint->x    = hook::mMouseX;
       lpPoint->y    = hook::mMouseY;
       hook::mMouseX = -1;
@@ -115,9 +115,10 @@ void hook::install() {
   swap_chain_hook->hook<present>(8);
   static auto on_process_spell_hook = new vmt_hook(vmt_in_obj);
   on_process_spell_hook->hook<on_process_spell>(30);
-  //DetourTransactionBegin();
-  //DetourUpdateThread(GetCurrentThread());
-  //get_cursor_pos::original = GetCursorPos;
-  //DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
-  //DetourTransactionCommit();
+  DetourRestoreAfterWith();
+  DetourTransactionBegin();
+  DetourUpdateThread(GetCurrentThread());
+  get_cursor_pos::original = GetCursorPos;
+  DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
+  DetourTransactionCommit();
 }

@@ -30,8 +30,8 @@ script &script::inst() {
       return instance_.reset(new Kaisa);
     case "Sett"_FNV:
       return instance_.reset(new Sett);
-    //case "Zeri"_FNV:
-    //  return instance_.reset(new Zeri);
+    case "Zeri"_FNV:
+      return instance_.reset(new Zeri);
     default:
       return instance_.reset(new script);
     }

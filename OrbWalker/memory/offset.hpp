@@ -61,6 +61,6 @@ constexpr uintptr_t objActionState = 0x13D0;
 constexpr uintptr_t objAttackRange = 0x16C4;
 constexpr uintptr_t objBuff        = 0x27D8;
 constexpr uintptr_t objManaCost    = 0x2A88;
-constexpr uintptr_t objSpell       = 0x30C8;
+constexpr uintptr_t objSpell       = 0x30D0;
 constexpr uintptr_t objDataStack   = 0x35D0;
 constexpr uintptr_t objName        = 0x3868;

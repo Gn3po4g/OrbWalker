@@ -93,24 +93,24 @@ void Move2Mouse() {
 //   return true;
 // }
 
-// void PressKeyAt(HKey key, FLOAT3 pos) {
-//   auto PressKey = [](HKey key) {
-//     INPUT input{};
-//     input.type           = INPUT_KEYBOARD;
-//     input.ki.wScan       = key;
-//     input.ki.time        = 0;
-//     input.ki.dwExtraInfo = 0;
-//     input.ki.wVk         = 0;
-//     input.ki.dwFlags     = KEYEVENTF_SCANCODE;
-//     SendInput(1, &input, sizeof(INPUT));
-//     input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-//     SendInput(1, &input, sizeof(INPUT));
-//   };
-//   INT2 p = WorldToScreen(pos);
-//   hook::mMouseX = p.x;
-//   hook::mMouseY = p.y;
-//   PressKey(key);
-// }
+void PressKeyAt(WORD key, FLOAT3 pos) {
+  auto PressKey = [](WORD key) {
+    INPUT input{};
+    input.type           = INPUT_KEYBOARD;
+    input.ki.wScan       = key;
+    input.ki.time        = 0;
+    input.ki.dwExtraInfo = 0;
+    input.ki.wVk         = 0;
+    input.ki.dwFlags     = KEYEVENTF_SCANCODE;
+    SendInput(1, &input, sizeof(INPUT));
+    input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+    SendInput(1, &input, sizeof(INPUT));
+  };
+  INT2 p = WorldToScreen(pos);
+  hook::mMouseX  = p.x;
+  hook::mMouseY  = p.y;
+  PressKey(MapVirtualKey(key, MAPVK_VK_TO_VSC));
+}
 
 void Draw(std::function<void()> draw_fun) {
   ImGuiIO &io{ImGui::GetIO()};
