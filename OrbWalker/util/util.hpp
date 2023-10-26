@@ -5,8 +5,6 @@
 #pragma section(".text")
 __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
 
-inline uintptr_t RVA(uintptr_t addr) { return (uintptr_t)GetModuleHandle(nullptr) + addr; }
-
 template <typename T, typename U>
 T Read(U addr) {
   return *reinterpret_cast<T *>((uintptr_t)addr);
