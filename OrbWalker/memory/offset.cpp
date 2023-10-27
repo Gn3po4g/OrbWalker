@@ -1,7 +1,5 @@
 #include "pch.hpp"
 
-#include "Psapi.h"
-
 #include "offset.hpp"
 
 bool Init() {
@@ -22,14 +20,6 @@ bool Init() {
 
 uintptr_t RVA(uintptr_t addr) { return (uintptr_t)GetModuleHandle(nullptr) + addr; }
 
-bool IsValidPtr(uintptr_t ptr) {
-  static MODULEINFO moduleInfo{};
-  static std::once_flag init;
-  std::call_once(init, [] {
-    GetModuleInformation(GetCurrentProcess(), GetModuleHandle(nullptr), &moduleInfo, sizeof(MODULEINFO));
-  });
-  return ptr >= (uintptr_t)moduleInfo.lpBaseOfDll && ptr < (uintptr_t)moduleInfo.lpBaseOfDll + moduleInfo.SizeOfImage;
-}
 //
 // using namespace std;
 //

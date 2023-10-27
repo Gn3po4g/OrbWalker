@@ -40,18 +40,6 @@ struct FLOAT3 {
   }
 };
 
-struct ByteWithMask {
-  ByteWithMask() = default;
-
-  ByteWithMask(int _b, bool _m) : _b(std::byte(_b)), _m(_m) {}
-
-  friend bool operator==(const ByteWithMask &bwm, u8 val) { return !bwm._m || bwm._b == std::byte(val); }
-
-private:
-  std::byte _b;
-  bool _m;
-};
-
 template <typename T>
 struct RiotArray {
   uintptr_t unused;

@@ -20,6 +20,7 @@ bool skin_valid(uint64_t obj) {
   case "BlueTrinket"_FNV:
   case "SRU_Jungle_Companions"_FNV:
   case "SRU_RiftHerald_Mercenary"_FNV:
+  case "TestCubeRender10Vision"_FNV:
     return false;
   default:
     return true;
