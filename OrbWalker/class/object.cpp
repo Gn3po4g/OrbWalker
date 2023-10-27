@@ -36,7 +36,7 @@ std::vector<Buff *> Object::buffs() {
     Buff *buff;
     uintptr_t pad;
   };
-  return MEMBER<std::vector<BuffStruct>>(objBuff) | std::views::transform([](BuffStruct &bs) { return bs.buff; })
+  return MEMBER<std::vector<BuffStruct>>(objBuff) | std::views::transform([](const BuffStruct &bs) { return bs.buff; })
        | std::ranges::to<std::vector>();
 }
 
