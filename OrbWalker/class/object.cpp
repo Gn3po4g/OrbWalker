@@ -32,7 +32,12 @@ DataStack *Object::dataStack() {
 
 std::vector<Buff *> Object::buffs() {
   if (!compare_type_flags(AI)) return {};
-  return MEMBER<std::vector<Buff *>>(objBuff);
+  struct BuffStruct {
+    Buff *buff;
+    uintptr_t pad;
+  };
+  return MEMBER<std::vector<BuffStruct>>(objBuff) | std::views::transform([](BuffStruct &bs) { return bs.buff; })
+       | std::ranges::to<std::vector>();
 }
 
 std::string Object::name() { return MEMBER<RiotString16>(objName).str(); }

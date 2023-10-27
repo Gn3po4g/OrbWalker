@@ -7,7 +7,7 @@ __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; //
 
 template <typename T, typename U>
 T Read(U addr) {
-  return *reinterpret_cast<T *>((uintptr_t)addr);
+  return *reinterpret_cast<T *>((uptr)addr);
 }
 
 template <typename ReturnType, typename... Args>
@@ -45,7 +45,7 @@ struct ByteWithMask {
 
   ByteWithMask(int _b, bool _m) : _b(std::byte(_b)), _m(_m) {}
 
-  friend bool operator==(const ByteWithMask &bwm, const uint8_t val) { return !bwm._m || bwm._b == std::byte(val); }
+  friend bool operator==(const ByteWithMask &bwm, u8 val) { return !bwm._m || bwm._b == std::byte(val); }
 
 private:
   std::byte _b;
@@ -56,14 +56,14 @@ template <typename T>
 struct RiotArray {
   uintptr_t unused;
   T *data;
-  int32_t size;
-  int32_t capacity;
+  i32 size;
+  i32 capacity;
 };
 
 struct RiotString8 {
   const char *m_str;
-  int32_t m_size;
-  int32_t m_capacity;
+  i32 m_size;
+  i32 m_capacity;
 
   std::string str() const { return std::string(m_str, m_size); }
 };
@@ -73,8 +73,8 @@ struct RiotString16 {
     const char *p_str;
     const char m_str[16];
   };
-  int64_t m_size;
-  int64_t m_capacity;
+  i64 m_size;
+  i64 m_capacity;
 
   std::string str() const {
     if (m_size >= 16) return std::string(p_str, m_size);
