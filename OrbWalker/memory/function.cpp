@@ -14,11 +14,6 @@ bool IsLeagueInBackground() { return Read<bool>(Read<uintptr_t>(RVA(oHudInstance
 
 bool CanSendInput() { return self && self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
-void PrintMessage(size_t color, std::string_view msg) {
-  const auto wrapped = std::format("<font color=#{:0>6x}>{}</font>", color & 0xFFFFFF, msg);
-  call_function<void>(RVA(oPrintChat), RVA(oChatClient), wrapped.data(), 4);
-}
-
 INT2 WorldToScreen(FLOAT3 in) {
   FLOAT3 out;
   call_function<uintptr_t>(RVA(oWorldToScreen), Read<uintptr_t>(RVA(oViewPort)) + 0x270, &in, &out);

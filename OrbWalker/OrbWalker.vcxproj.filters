@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="memory\offset.cpp">
-      <Filter>memory</Filter>
-    </ClCompile>
     <ClCompile Include="config\config.cpp">
       <Filter>config</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
     </ClInclude>
     <ClInclude Include="memory\function.hpp">
       <Filter>memory</Filter>
-    </ClInclude>
-    <ClInclude Include="util\vmt_hook.hpp">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="class\buff.hpp">
       <Filter>class</Filter>

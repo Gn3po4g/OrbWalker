@@ -12,15 +12,16 @@ using namespace std;
 
 bool skin_valid(uint64_t obj) {
   switch (obj) {
-  case "DominationScout"_FNV:
   case "JammerDevice"_FNV:
   case "SightWard"_FNV:
   case "YellowTrinket"_FNV:
   case "VisionWard"_FNV:
   case "BlueTrinket"_FNV:
+  case "DominationScout"_FNV:
   case "SRU_Jungle_Companions"_FNV:
   case "SRU_RiftHerald_Mercenary"_FNV:
   case "TestCubeRender10Vision"_FNV:
+  case "ViegoSoul"_FNV:
     return false;
   default:
     return true;

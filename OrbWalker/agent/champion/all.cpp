@@ -22,8 +22,8 @@ script &script::inst() {
       return instance_.reset(new Azir);
     case "Caitlyn"_FNV:
       return instance_.reset(new Caitlyn);
-    //case "Cassiopeia"_FNV:
-    //  return instance_.reset(new Cassiopeia);
+    case "Cassiopeia"_FNV:
+      return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
       return instance_.reset(new Graves);
     case "Kaisa"_FNV:
@@ -37,12 +37,4 @@ script &script::inst() {
     }
   });
   return *instance_;
-}
-
-void script::run(SpellCast *spell_cast, Object *obj) {
-  if (spell_cast->is_attack()) last_attack_time = game_time;
-  if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
-  //  if (spell_cast->name() == "SivirW")
-  //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
 }

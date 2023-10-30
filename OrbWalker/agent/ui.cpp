@@ -46,9 +46,7 @@ void Update() {
       ImGui::Checkbox("Show Attack Range", &config.show_attack_range);
       ImGui::Separator();
       ImGui::Text("Selector Setting:");
-      // ImGui::PushItemWidth(150);
       ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count);
-      // ImGui::PopItemWidth();
       ImGui::Separator();
       ImGui::Text("Key Setting:");
       ImGui::HotKey("Kite Key", config.kite_key);
@@ -58,14 +56,11 @@ void Update() {
     if (ImGui::BeginTabItem("Skin")) {
       ImGui::Text("Skin Setting:");
       auto &skins{skin::inst().championsSkins};
-      size_t max_len{};
-      for (auto &skin_info : skins) max_len = std::max(max_len, skin_info.skinName.size());
       ImGui::Text("Current Skin");
       if (ImGui::Combo("##Current Skin", &config.current_skin, vector_getter_skin, &skins, (int)skins.size())) {
         skin::inst().ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
         config.save();
       }
-      // ImGui::PopItemWidth();
       const auto player_hash{FNV(self->dataStack()->baseSkin.model.str())};
       if (const auto it{std::ranges::find_if(
             skin::inst().specialSkins,
@@ -90,24 +85,13 @@ void Update() {
       ImGui::EndTabItem();
     }
 
-    // if(ImGui::BeginTabItem("Infos")) {
-    //   auto FindVtFunction = [](const DWORD64 Fn_address) {
-    //     DWORD64 *base = *reinterpret_cast<DWORD64 **>(self);
-    //     int i = 0;
-    //     while(base[i]) {
-    //       if(base[i] == Fn_address) {
-    //         ImGui::Text("Found VT function at %d", i);
-    //         return i;
-    //       }
-    //       i++;
-    //     }
-    //     ImGui::Text("VT Function not found %d", i);
-    //     return -1;
-    //   };
-    //   FindVtFunction(oBonusRadius);
-    //   //FindVtFunction(oAttackWindup);
-    //   ImGui::EndTabItem();
-    // }
+    //if (ImGui::BeginTabItem("Infos")) {
+    //  for (const auto minion : std::span(minions->data, minions->size)) { 
+    //      if (minion->position()-self->position() < 300.f)
+    //      ImGui::Text(minion->name().data()); 
+    //  }
+    //  ImGui::EndTabItem();
+    //}
 
     if (ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", config.menu_key);

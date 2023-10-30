@@ -3,12 +3,6 @@
 #include "class/obj_list.hpp"
 #include "class/object.hpp"
 
-bool Init();
-
-uptr RVA(uptr);
-
-inline void *swap_chain{};
-
 inline std::unique_ptr<Object> self;
 inline std::unique_ptr<ObjList> heros;
 inline std::unique_ptr<ObjList> minions;
@@ -16,6 +10,7 @@ inline std::unique_ptr<ObjList> turrets;
 inline std::unique_ptr<ObjList> inhibs;
 inline std::unique_ptr<Object *> objUnderMouse;
 
+inline void *swap_chain{};
 inline void *vmt_in_obj{};
 
 // offsets
@@ -62,3 +57,22 @@ constexpr uptr objManaCost    = 0x2A90;
 constexpr uptr objSpell       = 0x30D0;
 constexpr uptr objDataStack   = 0x35D0;
 constexpr uptr objName        = 0x3868;
+
+template<typename T>
+uptr RVA(T addr) { return (uptr)GetModuleHandle(nullptr) + (uptr)addr; }
+
+static bool Init() {
+  auto game_state = (GameState *)(Read<uptr>(RVA(oGameState)) + 0xC);
+  while (*game_state != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  self.reset(Read<Object *>(RVA(oLocalPlayer)));
+  if (!self.get()) return false;
+
+  heros.reset(Read<ObjList *>(RVA(oHeroList)));
+  minions.reset(Read<ObjList *>(RVA(oMinionList)));
+  turrets.reset(Read<ObjList *>(RVA(oTurretList)));
+  inhibs.reset(Read<ObjList *>(RVA(oInhibList)));
+  objUnderMouse.reset((Object **)(Read<uptr>(RVA(oObjUnderMouse)) + 0x18));
+  swap_chain = Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1C0);
+  vmt_in_obj = (void *)((uptr)self.get() + 0x1198);
+  return true;
+}

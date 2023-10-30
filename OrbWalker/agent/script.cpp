@@ -26,13 +26,30 @@ void script::update() {
     else attack();
   }
 
-   //if (ImGui::IsKeyPressed(ImGuiKey_V)) {
-   //  for (auto buff : self->buffs()) {
-   //    if (buff->starttime() <= game_time && buff->endtime() >= game_time && buff->name() != "") {
-   //      PrintMessage(0xFFFFFF, std::format("{}\t{}", buff->count(), buff->name()));
-   //    }
-   //  }
-   //}
+  // if (ImGui::IsKeyPressed(ImGuiKey_V)) {
+  //   uptr target  = RVA(oAttackDelay);
+  //   bool found   = false;
+  //   auto base    = (uptr)self.get() + 0x1198;
+  //   auto vtable1 = *(uptr **)base;
+  //   size_t index{};
+  //   while (!found && !IsBadCodePtr((FARPROC)vtable1[index])) {
+  //     if (vtable1[index] == target) {
+  //       PrintMessage(0xFFFFFF, std::format("found at: {}", index));
+  //       found = true;
+  //     }
+  //     index++;
+  //   }
+  //   if (!found) PrintMessage(0xFFFFFF, "not found");
+  // }
+}
+
+void script::run(SpellCast *spell_cast, Object *obj) {
+  last_cast_spell = spell_cast;
+  if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
+  if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
+  // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
+  //  if (spell_cast->name() == "SivirW")
+  //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
 }
 
 bool script::can_attack() { return self->state() & CanAttack; }
@@ -43,9 +60,9 @@ bool script::can_do_action() {
   return true;
 }
 
-bool script::is_reloading() { return game_time < last_attack_time + self->AttackDelay() - 0.1f; }
+bool script::is_reloading() { return game_time < last_attack_time + self->AttackDelay(); }
 
-bool script::is_attacking() { return game_time < last_attack_time + self->AttackWindup(); }
+bool script::is_attacking() { return game_time < last_attack_time + self->AttackWindup() + 0.1f; }
 
 void script::idle() {
   if (!is_attacking() && can_do_action()) Move2Mouse();

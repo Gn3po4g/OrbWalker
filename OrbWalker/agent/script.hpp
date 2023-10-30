@@ -8,7 +8,7 @@ class script {
 public:
   static script &inst();
   void update();
-  virtual void run(SpellCast *spell_cast, Object *obj);
+  virtual void run(SpellCast *, Object *);
 
 protected:
   script() = default;
@@ -25,6 +25,7 @@ protected:
   float game_time{};
   float last_attack_time{-FLT_MAX};
   float last_action_time{-FLT_MAX};
+  SpellCast *last_cast_spell{};
   Object *markedObject{};
   enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 

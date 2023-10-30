@@ -1,5 +1,7 @@
 #pragma once
 
+#include "offset.hpp"
+
 #include "class/object.hpp"
 
 inline namespace function {
@@ -11,7 +13,12 @@ bool IsLeagueInBackground();
 
 bool CanSendInput();
 
-void PrintMessage(size_t color, std::string_view);
+template <size_t color, typename... Args>
+void PrintMessage(const std::format_string<Args...> fmt, Args &&...args) {
+    const auto msg = std::vformat(fmt.get(), std::make_format_args(args...));
+    const auto wrapped = std::format("<font color=#{:0>6x}>{}</font>", color & 0xFFFFFF, msg);
+    call_function<void>(RVA(oPrintChat), RVA(oChatClient), wrapped.data(), 4);
+}
 
 INT2 WorldToScreen(FLOAT3 position);
 

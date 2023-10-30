@@ -57,7 +57,7 @@ void init_all(IDXGISwapChain *pSwapChain) {
   ImGui_ImplWin32_Init(window);
   ImGui_ImplDX11_Init(pDevice, pDeviceContext);
 
-  PrintMessage(0x00FFFF, "Noroby's League of Legends script loaded");
+  PrintMessage<0x00FFFF>("Noroby's League of Legends script loaded");
 }
 
 void do_in_present() {
@@ -90,7 +90,7 @@ struct present {
 
 struct on_process_spell {
   static void __fastcall hooked(uintptr_t thisptr, int arg, SpellCast *spell_cast, Object *obj) {
-    if (arg == 0xc) script::inst().run(spell_cast, obj);
+    if (arg == 0xC) script::inst().run(spell_cast, obj);
     return original(thisptr, arg, spell_cast, obj);
   }
   inline static decltype(&hooked) original{};
@@ -115,10 +115,6 @@ void hook::install() {
   swap_chain_hook->hook<present>(8);
   static auto on_process_spell_hook = new vmt_hook(vmt_in_obj);
   on_process_spell_hook->hook<on_process_spell>(30);
-  DetourRestoreAfterWith();
-  DetourTransactionBegin();
-  DetourUpdateThread(GetCurrentThread());
-  get_cursor_pos::original = GetCursorPos;
-  DetourAttach(&(PVOID &)get_cursor_pos::original, get_cursor_pos::hooked);
-  DetourTransactionCommit();
+  static auto get_cursor_pos_hook = new mh_hook(GetCursorPos);
+  get_cursor_pos_hook->hook<get_cursor_pos>();
 }
