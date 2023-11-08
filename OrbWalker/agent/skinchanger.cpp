@@ -7,6 +7,7 @@
 #include "memory/offset.hpp"
 
 #include "memory/function.hpp"
+#include <class/obj_list.hpp>
 
 using namespace std;
 
@@ -62,7 +63,7 @@ void ChangeSkinForObject(Object *obj, int32_t skin) noexcept {
 
 void skin::ChangeSkin(std::string_view model, int32_t skin_id) {
   static auto CheckSpecialSkins = [&](string_view model, int32_t skin_id) {
-    const auto stack = self->dataStack();
+    const auto stack{Object::self()->dataStack()};
     const auto champName{FNV(stack->baseSkin.model.str())};
     if (std::ranges::count_if(specialSkins, [&](const SpecialSkin &special_skin) {
           return special_skin.champName == champName && skin_id >= special_skin.skinIdStart
@@ -79,8 +80,8 @@ void skin::ChangeSkin(std::string_view model, int32_t skin_id) {
       stack->update(true);
     }
   };
-  const auto stack{self->dataStack()};
-  ((xor_value<int32_t> *)((uintptr_t)self.get() + objSkinId))->encrypt(skin_id);
+  const auto stack{Object::self()->dataStack()};
+  ((xor_value<i32> *)((uptr)Object::self() + objSkinId))->encrypt(skin_id);
   stack->baseSkin.skin_id = skin_id;
   CheckSpecialSkins(model, skin_id);
 }
@@ -92,11 +93,12 @@ skin &skin::inst() {
 }
 
 skin::skin() {
-  const auto &default_skin = self->dataStack()->baseSkin;
+  const auto &default_skin = Object::self()->dataStack()->baseSkin;
   championsSkins.emplace_back(default_skin.model.str(), "Default", default_skin.skin_id);
   const auto champions = Read<vector<Champion *>>(Read<uintptr_t>(RVA(oChampionManager)) + 0x18);
-  if (const auto it{
-        ranges::find_if(champions, [](Champion *champion) { return self->name() == champion->championName().str(); })};
+  if (const auto it{ranges::find_if(
+        champions, [](Champion *champion) { return Object::self()->name() == champion->championName().str(); }
+      )};
       it != champions.end()) {
     const auto champion = *it;
     auto skins_id       = champion->skins_id();
@@ -139,17 +141,17 @@ void skin::update() {
       ChangeSkin(modelName, skinId);
     }
   });
-  const auto player_hash = FNV(self->dataStack()->baseSkin.model.str());
+  const auto player_hash = FNV(Object::self()->dataStack()->baseSkin.model.str());
   if (ImGui::IsKeyPressed(ImGuiKey_5) && ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
     if (const auto it = ranges::find_if(
           specialSkins,
           [&](const SpecialSkin &x) {
-            const auto skin = self->dataStack()->baseSkin.skin_id;
+            const auto skin = Object::self()->dataStack()->baseSkin.skin_id;
             return x.champName == player_hash && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
           }
         );
         it != specialSkins.end()) {
-      const auto stack     = self->dataStack();
+      const auto stack     = Object::self()->dataStack();
       stack->baseSkin.gear = (stack->baseSkin.gear + 1) % it->gears.size();
       stack->update(true);
     }
@@ -165,30 +167,30 @@ void skin::update() {
     ChangeSkin(modelName, skinId);
     config.save();
   }
-  if (!self->dataStack()->stack.empty()) {
+  if (!Object::self()->dataStack()->stack.empty()) {
     if (player_hash != "Viego"_FNV && player_hash != "Sylas"_FNV) {
-      if (auto &[model, _1, skin_id, _2, gear, _3] = self->dataStack()->stack.front();
-          skin_id != self->dataStack()->baseSkin.skin_id) {
-        skin_id = self->dataStack()->baseSkin.skin_id;
-        self->dataStack()->update(true);
+      if (auto &[model, _1, skin_id, _2, gear, _3] = Object::self()->dataStack()->stack.front();
+          skin_id != Object::self()->dataStack()->baseSkin.skin_id) {
+        skin_id = Object::self()->dataStack()->baseSkin.skin_id;
+        Object::self()->dataStack()->update(true);
       }
     }
   }
-  for (const auto minion : span(minions->data, minions->size)) {
+  for (const auto minion : span(ObjList::minions()->data, ObjList::minions()->size)) {
     const auto hash{FNV(minion->dataStack()->baseSkin.model.str())};
-    if (const auto owner{minion->GetOwner()}; owner == self.get()) {
+    if (const auto owner{minion->GetOwner()}; owner == Object::self()) {
       if (hash == "TestCubeRender10Vision"_FNV && player_hash == "Yone"_FNV) {
-        ChangeModelForObject(minion, "Yone", self->dataStack()->baseSkin.skin_id);
+        ChangeModelForObject(minion, "Yone", Object::self()->dataStack()->baseSkin.skin_id);
       } else if (skin_valid(hash)) {
         ChangeSkinForObject(minion, owner->dataStack()->baseSkin.skin_id);
       }
     } else if (is_companion(player_hash, hash)) {
-      ChangeSkinForObject(minion, self->dataStack()->baseSkin.skin_id);
+      ChangeSkinForObject(minion, Object::self()->dataStack()->baseSkin.skin_id);
     }
   }
-  for (const auto turret : span(turrets->data, turrets->size)) {
-    if (const auto owner = turret->GetOwner(); owner == self.get()) {
-      ChangeSkinForObject(turret, self->dataStack()->baseSkin.skin_id);
+  for (const auto turret : span(ObjList::turrets()->data, ObjList::turrets()->size)) {
+    if (const auto owner = turret->GetOwner(); owner == Object::self()) {
+      ChangeSkinForObject(turret, Object::self()->dataStack()->baseSkin.skin_id);
     }
   }
 }

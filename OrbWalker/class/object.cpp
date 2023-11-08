@@ -5,9 +5,13 @@
 #include "memory/function.hpp"
 #include "memory/offset.hpp"
 
-int32_t Object::index() { return MEMBER<int32_t>(objIndex); }
+Object *Object::self() { return Read<Object *>(RVA(oLocalPlayer)); }
 
-int32_t Object::team() { return MEMBER<int32_t>(objTeam); }
+Object *Object::obj_under_mouse() { return Read<Object *>(Read<uptr>(RVA(oObjUnderMouse)) + 0x18); }
+
+i32 Object::index() { return MEMBER<i32>(objIndex); }
+
+i32 Object::team() { return MEMBER<i32>(objTeam); }
 
 FLOAT3 Object::position() { return MEMBER<FLOAT3>(objPosition); }
 
@@ -52,12 +56,14 @@ float Object::AttackWindup() { return call_function<float>(RVA(oAttackWindup), t
 
 float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
+void *Object::ops_base() { return pMEMBER<void *>(0x11B8); }
+
 bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 
-bool Object::IsEnemy() { return team() != self->team(); }
+bool Object::IsEnemy() { return team() != self()->team(); }
 
 bool Object::IsTargetableToTeam() {
-  auto flags = MEMBER<int32_t>(0xED8);
+  auto flags = MEMBER<int32_t>(objTargetFlags);
   return flags == 4 || flags == 1;
 }
 

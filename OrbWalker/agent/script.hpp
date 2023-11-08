@@ -1,6 +1,7 @@
 #pragma once
 
 #include "class/object.hpp"
+#include "class/obj_list.hpp"
 
 constexpr float interval = 1.f / 30;
 

@@ -1,7 +1,6 @@
 ﻿#include "pch.hpp"
 
 #include "agent/script.hpp"
-#include "memory/offset.hpp"
 
 #include "aphelios.hpp"
 #include "azir.hpp"
@@ -15,7 +14,7 @@
 script &script::inst() {
   static std::once_flag singleton;
   std::call_once(singleton, [&] {
-    switch (FNV(self->name())) {
+    switch (FNV(Object::self()->name())) {
     case "Aphelios"_FNV:
       return instance_.reset(new Aphelios);
     case "Azir"_FNV:

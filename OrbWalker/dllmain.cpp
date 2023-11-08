@@ -14,8 +14,7 @@ bool WINAPI HideThread(HANDLE hThread) {
 
 void Start() {
   HideThread(GetCurrentThread());
-  if (!Init()) return;
-  hook::inst().install();
+  if(!hook::inst().install()) return;
   std::unique_lock lkRun(hook::mRun);
   std::condition_variable().wait(lkRun);
 }

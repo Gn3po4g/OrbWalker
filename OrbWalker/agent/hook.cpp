@@ -110,11 +110,14 @@ struct get_cursor_pos {
   inline static decltype(&hooked) original{};
 };
 
-void hook::install() {
-  static auto swap_chain_hook = new vmt_hook(swap_chain);
+bool hook::install() {
+  while (game_state() != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  if (!Object::self()) return false;
+  static auto swap_chain_hook = new vmt_hook(swap_chain());
   swap_chain_hook->hook<present>(8);
-  static auto on_process_spell_hook = new vmt_hook(vmt_in_obj);
+  static auto on_process_spell_hook = new vmt_hook(Object::self()->ops_base());
   on_process_spell_hook->hook<on_process_spell>(30);
   static auto get_cursor_pos_hook = new mh_hook(GetCursorPos);
   get_cursor_pos_hook->hook<get_cursor_pos>();
+  return true;
 }

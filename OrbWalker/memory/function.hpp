@@ -5,7 +5,11 @@
 #include "class/object.hpp"
 
 inline namespace function {
+void *swap_chain();
+
 float GameTime();
+
+GameState game_state();
 
 bool IsChatOpen();
 

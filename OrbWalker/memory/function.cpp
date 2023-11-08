@@ -6,13 +6,17 @@
 #include "agent/hook.hpp"
 
 namespace function {
+void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1C0); }
+
 float GameTime() { return Read<float>(RVA(oGameTime)); }
+
+GameState game_state() { return Read<GameState>(Read<uptr>(RVA(oGameState)) + 0xC); }
 
 bool IsChatOpen() { return Read<bool>(Read<uintptr_t>(RVA(oChatClient)) + 0xC90); }
 
 bool IsLeagueInBackground() { return Read<bool>(Read<uintptr_t>(RVA(oHudInstance)) + 0xB9); }
 
-bool CanSendInput() { return self && self->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
+bool CanSendInput() { return Object::self()->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
 INT2 WorldToScreen(FLOAT3 in) {
   FLOAT3 out;
@@ -101,9 +105,9 @@ void PressKeyAt(WORD key, FLOAT3 pos) {
     input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
     SendInput(1, &input, sizeof(INPUT));
   };
-  INT2 p = WorldToScreen(pos);
-  hook::mMouseX  = p.x;
-  hook::mMouseY  = p.y;
+  INT2 p        = WorldToScreen(pos);
+  hook::mMouseX = p.x;
+  hook::mMouseY = p.y;
   PressKey(MapVirtualKey(key, MAPVK_VK_TO_VSC));
 }
 

@@ -3,7 +3,7 @@
 class hook {
 public:
   static hook &inst();
-  void install();
+  bool install();
 
   inline static std::mutex mRun;
   inline static int mMouseX{-1}, mMouseY{-1};

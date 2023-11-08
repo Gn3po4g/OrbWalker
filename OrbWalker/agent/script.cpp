@@ -4,7 +4,6 @@
 
 #include "config/config.hpp"
 #include "memory/function.hpp"
-#include "memory/offset.hpp"
 
 void script::update() {
   game_time = GameTime();
@@ -13,7 +12,7 @@ void script::update() {
   check_marked_object();
 
   Draw([&] {
-    if (config::inst().show_attack_range) Circle(self->position(), real_range(), 0xffffffff, 1.5f);
+    if (config::inst().show_attack_range) Circle(Object::self()->position(), real_range(), 0xffffffff, 1.5f);
     if (markedObject && markedObject->IsAlive() && markedObject->visible()) {
       Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 3.0f);
     }
@@ -52,7 +51,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
 }
 
-bool script::can_attack() { return self->state() & CanAttack; }
+bool script::can_attack() { return Object::self()->state() & CanAttack; }
 
 bool script::can_do_action() {
   if (game_time < last_action_time + interval) return false;
@@ -60,9 +59,9 @@ bool script::can_do_action() {
   return true;
 }
 
-bool script::is_reloading() { return game_time < last_attack_time + self->AttackDelay(); }
+bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay(); }
 
-bool script::is_attacking() { return game_time < last_attack_time + self->AttackWindup() + 0.1f; }
+bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.1f; }
 
 void script::idle() {
   if (!is_attacking() && can_do_action()) Move2Mouse();
@@ -74,11 +73,12 @@ void script::attack() {
   } else idle();
 }
 
-float script::real_range() { return self->attack_range() + self->BonusRadius(); }
+float script::real_range() { return Object::self()->attack_range() + Object::self()->BonusRadius(); }
 
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-    if (const auto obj = *objUnderMouse; heros->contains(obj) && obj->IsEnemy()) markedObject = obj;
+    if (const auto obj = Object::obj_under_mouse(); obj && obj->compare_type_flags(Hero) && obj->IsEnemy())
+      markedObject = obj;
   }
 }
 
@@ -90,20 +90,24 @@ void script::check_orb_state() {
 
 Object *script::get_attack_target() {
   if (orbState == OrbState::Kite) {
-    return get_in_order<heros>([&](Object *obj) { return in_attack_range(obj); }, markedObject);
+    return ObjList::get_in_order(
+      Hero, [&](Object *obj) { return in_attack_range(obj); }, markedObject
+    );
   }
   if (orbState == OrbState::Clear) {
-    return get_in_order<minions, turrets, inhibs>([&](Object *obj) { return in_attack_range(obj); });
+    return ObjList::get_in_order(Minion | Building, [&](Object *obj) { return in_attack_range(obj); });
   }
   return nullptr;
 }
 
 Object *script::get_skill_target(float range) {
   if (orbState == OrbState::Kite) {
-    return get_in_order<heros>([&](Object *obj) { return in_skill_range(obj, range); }, markedObject);
+    return ObjList::get_in_order(
+      Hero, [&](Object *obj) { return in_skill_range(obj, range); }, markedObject
+    );
   }
   if (orbState == OrbState::Clear) {
-    return get_in_order<minions>([&](Object *obj) { return in_skill_range(obj, range); });
+    return ObjList::get_in_order(Minion, [&](Object *obj) { return in_skill_range(obj, range); });
   }
   return nullptr;
 }
@@ -115,7 +119,8 @@ bool script::has_buff(Object *obj, std::string_view name) {
 }
 
 bool script::in_attack_range(Object *obj) {
-  return obj->position() - self->position() <= self->attack_range() + self->BonusRadius() + obj->BonusRadius();
+  return obj->position() - Object::self()->position()
+      <= Object::self()->attack_range() + Object::self()->BonusRadius() + obj->BonusRadius();
 }
 
-bool script::in_skill_range(Object *obj, float range) { return obj->position() - self->position() <= range; }
+bool script::in_skill_range(Object *obj, float range) { return obj->position() - Object::self()->position() <= range; }

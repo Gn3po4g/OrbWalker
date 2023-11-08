@@ -6,8 +6,11 @@
 
 class Object : IMEMBER {
 public:
-  int32_t index();
-  int32_t team();
+  static Object *self();
+  static Object *obj_under_mouse();
+
+  i32 index();
+  i32 team();
   FLOAT3 position();
   bool visible();
   float mana();
@@ -19,20 +22,15 @@ public:
   DataStack *dataStack();
   std::vector<Buff *> buffs();
   std::string name();
-
-  // float attackdamage();
   float AttackDelay();
   float AttackWindup();
   float BonusRadius();
+  void *ops_base();
 
   bool IsAlive();
   bool IsEnemy();
   bool IsTargetableToTeam();
   bool IsValidTarget();
-  //bool IsHero();
-  //bool IsBuilding();
-  //bool IsPlant();
-  //bool IsWard();
 
   bool compare_type_flags(TypeFlag);
   float get_mana_cost(SpellSlot);

@@ -3,8 +3,9 @@
 #include "ui.hpp"
 
 #include "agent/skinchanger.hpp"
+#include "class/obj_list.hpp"
+#include "class/object.hpp"
 #include "config/config.hpp"
-#include "memory/offset.hpp"
 
 namespace ui {
 auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
@@ -61,16 +62,16 @@ void Update() {
         skin::inst().ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
         config.save();
       }
-      const auto player_hash{FNV(self->dataStack()->baseSkin.model.str())};
+      const auto player_hash{FNV(Object::self()->dataStack()->baseSkin.model.str())};
       if (const auto it{std::ranges::find_if(
             skin::inst().specialSkins,
             [player_hash](const skin::SpecialSkin &x) {
-              const auto skin_id = self->dataStack()->baseSkin.skin_id;
+              const auto skin_id = Object::self()->dataStack()->baseSkin.skin_id;
               return x.champName == player_hash && (x.skinIdStart <= skin_id && x.skinIdEnd >= skin_id);
             }
           )};
           it != skin::inst().specialSkins.end()) {
-        const auto stack{self->dataStack()};
+        const auto stack{Object::self()->dataStack()};
         gear = static_cast<int>(stack->baseSkin.gear);
         ImGui::Text("Current Gear");
         if (ImGui::Combo("##Current Gear", &gear, vector_getter_gear, &it->gears, (int)it->gears.size())) {
@@ -85,13 +86,13 @@ void Update() {
       ImGui::EndTabItem();
     }
 
-    //if (ImGui::BeginTabItem("Infos")) {
-    //  for (const auto minion : std::span(minions->data, minions->size)) { 
-    //      if (minion->position()-self->position() < 300.f)
-    //      ImGui::Text(minion->name().data()); 
-    //  }
-    //  ImGui::EndTabItem();
-    //}
+    // if (ImGui::BeginTabItem("Infos")) {
+    //   for (const auto minion : std::span(minions->data, minions->size)) {
+    //       if (minion->position()-self->position() < 300.f)
+    //       ImGui::Text(minion->name().data());
+    //   }
+    //   ImGui::EndTabItem();
+    // }
 
     if (ImGui::BeginTabItem("Extras")) {
       ImGui::HotKey("Menu Key", config.menu_key);
