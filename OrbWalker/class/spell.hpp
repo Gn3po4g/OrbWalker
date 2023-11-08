@@ -11,7 +11,7 @@ public:
   //  void SetClickedPos(FLOAT3);
   //  void SetUnkPos(FLOAT3);
   //};
-  int16_t level();
+  i16 level();
   float readyTime();
   //SpellInput *spellInput();
   //uintptr_t spellInfo();
@@ -19,8 +19,8 @@ public:
 
 class SpellCast : IMEMBER {
 public:
-  int32_t type();
-  int32_t slot();
+  i32 type();
+  i32 slot();
   std::string name();
 
   bool is_attack();

@@ -33,7 +33,7 @@ enum SpellSlot : int32_t {
   // SpellSlot_BasicAttack2 = 65,
 };
 
-enum CharacterState : uint16_t {
+enum ActionState : u16 {
   CanAttack = 1 << 0,
   CanMove   = 1 << 1,
   CanCast   = 1 << 2,

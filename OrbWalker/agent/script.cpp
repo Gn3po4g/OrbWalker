@@ -46,6 +46,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast;
   if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
+  //PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
   // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
   //  if (spell_cast->name() == "SivirW")
   //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);

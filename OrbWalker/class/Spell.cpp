@@ -4,7 +4,7 @@
 
 // using SpellInput = Spell::SpellInput;
 
-int16_t Spell::level() { return MEMBER<i16>(0x28); }
+i16 Spell::level() { return MEMBER<i16>(0x28); }
 
 float Spell::readyTime() { return MEMBER<float>(0x30); }
 
@@ -24,9 +24,9 @@ float Spell::readyTime() { return MEMBER<float>(0x30); }
 //
 // void SpellInput::SetUnkPos(FLOAT3 pos) { *pMEMBER<FLOAT3>(0x3C) = pos; }
 
-int32_t SpellCast::type() { return MEMBER<i32>(0x10); }
+i32 SpellCast::type() { return MEMBER<i32>(0x10); }
 
-int32_t SpellCast::slot() { return MEMBER<i32>(0x11C); }
+i32 SpellCast::slot() { return MEMBER<i32>(0x11C); }
 
 std::string SpellCast::name() { return Read<RiotString16>(Read<uintptr_t>(this) + 0x28).str(); }
 
@@ -34,7 +34,7 @@ bool SpellCast::is_attack() { return MEMBER<bool>(0x112) || MEMBER<bool>(0x113) 
 
 bool SpellCast::is_attack_reset() {
   static constexpr auto reset_attack_spells = std::to_array<u64>(
-    {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"), FNV("LucianE"),
+    {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("CamilleQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"), FNV("LucianE"),
      FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
   );
   return std::ranges::count(reset_attack_spells, FNV(name()));

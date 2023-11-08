@@ -27,7 +27,7 @@ float Object::max_health() { return MEMBER<float>(objMaxHealth); }
 
 float Object::attack_range() { return MEMBER<float>(objAttackRange); }
 
-CharacterState Object::state() { return MEMBER<CharacterState>(objActionState); }
+ActionState Object::state() { return MEMBER<ActionState>(objActionState); }
 
 DataStack *Object::dataStack() {
   if (!compare_type_flags(AI)) return nullptr;
@@ -62,12 +62,12 @@ bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 
 bool Object::IsEnemy() { return team() != self()->team(); }
 
-bool Object::IsTargetableToTeam() {
+bool Object::IsTargetable() {
   auto flags = MEMBER<int32_t>(objTargetFlags);
   return flags == 4 || flags == 1;
 }
 
-bool Object::IsValidTarget() { return IsEnemy() && IsAlive() && visible() && targetable() && IsTargetableToTeam(); }
+bool Object::IsValidTarget() { return visible() && targetable() && IsEnemy() && IsAlive() && IsTargetable(); }
 
 bool Object::compare_type_flags(TypeFlag flag) { return call_function<bool>(RVA(oCompareTypeFlags), this, flag); }
 

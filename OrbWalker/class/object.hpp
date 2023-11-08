@@ -18,7 +18,7 @@ public:
   float health();
   float max_health();
   float attack_range();
-  CharacterState state();
+  ActionState state();
   DataStack *dataStack();
   std::vector<Buff *> buffs();
   std::string name();
@@ -29,7 +29,7 @@ public:
 
   bool IsAlive();
   bool IsEnemy();
-  bool IsTargetableToTeam();
+  bool IsTargetable();
   bool IsValidTarget();
 
   bool compare_type_flags(TypeFlag);

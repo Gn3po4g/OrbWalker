@@ -40,13 +40,9 @@ Object *ObjList::get_in_order(int type, std::function<bool(Object *)> fun, Objec
     return heros()->best_object(fun, specific);
   } else {
     Object *ret{};
-    if (!ret && (type & Minion)) {
-      ret = minions()->best_object(fun, nullptr);
-    } else if (!ret && (type & Building)) {
-      ret = turrets()->best_object(fun, nullptr);
-    } else if (!ret && (type & Building)) {
-      ret = inhibs()->best_object(fun, nullptr);
-    }
+    if (!ret && (type & Minion)) { ret = minions()->best_object(fun, nullptr); }
+    if (!ret && (type & Building)) { ret = turrets()->best_object(fun, nullptr); }
+    if (!ret && (type & Building)) { ret = inhibs()->best_object(fun, nullptr); }
     return ret;
   }
 }
