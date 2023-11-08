@@ -10,7 +10,10 @@ void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegist
 
 float GameTime() { return Read<float>(RVA(oGameTime)); }
 
-GameState game_state() { return Read<GameState>(Read<uptr>(RVA(oGameState)) + 0xC); }
+GameState game_state() {
+  auto addr = Read<uptr>(RVA(oGameState));
+  return addr ? Read<GameState>(addr + 0xC) : Loading;
+}
 
 bool IsChatOpen() { return Read<bool>(Read<uintptr_t>(RVA(oChatClient)) + 0xC90); }
 
