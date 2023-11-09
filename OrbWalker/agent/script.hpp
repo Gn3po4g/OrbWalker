@@ -26,7 +26,7 @@ protected:
   float game_time{};
   float last_attack_time{-FLT_MAX};
   float last_action_time{-FLT_MAX};
-  SpellCast *last_cast_spell{};
+  std::string last_cast_spell;
   Object *markedObject{};
   enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 

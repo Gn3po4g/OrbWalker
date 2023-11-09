@@ -28,6 +28,5 @@
 #include "util/util.hpp"
 #include "util/encryption.hpp"
 
-using json = nlohmann::json;
 using namespace std::string_literals;
 using namespace std::string_view_literals;

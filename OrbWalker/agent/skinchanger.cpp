@@ -137,7 +137,8 @@ void skin::update() {
   static std::once_flag init_skin;
   std::call_once(init_skin, [&] {
     if (config.current_skin > 0) {
-      const auto &[modelName, skinName, skinId]{championsSkins[config.current_skin]};
+      auto index = std::min((size_t)config.current_skin, championsSkins.size());
+      const auto &[modelName, skinName, skinId]{championsSkins[index]};
       ChangeSkin(modelName, skinId);
     }
   });
