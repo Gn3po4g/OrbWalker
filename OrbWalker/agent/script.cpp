@@ -2,8 +2,46 @@
 
 #include "script.hpp"
 
+#include "champion/akshan.hpp"
+#include "champion/aphelios.hpp"
+#include "champion/azir.hpp"
+#include "champion/caitlyn.hpp"
+#include "champion/cassiopeia.hpp"
+#include "champion/graves.hpp"
+#include "champion/kaisa.hpp"
+#include "champion/sett.hpp"
+#include "champion/zeri.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
+
+script &script::inst() {
+  static std::once_flag singleton;
+  std::call_once(singleton, [&] {
+    switch (FNV(Object::self()->name())) {
+    case "Akshan"_FNV:
+      return instance_.reset(new Akshan);
+    case "Aphelios"_FNV:
+      return instance_.reset(new Aphelios);
+    case "Azir"_FNV:
+      return instance_.reset(new Azir);
+    case "Caitlyn"_FNV:
+      return instance_.reset(new Caitlyn);
+    case "Cassiopeia"_FNV:
+      return instance_.reset(new Cassiopeia);
+    case "Graves"_FNV:
+      return instance_.reset(new Graves);
+    case "Kaisa"_FNV:
+      return instance_.reset(new Kaisa);
+    case "Sett"_FNV:
+      return instance_.reset(new Sett);
+    case "Zeri"_FNV:
+      return instance_.reset(new Zeri);
+    default:
+      return instance_.reset(new script);
+    }
+  });
+  return *instance_;
+}
 
 void script::update() {
   game_time = GameTime();
@@ -26,19 +64,19 @@ void script::update() {
   }
 
   // if (ImGui::IsKeyPressed(ImGuiKey_V)) {
-  //   uptr target  = RVA(oAttackDelay);
+  //   uptr target  = RVA(oWorldToScreen);
   //   bool found   = false;
-  //   auto base    = (uptr)self.get() + 0x1198;
-  //   auto vtable1 = *(uptr **)base;
+  //   auto base    = Read<uintptr_t>(RVA(oViewPort));
+  //   auto vtable = *(uptr **)base;
   //   size_t index{};
-  //   while (!found && !IsBadCodePtr((FARPROC)vtable1[index])) {
-  //     if (vtable1[index] == target) {
-  //       PrintMessage(0xFFFFFF, std::format("found at: {}", index));
+  //   while (!found && !IsBadCodePtr((FARPROC)vtable[index])) {
+  //     if (vtable[index] == target) {
+  //       PrintMessage<0xFFFFFF>("found at: {}", index);
   //       found = true;
   //     }
   //     index++;
   //   }
-  //   if (!found) PrintMessage(0xFFFFFF, "not found");
+  //   if (!found) PrintMessage<0xFFFFFF>("not found");
   // }
 }
 
@@ -46,7 +84,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  //PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
+  PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
   // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
   //  if (spell_cast->name() == "SivirW")
   //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);

@@ -7,7 +7,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="agent\champion\all.cpp" />
     <ClCompile Include="agent\hook.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
@@ -26,6 +25,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="agent\champion\akshan.hpp" />
     <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\azir.hpp" />
     <ClInclude Include="agent\champion\caitlyn.hpp" />

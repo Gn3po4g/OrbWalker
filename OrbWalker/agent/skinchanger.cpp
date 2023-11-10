@@ -102,15 +102,15 @@ skin::skin() {
       it != champions.end()) {
     const auto champion = *it;
     auto skins_id       = champion->skins_id();
-    map<string_view, int32_t> tempSkinList;
+    map<u64, i32> tempSkinList;
     for (auto &i : skins_id) {
       const auto name     = champion->championName().str();
       constexpr auto fmt  = "game_character_skin_displayname_{}_{}";
       auto translatedName = i ? call_function<const char *>(RVA(oTranslateString), format(fmt, name, i).data()) : name;
-      if (tempSkinList.count(translatedName)) {
-        translatedName.append(" Chroma " + to_string(tempSkinList[translatedName]++));
+      if (tempSkinList.count(FNV(translatedName))) {
+        translatedName.append(" Chroma " + to_string(tempSkinList[FNV(translatedName)]++));
       } else {
-        tempSkinList[translatedName] = 1;
+        tempSkinList[FNV(translatedName)] = 1;
       }
       championsSkins.emplace_back(name, translatedName, i);
       const auto name_hash = FNV(name);

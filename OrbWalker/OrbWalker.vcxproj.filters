@@ -57,9 +57,6 @@
     <ClCompile Include="agent\ui.cpp">
       <Filter>agent</Filter>
     </ClCompile>
-    <ClCompile Include="agent\champion\all.cpp">
-      <Filter>agent\champion</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
@@ -144,6 +141,9 @@
       <Filter>agent\champion</Filter>
     </ClInclude>
     <ClInclude Include="agent\champion\azir.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="agent\champion\akshan.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
   </ItemGroup>

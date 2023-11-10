@@ -15,27 +15,27 @@ GameState game_state() {
   return addr ? Read<GameState>(addr + 0xC) : Loading;
 }
 
-bool IsChatOpen() { return Read<bool>(Read<uintptr_t>(RVA(oChatClient)) + 0xC90); }
+bool IsChatOpen() { return Read<bool>(Read<uptr>(RVA(oChatClient)) + 0xC90); }
 
-bool IsLeagueInBackground() { return Read<bool>(Read<uintptr_t>(RVA(oHudInstance)) + 0xB9); }
+bool IsLeagueInBackground() { return Read<bool>(Read<uptr>(RVA(oHudInstance)) + 0xB9); }
 
 bool CanSendInput() { return Object::self()->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
 INT2 WorldToScreen(FLOAT3 in) {
   FLOAT3 out;
-  call_function<uintptr_t>(RVA(oWorldToScreen), Read<uintptr_t>(RVA(oViewPort)) + 0x270, &in, &out);
+  call_function<uptr>(RVA(oWorldToScreen), Read<uptr>(RVA(oViewPort)) + 0x270, &in, &out);
   return {(int)out.x, (int)out.y};
 }
 
 void AttackObject(Object *target) {
   const auto pos = WorldToScreen(target->position());
-  auto hudInput  = Read<uintptr_t>(Read<uintptr_t>(RVA(oHudInstance)) + 0x48);
+  auto hudInput  = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x48);
   call_function<bool>(RVA(oIssueOrder), hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
 }
 
 void Move2Mouse() {
   if (POINT pos; GetCursorPos(&pos)) {
-    auto hudInput                = Read<uintptr_t>(Read<uintptr_t>(RVA(oHudInstance)) + 0x28);
+    auto hudInput                = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x28);
     *(FLOAT3 *)(hudInput + 0x38) = FLOAT3{0, 0, 0};
     call_function<bool>(RVA(oIssueMove), hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 0ui8);
   }
