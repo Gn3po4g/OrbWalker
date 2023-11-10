@@ -146,6 +146,9 @@
     <ClInclude Include="agent\champion\akshan.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
+    <ClInclude Include="agent\champion\kalista.hpp">
+      <Filter>agent\champion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="memory\spoofer.asm">

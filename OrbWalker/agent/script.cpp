@@ -9,6 +9,7 @@
 #include "champion/cassiopeia.hpp"
 #include "champion/graves.hpp"
 #include "champion/kaisa.hpp"
+#include "champion/kalista.hpp"
 #include "champion/sett.hpp"
 #include "champion/zeri.hpp"
 #include "config/config.hpp"
@@ -32,6 +33,8 @@ script &script::inst() {
       return instance_.reset(new Graves);
     case "Kaisa"_FNV:
       return instance_.reset(new Kaisa);
+    case "Kalista"_FNV:
+      return instance_.reset(new Kalista);
     case "Sett"_FNV:
       return instance_.reset(new Sett);
     case "Zeri"_FNV:
@@ -84,10 +87,10 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  //PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
-  // auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
-  //  if (spell_cast->name() == "SivirW")
-  //  MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
+  // PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
+  //  auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
+  //   if (spell_cast->name() == "SivirW")
+  //   MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack; }

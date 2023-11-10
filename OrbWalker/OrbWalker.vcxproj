@@ -32,6 +32,7 @@
     <ClInclude Include="agent\champion\cassiopeia.hpp" />
     <ClInclude Include="agent\champion\graves.hpp" />
     <ClInclude Include="agent\champion\kaisa.hpp" />
+    <ClInclude Include="agent\champion\kalista.hpp" />
     <ClInclude Include="agent\champion\sett.hpp" />
     <ClInclude Include="agent\champion\zeri.hpp" />
     <ClInclude Include="agent\hook.hpp" />
