@@ -24,6 +24,7 @@ config::config() {
   }
   current_skin      = config_json.value(json::json_pointer("/skin/" + Object::self()->name()), 0);
   show_attack_range = config_json.value("show_attack_range", true);
+  show_click        = config_json.value("show_click", true);
   kite_key          = config_json.value("kite_key", ImGuiKey_Space);
   clean_key         = config_json.value("clean_key", ImGuiKey_V);
   prev_skin_key     = config_json.value("prev_skin_key", ImGuiKey_PageUp);

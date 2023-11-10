@@ -45,6 +45,7 @@ void Update() {
     if (ImGui::BeginTabItem("Script")) {
       ImGui::Text("Drawing Setting:");
       ImGui::Checkbox("Show Attack Range", &config.show_attack_range);
+      ImGui::Checkbox("Show Click", &config.show_click);
       ImGui::Separator();
       ImGui::Text("Selector Setting:");
       ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count);

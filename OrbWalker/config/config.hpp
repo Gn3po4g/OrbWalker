@@ -5,6 +5,7 @@ public:
   static config &inst();
 
   bool show_attack_range;
+  bool show_click;
   int selector;
   ImGuiKey kite_key;
   ImGuiKey clean_key;

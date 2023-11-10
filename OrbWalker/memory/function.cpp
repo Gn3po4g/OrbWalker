@@ -4,6 +4,7 @@
 #include "offset.hpp"
 
 #include "agent/hook.hpp"
+#include "config/config.hpp"
 
 namespace function {
 void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1C0); }
@@ -37,7 +38,7 @@ void Move2Mouse() {
   if (POINT pos; GetCursorPos(&pos)) {
     auto hudInput                = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x28);
     *(FLOAT3 *)(hudInput + 0x38) = FLOAT3{0, 0, 0};
-    call_function<bool>(RVA(oIssueMove), hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, 0ui8);
+    call_function<bool>(RVA(oIssueMove), hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, config::inst().show_click);
   }
 }
 
