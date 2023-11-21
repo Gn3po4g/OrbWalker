@@ -1,4 +1,4 @@
-<h1 align="center">Supported Version: 13.22</h1>
+<h1 align="center">Supported Version: 13.23</h1>
 
 # Feature
 1. Skin Changer(thanks to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
