@@ -2,8 +2,6 @@
 
 #include "spell.hpp"
 
-// using SpellInput = Spell::SpellInput;
-
 i16 Spell::level() { return MEMBER<i16>(0x28); }
 
 float Spell::readyTime() { return MEMBER<float>(0x30); }
@@ -33,9 +31,11 @@ std::string SpellCast::name() { return Read<RiotString16>(Read<uintptr_t>(this) 
 bool SpellCast::is_attack() { return MEMBER<bool>(0x112) || MEMBER<bool>(0x113) || MEMBER<bool>(0x114); }
 
 bool SpellCast::is_attack_reset() {
-  static constexpr auto reset_attack_spells = std::to_array<u64>(
-    {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("CamilleQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"), FNV("LucianE"),
-     FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
+  static constexpr auto reset_attack_spells = std::to_array<hash_type>(
+    {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("CamilleQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"),
+     FNV("KayleE"), FNV("LucianE"), FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
   );
   return std::ranges::count(reset_attack_spells, FNV(name()));
 }
+
+bool ActiveSpell::is_attack() { return MEMBER<bool>(0x11A) || MEMBER<bool>(0x11B); }

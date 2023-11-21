@@ -39,6 +39,7 @@ void config::save() {
   if (!out.good()) return;
   config_json["skin"][Object::self()->name()] = current_skin;
   config_json["show_attack_range"]            = show_attack_range;
+  config_json["show_click"]                   = show_click;
   config_json["kite_key"]                     = kite_key;
   config_json["clean_key"]                    = clean_key;
   config_json["prev_skin_key"]                = prev_skin_key;

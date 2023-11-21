@@ -32,7 +32,6 @@ protected:
 
   void check_marked_object();
   void check_orb_state();
-  bool has_buff(Object *obj, std::string_view);
   bool in_skill_range(Object *, float);
   Object *get_attack_target();
   Object *get_skill_target(float);

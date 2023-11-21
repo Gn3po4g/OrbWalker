@@ -26,3 +26,8 @@ public:
   bool is_attack();
   bool is_attack_reset();
 };
+
+class ActiveSpell : IMEMBER {
+public:
+  bool is_attack();
+};

@@ -5,7 +5,7 @@
 
 class Zeri : public script {
 public:
-  bool can_attack() override { return Object::self()->state() & CanCast; };
+  bool can_attack() override { return Object::self()->state() & CanCast && !Object::self()->IsCasting(); };
   bool is_reloading() override {
     return game_time < Object::self()->GetSpell(SpellSlot_Q)->readyTime() - interval * 2;
   };
@@ -16,5 +16,7 @@ public:
     else idle();
   };
   float real_range() override { return Object::self()->attack_range() + 250.f; };
-  bool in_attack_range(Object *obj) override { return obj->position() - Object::self()->position() <= real_range(); }
+  bool in_attack_range(Object *obj) override {
+    return distance(obj->position(), Object::self()->position()) <= real_range();
+  }
 };

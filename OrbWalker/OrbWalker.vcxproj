@@ -31,7 +31,6 @@
     <ClInclude Include="agent\champion\caitlyn.hpp" />
     <ClInclude Include="agent\champion\cassiopeia.hpp" />
     <ClInclude Include="agent\champion\graves.hpp" />
-    <ClInclude Include="agent\champion\kaisa.hpp" />
     <ClInclude Include="agent\champion\kalista.hpp" />
     <ClInclude Include="agent\champion\sett.hpp" />
     <ClInclude Include="agent\champion\zeri.hpp" />
@@ -46,6 +45,7 @@
     <ClInclude Include="class\obj_list.hpp" />
     <ClInclude Include="class\spell.hpp" />
     <ClInclude Include="config\config.hpp" />
+    <ClInclude Include="config\font.hpp" />
     <ClInclude Include="memory\function.hpp" />
     <ClInclude Include="memory\offset.hpp" />
     <ClInclude Include="memory\spoof_call.h" />
@@ -118,6 +118,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
       <EnableModules>false</EnableModules>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

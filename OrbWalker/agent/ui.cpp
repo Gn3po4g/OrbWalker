@@ -44,15 +44,15 @@ void Update() {
   if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
     if (ImGui::BeginTabItem("Script")) {
       ImGui::Text("Drawing Setting:");
-      ImGui::Checkbox("Show Attack Range", &config.show_attack_range);
-      ImGui::Checkbox("Show Click", &config.show_click);
+      if (ImGui::Checkbox("Show Attack Range", &config.show_attack_range)) config.save();
+      if (ImGui::Checkbox("Show Click", &config.show_click)) config.save();
       ImGui::Separator();
       ImGui::Text("Selector Setting:");
-      ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count);
+      if (ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count)) config.save();
       ImGui::Separator();
       ImGui::Text("Key Setting:");
-      ImGui::HotKey("Kite Key", config.kite_key);
-      ImGui::HotKey("Clean Lane Key", config.clean_key);
+      if (ImGui::HotKey("Kite Key", config.kite_key)) config.save();
+      if (ImGui::HotKey("Clean Lane Key", config.clean_key)) config.save();
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Skin")) {
@@ -82,8 +82,8 @@ void Update() {
       }
       ImGui::Separator();
       ImGui::Text("Key Setting:");
-      ImGui::HotKey("Previous Skin Key", config.prev_skin_key);
-      ImGui::HotKey("Next Skin Key", config.next_skin_key);
+      if (ImGui::HotKey("Previous Skin Key", config.prev_skin_key)) config.save();
+      if (ImGui::HotKey("Next Skin Key", config.next_skin_key)) config.save();
       ImGui::EndTabItem();
     }
 
@@ -96,7 +96,7 @@ void Update() {
     // }
 
     if (ImGui::BeginTabItem("Extras")) {
-      ImGui::HotKey("Menu Key", config.menu_key);
+      if (ImGui::HotKey("Menu Key", config.menu_key)) config.save();
       ImGui::Separator();
       if (ImGui::Button("Force Close")) { std::terminate(); }
       ImGui::EndTabItem();
@@ -119,7 +119,7 @@ bool SetToPressedKey(ImGuiKey &key) {
   return false;
 }
 
-void HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
+bool HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
   static std::map<ImGuiID, bool> activeMap;
   const auto id = GetID(label);
   AlignTextToFramePadding();
@@ -129,9 +129,13 @@ void HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
     PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
     Button("...", size);
     PopStyleColor();
-    if ((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) { activeMap[id] = false; }
+    if ((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) {
+      activeMap[id] = false;
+      return true;
+    }
   } else if (Button(keyMap[key].data(), size)) {
     activeMap[id] = true;
   }
+  return false;
 }
 } // namespace ImGui

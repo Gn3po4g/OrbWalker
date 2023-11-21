@@ -11,7 +11,7 @@
 
 using namespace std;
 
-bool skin_valid(uint64_t obj) {
+bool skin_valid(hash_type obj) {
   switch (obj) {
   case "JammerDevice"_FNV:
   case "SightWard"_FNV:
@@ -29,7 +29,7 @@ bool skin_valid(uint64_t obj) {
   }
 }
 
-bool is_companion(uint64_t owner, uint64_t obj) {
+bool is_companion(hash_type owner, hash_type obj) {
   switch (owner) {
   case "Kindred"_FNV:
     return obj == "KindredWolf"_FNV;
@@ -51,7 +51,7 @@ void ChangeModelForObject(Object *obj, const char *model, int32_t skin) {
   }
 }
 
-void ChangeSkinForObject(Object *obj, int32_t skin) noexcept {
+void ChangeSkinForObject(Object *obj, i32 skin) noexcept {
   if (skin == -1) { return; }
   if (const auto stack = obj->dataStack(); stack->baseSkin.skin_id != skin) {
     stack->baseSkin.skin_id = skin;
@@ -61,7 +61,7 @@ void ChangeSkinForObject(Object *obj, int32_t skin) noexcept {
   }
 }
 
-void skin::ChangeSkin(std::string_view model, int32_t skin_id) {
+void skin::ChangeSkin(std::string_view model, i32 skin_id) {
   static auto CheckSpecialSkins = [&](string_view model, int32_t skin_id) {
     const auto stack{Object::self()->dataStack()};
     const auto champName{FNV(stack->baseSkin.model.str())};
@@ -102,11 +102,13 @@ skin::skin() {
       it != champions.end()) {
     const auto champion = *it;
     auto skins_id       = champion->skins_id();
-    map<u64, i32> tempSkinList;
+    map<hash_type, i32> tempSkinList;
     for (auto &i : skins_id) {
-      const auto name     = champion->championName().str();
-      constexpr auto fmt  = "game_character_skin_displayname_{}_{}";
-      auto translatedName = i ? call_function<const char *>(RVA(oTranslateString), format(fmt, name, i).data()) : name;
+      const auto name           = champion->championName().str();
+      const auto skin_fmt       = "game_character_skin_displayname_{}_{}";
+      const auto name_fmt       = "game_character_displayname_{}";
+      const auto formatted_name = i ? format(skin_fmt, name, i) : format(name_fmt, name);
+      auto translatedName       = string(call_function<const char *>(RVA(oTranslateString), formatted_name.data()));
       if (tempSkinList.count(FNV(translatedName))) {
         translatedName.append(" Chroma " + to_string(tempSkinList[FNV(translatedName)]++));
       } else {

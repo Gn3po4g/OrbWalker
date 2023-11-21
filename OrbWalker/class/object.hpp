@@ -9,9 +9,8 @@ public:
   static Object *self();
   static Object *obj_under_mouse();
 
-  i32 index();
-  i32 team();
-  FLOAT3 position();
+  u32 team();
+  vec3 position();
   bool visible();
   float mana();
   bool targetable();
@@ -19,21 +18,22 @@ public:
   float max_health();
   float attack_range();
   ActionState state();
+  ObjectType type();
   DataStack *dataStack();
   std::vector<Buff *> buffs();
   std::string name();
   float AttackDelay();
-  float AttackWindup();
   float BonusRadius();
   void *ops_base();
+  ActiveSpell *active_spell();
 
   bool IsAlive();
   bool IsEnemy();
-  bool IsTargetable();
   bool IsValidTarget();
+  bool IsCasting();
 
-  bool compare_type_flags(TypeFlag);
   float get_mana_cost(SpellSlot);
+  bool has_buff(hash_type);
   Spell *GetSpell(SpellSlot);
   Object *GetOwner();
 };

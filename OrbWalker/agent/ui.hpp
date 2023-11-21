@@ -197,5 +197,5 @@ inline std::map<ImGuiKey, std::string_view> keyMap = {
   {ImGuiKey_MouseX2,        "MouseX2"       }
 };
 
-void HotKey(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 0.0f});
+bool HotKey(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 0.0f});
 } // namespace ImGui

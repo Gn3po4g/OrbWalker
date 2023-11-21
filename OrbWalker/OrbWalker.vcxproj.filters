@@ -121,9 +121,6 @@
     <ClInclude Include="agent\champion\graves.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
-    <ClInclude Include="agent\champion\kaisa.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
     <ClInclude Include="agent\champion\zeri.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
@@ -148,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="agent\champion\kalista.hpp">
       <Filter>agent\champion</Filter>
+    </ClInclude>
+    <ClInclude Include="config\font.hpp">
+      <Filter>config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

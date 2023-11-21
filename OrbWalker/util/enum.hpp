@@ -10,9 +10,9 @@ using i64  = int64_t;
 using u64  = uint64_t;
 using uptr = uintptr_t;
 
-enum GameState : int32_t { Loading, Connecting, Running, Paused, Finished, Exiting };
+enum GameState : i32 { Loading, Connecting, Running, Paused, Finished, Exiting };
 
-enum SpellSlot : int32_t {
+enum SpellSlot : i32 {
   SpellSlot_Q,
   SpellSlot_W,
   SpellSlot_E,
@@ -52,20 +52,4 @@ enum ActionState : u16 {
   NoRender  = 1 << 15
 };
 
-enum TypeFlag : int32_t {
-  // Object = (1 << 0),         // 0x1
-  // NeutralCamp = (1 << 1),    // 0x2
-  // DeadObject = (1 << 4),     // 0x10
-  // InvalidObject = (1 << 5),  // 0x20
-  // AIBaseCommon = (1 << 7),   // 0x80
-  // AttackableUnit = (1 << 9), // 0x200
-  AI       = 1 << 10, // 0x400
-  Minion   = 1 << 11, // 0x800
-  Hero     = 1 << 12, // 0x1000
-  Turret   = 1 << 13, // 0x2000
-  Unknown0 = 1 << 14, // 0x4000
-  Missile  = 1 << 15, // 0x8000
-  Unknown1 = 1 << 16, // 0x10000
-  Building = 1 << 17, // 0x20000
-  Unknown2 = 1 << 18, // 0x40000
-};
+enum ObjectType : u64 { Hero = 0xE260302C, Minion = 0xCAA58CB2, Turret = 0xBEBA9102, Inhibitor = 0x60BB49C0 };

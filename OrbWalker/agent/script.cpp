@@ -8,7 +8,6 @@
 #include "champion/caitlyn.hpp"
 #include "champion/cassiopeia.hpp"
 #include "champion/graves.hpp"
-#include "champion/kaisa.hpp"
 #include "champion/kalista.hpp"
 #include "champion/sett.hpp"
 #include "champion/zeri.hpp"
@@ -31,8 +30,6 @@ script &script::inst() {
       return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
       return instance_.reset(new Graves);
-    case "Kaisa"_FNV:
-      return instance_.reset(new Kaisa);
     case "Kalista"_FNV:
       return instance_.reset(new Kalista);
     case "Sett"_FNV:
@@ -55,7 +52,7 @@ void script::update() {
   Draw([&] {
     if (config::inst().show_attack_range) Circle(Object::self()->position(), real_range(), 0xffffffff, 1.5f);
     if (markedObject && markedObject->IsAlive() && markedObject->visible()) {
-      Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 3.0f);
+      Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 4.5f);
     }
   });
 
@@ -66,34 +63,19 @@ void script::update() {
     else attack();
   }
 
-  // if (ImGui::IsKeyPressed(ImGuiKey_V)) {
-  //   uptr target  = RVA(oWorldToScreen);
-  //   bool found   = false;
-  //   auto base    = Read<uintptr_t>(RVA(oViewPort));
-  //   auto vtable = *(uptr **)base;
-  //   size_t index{};
-  //   while (!found && !IsBadCodePtr((FARPROC)vtable[index])) {
-  //     if (vtable[index] == target) {
-  //       PrintMessage<0xFFFFFF>("found at: {}", index);
-  //       found = true;
-  //     }
-  //     index++;
-  //   }
-  //   if (!found) PrintMessage<0xFFFFFF>("not found");
-  // }
+  //if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
+  //  if (markedObject) PressKeyAt('E', markedObject->position());
+  //}
 }
 
 void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  // PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
-  //  auto addr = *(void **)(*(uintptr_t *)spell_cast + 0x60);
-  //   if (spell_cast->name() == "SivirW")
-  //   MessageBoxA(nullptr, std::format("{:x}", (uintptr_t)spell_cast).c_str(), "", MB_OK);
+   //PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
 }
 
-bool script::can_attack() { return Object::self()->state() & CanAttack; }
+bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
 
 bool script::can_do_action() {
   if (game_time < last_action_time + interval) return false;
@@ -103,7 +85,7 @@ bool script::can_do_action() {
 
 bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay(); }
 
-bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.1f; }
+bool script::is_attacking() { return Object::self()->IsCasting() && Object::self()->active_spell()->is_attack(); }
 
 void script::idle() {
   if (!is_attacking() && can_do_action()) Move2Mouse();
@@ -119,8 +101,7 @@ float script::real_range() { return Object::self()->attack_range() + Object::sel
 
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-    if (const auto obj = Object::obj_under_mouse(); obj && obj->compare_type_flags(Hero) && obj->IsEnemy())
-      markedObject = obj;
+    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
   }
 }
 
@@ -132,37 +113,33 @@ void script::check_orb_state() {
 
 Object *script::get_attack_target() {
   if (orbState == OrbState::Kite) {
-    return ObjList::get_in_order(
-      Hero, [&](Object *obj) { return in_attack_range(obj); }, markedObject
+    return ObjList::get_object_in(
+      {Hero}, [&](Object *obj) { return in_attack_range(obj); }, markedObject
     );
   }
   if (orbState == OrbState::Clear) {
-    return ObjList::get_in_order(Minion | Building, [&](Object *obj) { return in_attack_range(obj); });
+    return ObjList::get_object_in({Minion, Turret, Inhibitor}, [&](Object *obj) { return in_attack_range(obj); });
   }
   return nullptr;
 }
 
 Object *script::get_skill_target(float range) {
   if (orbState == OrbState::Kite) {
-    return ObjList::get_in_order(
-      Hero, [&](Object *obj) { return in_skill_range(obj, range); }, markedObject
+    return ObjList::get_object_in(
+      {Hero}, [&](Object *obj) { return in_skill_range(obj, range); }, markedObject
     );
   }
   if (orbState == OrbState::Clear) {
-    return ObjList::get_in_order(Minion, [&](Object *obj) { return in_skill_range(obj, range); });
+    return ObjList::get_object_in({Minion}, [&](Object *obj) { return in_skill_range(obj, range); });
   }
   return nullptr;
 }
 
-bool script::has_buff(Object *obj, std::string_view name) {
-  return std::ranges::any_of(obj->buffs(), [name, this](Buff *buff) {
-    return buff->is_valid() && game_time >= buff->starttime() && game_time <= buff->endtime() && buff->name() == name;
-  });
-}
-
 bool script::in_attack_range(Object *obj) {
-  return obj->position() - Object::self()->position()
+  return distance(obj->position(), Object::self()->position())
       <= Object::self()->attack_range() + Object::self()->BonusRadius() + obj->BonusRadius();
 }
 
-bool script::in_skill_range(Object *obj, float range) { return obj->position() - Object::self()->position() <= range; }
+bool script::in_skill_range(Object *obj, float range) {
+  return distance(obj->position(), Object::self()->position()) <= range;
+}

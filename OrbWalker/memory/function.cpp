@@ -22,97 +22,46 @@ bool IsLeagueInBackground() { return Read<bool>(Read<uptr>(RVA(oHudInstance)) + 
 
 bool CanSendInput() { return Object::self()->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
 
-INT2 WorldToScreen(FLOAT3 in) {
-  FLOAT3 out;
-  call_function<uptr>(RVA(oWorldToScreen), Read<uptr>(RVA(oViewPort)) + 0x270, &in, &out);
-  return {(int)out.x, (int)out.y};
+vec2 WorldToScreen(const vec3 &in) {
+  const auto view_matrix = Read<matrix>(RVA(oViewProjMatrix));
+  const auto proj_matrix = Read<matrix>(RVA(oViewProjMatrix) + 0x40);
+  const auto viewport    = Read<Viewport>(RVA(oViewProjMatrix) + 0x8C);
+
+  auto res = viewport.project(in, proj_matrix, view_matrix);
+  return vec2(res.x, res.y);
 }
 
 void AttackObject(Object *target) {
   const auto pos = WorldToScreen(target->position());
   auto hudInput  = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x48);
-  call_function<bool>(RVA(oIssueOrder), hudInput, 2ui8, 0ui8, 0ui8, pos.x, pos.y, 0ui8);
+  call_function<bool>(
+    RVA(oIssueOrder), hudInput, 2ui8, 0ui8, 0ui8, static_cast<int>(pos.x), static_cast<int>(pos.y), 1ui8
+  );
 }
 
 void Move2Mouse() {
   if (POINT pos; GetCursorPos(&pos)) {
-    auto hudInput                = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x28);
-    *(FLOAT3 *)(hudInput + 0x38) = FLOAT3{0, 0, 0};
-    call_function<bool>(RVA(oIssueMove), hudInput, (int)pos.x, (int)pos.y, 0ui8, 0ui8, config::inst().show_click);
+    auto hudInput              = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x28);
+    *(vec3 *)(hudInput + 0x38) = vec3(0.f, 0.f, 0.f);
+    call_function<bool>(RVA(oIssueMove), hudInput, pos.x, pos.y, 0ui8, 0ui8, config::inst().show_click);
   }
 }
 
-// bool CastSpell(SpellSlot slot) {
-//   if (slot >= SpellSlot_Other) { return false; }
-//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-//   auto spell      = self->GetSpell(slot);
-//   auto targetInfo = spell->spellInput();
-//   if (!targetInfo) { return false; }
-//   // set spell position
-//   targetInfo->SetCasterHandle(self->index());
-//   targetInfo->SetTargetHandle(0);
-//   targetInfo->SetStartPos(self->position());
-//   targetInfo->SetEndPos(self->position());
-//   targetInfo->SetClickedPos(self->position());
-//   targetInfo->SetUnkPos(self->position());
-//
-//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-//   return true;
-// }
-//
-// bool CastSpell(Object *target, SpellSlot slot) {
-//   if (slot >= SpellSlot_Other) { return false; }
-//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-//   auto spell      = self->GetSpell(slot);
-//   auto targetInfo = spell->spellInput();
-//   if (!targetInfo || !target) { return false; }
-//   // set spell position
-//   targetInfo->SetCasterHandle(self->index());
-//   targetInfo->SetTargetHandle(target->index());
-//   targetInfo->SetStartPos(self->position());
-//   targetInfo->SetEndPos(target->position());
-//   targetInfo->SetClickedPos(target->position());
-//   targetInfo->SetUnkPos(target->position());
-//
-//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-//   return true;
-// }
-//
-// bool CastSpell(FLOAT3 pos, SpellSlot slot) {
-//   if (slot >= SpellSlot_Other) { return false; }
-//   auto hudInput   = *(uintptr_t *)(*(uintptr_t *)oHudInstance + 0x68);
-//   auto spell      = self->GetSpell(slot);
-//   auto targetInfo = spell->spellInput();
-//   if (!targetInfo) { return false; }
-//   // set spell position
-//   targetInfo->SetCasterHandle(self->index());
-//   targetInfo->SetTargetHandle(0);
-//   targetInfo->SetStartPos(self->position());
-//   targetInfo->SetEndPos(pos);
-//   targetInfo->SetClickedPos(pos);
-//   targetInfo->SetUnkPos(pos);
-//
-//   call_function<bool>(oCastSpell, hudInput, spell->spellInfo());
-//   return true;
-// }
-
-void PressKeyAt(WORD key, FLOAT3 pos) {
-  auto PressKey = [](WORD key) {
+void PressKeyAt(WORD key, const vec3 &pos) {
+  auto CreateKeyboardInput = [](WORD vkCode, bool down) {
     INPUT input{};
-    input.type           = INPUT_KEYBOARD;
-    input.ki.wScan       = key;
-    input.ki.time        = 0;
-    input.ki.dwExtraInfo = 0;
-    input.ki.wVk         = 0;
-    input.ki.dwFlags     = KEYEVENTF_SCANCODE;
-    SendInput(1, &input, sizeof(INPUT));
-    input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-    SendInput(1, &input, sizeof(INPUT));
+    input.type       = INPUT_KEYBOARD;
+    input.ki.wVk     = vkCode;
+    input.ki.wScan   = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
+    input.ki.dwFlags = KEYEVENTF_SCANCODE | (down ? 0 : KEYEVENTF_KEYUP);
+    return input;
   };
-  INT2 p        = WorldToScreen(pos);
-  hook::mMouseX = p.x;
-  hook::mMouseY = p.y;
-  PressKey(MapVirtualKey(key, MAPVK_VK_TO_VSC));
+  auto PressKey = [&](WORD key) {
+    INPUT inputs[2]{CreateKeyboardInput(key, true), CreateKeyboardInput(key, false)};
+    SendInput(2, inputs, sizeof(INPUT));
+  };
+  hook::MousePos = WorldToScreen(pos);
+   PressKey(key);
 }
 
 void Draw(std::function<void()> draw_fun) {
@@ -136,15 +85,15 @@ void Draw(std::function<void()> draw_fun) {
   ImGui::PopStyleVar(2);
 }
 
-void Circle(const FLOAT3 &worldPos, float radius, uint32_t color, float thickness) {
+void Circle(const vec3 &center, float radius, u32 color, float thickness) {
   ImGuiWindow *window{ImGui::GetCurrentWindow()};
-  const size_t numPoints{127};
+  const size_t numPoints{314};
   ImVec2 points[numPoints]{};
   float theta{0.f};
   for (size_t i{0}; i < numPoints; i++) {
-    FLOAT3 worldSpace{worldPos.x + radius * cos(theta), worldPos.y, worldPos.z + radius * sin(theta)};
-    ImVec2 screenSpace{WorldToScreen(worldSpace).ToImVec()};
-    points[i] = screenSpace;
+    vec3 world_pos(center.x + radius * cos(theta), center.y, center.z + radius * sin(theta));
+    const auto screen_pos = WorldToScreen(world_pos);
+    points[i]             = {screen_pos.x, screen_pos.y};
     theta += IM_PI * 2 / numPoints;
   }
   window->DrawList->AddPolyline(points, numPoints, color, true, thickness);

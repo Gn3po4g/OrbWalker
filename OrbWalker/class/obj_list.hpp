@@ -19,5 +19,5 @@ public:
   static ObjList *inhibs();
 
   Object *best_object(std::function<bool(Object *)>, Object *specific);
-  static Object *get_in_order(int, std::function<bool(Object *)>, Object *specific = nullptr);
+  static Object *get_object_in(std::initializer_list<ObjectType>, std::function<bool(Object *)>, Object *specific = nullptr);
 };
