@@ -4,8 +4,7 @@
 
 class Azir : public script {
   bool in_attack_range(Object *obj) override {
-    auto soldiers = std::span(ObjList::minions()->data, ObjList::minions()->size)
-                  | std::views::filter([](Object *soldier) {
+    auto soldiers = ObjList::minions()->all() | std::views::filter([](Object *soldier) {
                       return soldier->name() == "AzirSoldier" && soldier->IsAlive()
                           && distance(soldier->position(), Object::self()->position())
                                <= Object::self()->BonusRadius() + 660.f + soldier->BonusRadius();

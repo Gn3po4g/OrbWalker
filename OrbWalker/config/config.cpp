@@ -2,6 +2,7 @@
 
 #include "config.hpp"
 
+#include "agent/ui.hpp"
 #include "class/obj_list.hpp"
 #include "class/object.hpp"
 
@@ -22,15 +23,21 @@ config::config() {
     const json j = json::parse(in, nullptr, false, true);
     if (!j.is_discarded()) config_json = j;
   }
+  auto temp_key     = ImGuiKey_None;
   current_skin      = config_json.value(json::json_pointer("/skin/" + Object::self()->name()), 0);
   show_attack_range = config_json.value("show_attack_range", true);
   show_click        = config_json.value("show_click", true);
-  kite_key          = config_json.value("kite_key", ImGuiKey_Space);
-  clean_key         = config_json.value("clean_key", ImGuiKey_V);
-  prev_skin_key     = config_json.value("prev_skin_key", ImGuiKey_PageUp);
-  next_skin_key     = config_json.value("next_skin_key", ImGuiKey_PageDown);
-  menu_key          = config_json.value("menu_key", ImGuiKey_Insert);
   selector          = config_json.value("selector", health_lowest);
+  temp_key          = config_json.value("kite_key", ImGuiKey_Space);
+  kite_key          = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Space;
+  temp_key          = config_json.value("clean_key", ImGuiKey_V);
+  clean_key         = keyMap.contains(temp_key) ? temp_key : ImGuiKey_V;
+  temp_key          = config_json.value("prev_skin_key", ImGuiKey_PageUp);
+  prev_skin_key     = keyMap.contains(temp_key) ? temp_key : ImGuiKey_PageUp;
+  temp_key          = config_json.value("next_skin_key", ImGuiKey_PageDown);
+  next_skin_key     = keyMap.contains(temp_key) ? temp_key : ImGuiKey_PageDown;
+  temp_key          = config_json.value("menu_key", ImGuiKey_Insert);
+  menu_key          = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Insert;
   in.close();
 }
 

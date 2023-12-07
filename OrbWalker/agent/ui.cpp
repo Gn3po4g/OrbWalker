@@ -8,134 +8,147 @@
 #include "config/config.hpp"
 
 namespace ui {
-auto vector_getter_skin = [](void *vec, const int32_t idx, const char **out_text) {
-  const auto index = static_cast<size_t>(idx);
-  const auto &v    = *static_cast<std::vector<skin::SkinInfo> *>(vec);
-  if (index >= v.size()) { return false; }
-  *out_text = v[index].skinName.data();
-  return true;
-};
+void LoadTheme() {
+  ImVec4 *colors                         = GetStyle().Colors;
+  colors[ImGuiCol_Text]                  = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+  colors[ImGuiCol_TextDisabled]          = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+  colors[ImGuiCol_WindowBg]              = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+  colors[ImGuiCol_ChildBg]               = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  colors[ImGuiCol_PopupBg]               = ImVec4(0.19f, 0.19f, 0.19f, 0.92f);
+  colors[ImGuiCol_Border]                = ImVec4(0.19f, 0.19f, 0.19f, 0.29f);
+  colors[ImGuiCol_BorderShadow]          = ImVec4(0.00f, 0.00f, 0.00f, 0.24f);
+  colors[ImGuiCol_FrameBg]               = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
+  colors[ImGuiCol_FrameBgHovered]        = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
+  colors[ImGuiCol_FrameBgActive]         = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
+  colors[ImGuiCol_TitleBg]               = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_TitleBgActive]         = ImVec4(0.06f, 0.06f, 0.06f, 1.00f);
+  colors[ImGuiCol_TitleBgCollapsed]      = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_MenuBarBg]             = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+  colors[ImGuiCol_ScrollbarBg]           = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
+  colors[ImGuiCol_ScrollbarGrab]         = ImVec4(0.34f, 0.34f, 0.34f, 0.54f);
+  colors[ImGuiCol_ScrollbarGrabHovered]  = ImVec4(0.40f, 0.40f, 0.40f, 0.54f);
+  colors[ImGuiCol_ScrollbarGrabActive]   = ImVec4(0.56f, 0.56f, 0.56f, 0.54f);
+  colors[ImGuiCol_CheckMark]             = ImVec4(0.33f, 0.67f, 0.86f, 1.00f);
+  colors[ImGuiCol_SliderGrab]            = ImVec4(0.34f, 0.34f, 0.34f, 0.54f);
+  colors[ImGuiCol_SliderGrabActive]      = ImVec4(0.56f, 0.56f, 0.56f, 0.54f);
+  colors[ImGuiCol_Button]                = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
+  colors[ImGuiCol_ButtonHovered]         = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
+  colors[ImGuiCol_ButtonActive]          = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
+  colors[ImGuiCol_Header]                = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+  colors[ImGuiCol_HeaderHovered]         = ImVec4(0.00f, 0.00f, 0.00f, 0.36f);
+  colors[ImGuiCol_HeaderActive]          = ImVec4(0.20f, 0.22f, 0.23f, 0.33f);
+  colors[ImGuiCol_Separator]             = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
+  colors[ImGuiCol_SeparatorHovered]      = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
+  colors[ImGuiCol_SeparatorActive]       = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
+  colors[ImGuiCol_ResizeGrip]            = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
+  colors[ImGuiCol_ResizeGripHovered]     = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
+  colors[ImGuiCol_ResizeGripActive]      = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
+  colors[ImGuiCol_Tab]                   = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+  colors[ImGuiCol_TabHovered]            = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+  colors[ImGuiCol_TabActive]             = ImVec4(0.20f, 0.20f, 0.20f, 0.36f);
+  colors[ImGuiCol_TabUnfocused]          = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+  colors[ImGuiCol_TabUnfocusedActive]    = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+  colors[ImGuiCol_PlotLines]             = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_PlotLinesHovered]      = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_PlotHistogram]         = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_PlotHistogramHovered]  = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_TableHeaderBg]         = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+  colors[ImGuiCol_TableBorderStrong]     = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+  colors[ImGuiCol_TableBorderLight]      = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
+  colors[ImGuiCol_TableRowBg]            = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  colors[ImGuiCol_TableRowBgAlt]         = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
+  colors[ImGuiCol_TextSelectedBg]        = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
+  colors[ImGuiCol_DragDropTarget]        = ImVec4(0.33f, 0.67f, 0.86f, 1.00f);
+  colors[ImGuiCol_NavHighlight]          = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+  colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 0.00f, 0.00f, 0.70f);
+  colors[ImGuiCol_NavWindowingDimBg]     = ImVec4(1.00f, 0.00f, 0.00f, 0.20f);
+  colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(1.00f, 0.00f, 0.00f, 0.35f);
 
-auto vector_getter_gear = [](void *vec, const int32_t idx, const char **out_text) {
-  const auto index = static_cast<size_t>(idx);
-  const auto &v    = *static_cast<std::vector<std::string> *>(vec);
-  if (index >= v.size()) { return false; }
-  *out_text = v[index].data();
-  return true;
-};
-
-auto selector_getter = [](void *_, const int32_t idx, const char **out_text) {
-  if (idx >= selector_map.size()) { return false; }
-  *out_text = selector_map.at(idx).data();
-  return true;
-};
+  ImGuiStyle &style       = GetStyle();
+  style.WindowPadding     = ImVec2(8.00f, 8.00f);
+  style.FramePadding      = ImVec2(5.00f, 2.00f);
+  style.CellPadding       = ImVec2(6.00f, 6.00f);
+  style.ItemSpacing       = ImVec2(6.00f, 6.00f);
+  style.ItemInnerSpacing  = ImVec2(6.00f, 6.00f);
+  style.TouchExtraPadding = ImVec2(0.00f, 0.00f);
+  style.IndentSpacing     = 25;
+  style.ScrollbarSize     = 15;
+  style.GrabMinSize       = 10;
+  style.WindowBorderSize  = 1;
+  style.ChildBorderSize   = 1;
+  style.PopupBorderSize   = 1;
+  style.FrameBorderSize   = 1;
+  style.TabBorderSize     = 1;
+  style.WindowRounding    = 7;
+  style.ChildRounding     = 4;
+  style.FrameRounding     = 3;
+  style.PopupRounding     = 4;
+  style.ScrollbarRounding = 9;
+  style.GrabRounding      = 3;
+  style.LogSliderDeadzone = 4;
+  style.TabRounding       = 4;
+}
 
 void Update() {
-  static int gear{};
   static bool show_menu{true};
-  auto &config = config::inst();
-  if (ImGui::IsKeyPressed(config.menu_key)) { show_menu ^= true; }
+  if (IsKeyPressed(config::inst().menu_key)) { show_menu ^= true; }
   if (!show_menu) return;
-  ImGui::Begin(
-    "Settings", nullptr,
-    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse
-      | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing
-  );
-  if (ImGui::BeginTabBar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
-    if (ImGui::BeginTabItem("Script")) {
-      ImGui::Text("Drawing Setting:");
-      if (ImGui::Checkbox("Show Attack Range", &config.show_attack_range)) config.save();
-      if (ImGui::Checkbox("Show Click", &config.show_click)) config.save();
-      ImGui::Separator();
-      ImGui::Text("Selector Setting:");
-      if (ImGui::Combo("##Current Method", &config.selector, selector_getter, nullptr, count)) config.save();
-      ImGui::Separator();
-      ImGui::Text("Key Setting:");
-      if (ImGui::HotKey("Kite Key", config.kite_key)) config.save();
-      if (ImGui::HotKey("Clean Lane Key", config.clean_key)) config.save();
-      ImGui::EndTabItem();
-    }
-    if (ImGui::BeginTabItem("Skin")) {
-      ImGui::Text("Skin Setting:");
-      auto &skins{skin::inst().championsSkins};
-      ImGui::Text("Current Skin");
-      if (ImGui::Combo("##Current Skin", &config.current_skin, vector_getter_skin, &skins, (int)skins.size())) {
-        skin::inst().ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
-        config.save();
-      }
-      const auto player_hash{FNV(Object::self()->dataStack()->baseSkin.model.str())};
-      if (const auto it{std::ranges::find_if(
-            skin::inst().specialSkins,
-            [player_hash](const skin::SpecialSkin &x) {
-              const auto skin_id = Object::self()->dataStack()->baseSkin.skin_id;
-              return x.champName == player_hash && (x.skinIdStart <= skin_id && x.skinIdEnd >= skin_id);
+  window("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing)(
+    [] {
+      tab_bar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)([] {
+        tab_item("Script")([] {
+          auto &config = config::inst();
+          text("Drawing Setting:");
+          if (Checkbox("Show Attack Range", &config.show_attack_range)) config.save();
+          if (Checkbox("Show Click", &config.show_click)) config.save();
+          Separator();
+          text("Selector Setting:");
+          if (Combo("##Current Method", &config.selector, vector2imgui(selector_str).data())) config.save();
+          Separator();
+          text("Key Setting:");
+          if (hot_key("Kite Key", config.kite_key)) config.save();
+          if (hot_key("Clean Lane Key", config.clean_key)) config.save();
+        });
+        tab_item("Skin")([] {
+          auto &config  = config::inst();
+          auto &changer = skin::inst();
+          text("Skin Setting:");
+          auto &skins{changer.championSkins};
+          text("Current Skin");
+          if (Combo("##Current Skin", &config.current_skin, vector2imgui(changer.skins_name()).data())) {
+            changer.ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
+            config.save();
+          }
+          if (const auto i = changer.special_skin(); (size_t)i < changer.specialSkins.size()) {
+            const auto stack{Object::self()->dataStack()};
+            auto gear = static_cast<int>(stack->baseSkin.gear);
+            text("Current Gear");
+            if (Combo("##Current Gear", &gear, vector2imgui(changer.specialSkins[i].gears).data())) {
+              stack->baseSkin.gear = static_cast<i8>(gear);
+              stack->update(true);
             }
-          )};
-          it != skin::inst().specialSkins.end()) {
-        const auto stack{Object::self()->dataStack()};
-        gear = static_cast<int>(stack->baseSkin.gear);
-        ImGui::Text("Current Gear");
-        if (ImGui::Combo("##Current Gear", &gear, vector_getter_gear, &it->gears, (int)it->gears.size())) {
-          stack->baseSkin.gear = static_cast<int8_t>(gear);
-          stack->update(true);
-        }
-      }
-      ImGui::Separator();
-      ImGui::Text("Key Setting:");
-      if (ImGui::HotKey("Previous Skin Key", config.prev_skin_key)) config.save();
-      if (ImGui::HotKey("Next Skin Key", config.next_skin_key)) config.save();
-      ImGui::EndTabItem();
+          }
+          Separator();
+          text("Key Setting:");
+          if (hot_key("Previous Skin Key", config.prev_skin_key)) config.save();
+          if (hot_key("Next Skin Key", config.next_skin_key)) config.save();
+        });
+        tab_item("Extras")([] {
+          auto &config = config::inst();
+          if (hot_key("Menu Key", config.menu_key)) config.save();
+          Separator();
+          if (Button("Force Close")) { std::terminate(); }
+        });
+      });
     }
+  );
 
-    // if (ImGui::BeginTabItem("Infos")) {
-    //   for (const auto minion : std::span(minions->data, minions->size)) {
-    //       if (minion->position()-self->position() < 300.f)
-    //       ImGui::Text(minion->name().data());
-    //   }
-    //   ImGui::EndTabItem();
-    // }
-
-    if (ImGui::BeginTabItem("Extras")) {
-      if (ImGui::HotKey("Menu Key", config.menu_key)) config.save();
-      ImGui::Separator();
-      if (ImGui::Button("Force Close")) { std::terminate(); }
-      ImGui::EndTabItem();
-    }
-    ImGui::End();
-  }
-  ImGui::End();
+  // if (ImGui::BeginTabItem("Infos")) {
+  //   for (const auto minion : std::span(minions->data, minions->size)) {
+  //       if (minion->position()-self->position() < 300.f)
+  //       ImGui::Text(minion->name().data());
+  //   }
+  //   ImGui::EndTabItem();
+  // }
 }
 } // namespace ui
-
-namespace ImGui {
-bool SetToPressedKey(ImGuiKey &key) {
-  for (const auto &key_in_map : keyMap | std::views::keys) {
-    if (IsKeyPressed(key_in_map)) {
-      if (key_in_map == ImGuiKey_Escape) key = ImGuiKey_None;
-      else key = key_in_map;
-      return true;
-    }
-  }
-  return false;
-}
-
-bool HotKey(const char *label, ImGuiKey &key, const ImVec2 &size) {
-  static std::map<ImGuiID, bool> activeMap;
-  const auto id = GetID(label);
-  AlignTextToFramePadding();
-  Text(label);
-  SameLine(150.f);
-  if (activeMap[id]) {
-    PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
-    Button("...", size);
-    PopStyleColor();
-    if ((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) {
-      activeMap[id] = false;
-      return true;
-    }
-  } else if (Button(keyMap[key].data(), size)) {
-    activeMap[id] = true;
-  }
-  return false;
-}
-} // namespace ImGui

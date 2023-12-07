@@ -3,7 +3,7 @@
 #include "agent/hook.hpp"
 #include "memory/offset.hpp"
 
-bool WINAPI HideThread(HANDLE hThread) {
+BOOL WINAPI HideThread(HANDLE hThread) {
   using fn = NTSTATUS(NTAPI *)(HANDLE, UINT, PVOID, ULONG);
   const auto ntdllModule{GetModuleHandle(TEXT("ntdll.dll"))};
   if (!ntdllModule) return false;
@@ -13,10 +13,9 @@ bool WINAPI HideThread(HANDLE hThread) {
 }
 
 void Start() {
-  HideThread(GetCurrentThread());
-  if(!hook::inst().install()) return;
-  std::unique_lock lkRun(hook::mRun);
-  std::condition_variable().wait(lkRun);
+  if (!HideThread(GetCurrentThread())) return;
+  if (!hook::inst().install()) return;
+  std::this_thread::sleep_for(std::chrono::hours::max());
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID) {

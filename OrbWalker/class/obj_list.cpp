@@ -15,6 +15,8 @@ ObjList *ObjList::turrets() { return Read<ObjList *>(RVA(oTurretList)); }
 
 ObjList *ObjList::inhibs() { return Read<ObjList *>(RVA(oInhibList)); }
 
+std::vector<Object *> ObjList::all() { return span(data, size) | ranges::to<vector>(); }
+
 Object *ObjList::best_object(std::function<bool(Object *)> fun, Object *specific) {
   const auto &list = span(data, size) | views::filter([fun](Object *obj) { return obj->IsValidTarget() && fun(obj); })
                    | ranges::to<vector>();

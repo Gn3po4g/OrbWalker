@@ -2,7 +2,6 @@
 
 #include "script.hpp"
 
-#include "champion/akshan.hpp"
 #include "champion/aphelios.hpp"
 #include "champion/azir.hpp"
 #include "champion/caitlyn.hpp"
@@ -11,8 +10,13 @@
 #include "champion/kalista.hpp"
 #include "champion/sett.hpp"
 #include "champion/zeri.hpp"
+#include "class/hud.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
+
+class Akshan : public script {
+  bool is_attacking() override { return game_time < last_attack_time + Object::self()->AttackWindup() * 1.75 + 0.175; }
+};
 
 script &script::inst() {
   static std::once_flag singleton;
@@ -26,16 +30,16 @@ script &script::inst() {
       return instance_.reset(new Azir);
     case "Caitlyn"_FNV:
       return instance_.reset(new Caitlyn);
-    case "Cassiopeia"_FNV:
-      return instance_.reset(new Cassiopeia);
+    // case "Cassiopeia"_FNV:
+    //   return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
       return instance_.reset(new Graves);
     case "Kalista"_FNV:
       return instance_.reset(new Kalista);
     case "Sett"_FNV:
       return instance_.reset(new Sett);
-    case "Zeri"_FNV:
-      return instance_.reset(new Zeri);
+    // case "Zeri"_FNV:
+    //   return instance_.reset(new Zeri);
     default:
       return instance_.reset(new script);
     }
@@ -50,54 +54,52 @@ void script::update() {
   check_marked_object();
 
   Draw([&] {
-    if (config::inst().show_attack_range) Circle(Object::self()->position(), real_range(), 0xffffffff, 1.5f);
+    if (config::inst().show_attack_range) Circle(Object::self()->position(), real_range(), 0xFFFFFFFF, 1.5f);
     if (markedObject && markedObject->IsAlive() && markedObject->visible()) {
-      Circle(markedObject->position(), markedObject->BonusRadius(), 0xff0c9d00, 4.5f);
+      Circle(markedObject->position(), markedObject->BonusRadius(), 0xFF33AB84, 4.5f);
     }
   });
 
-  if (!CanSendInput()) return;
+  if (!Object::self()->IsAlive() || IsChatOpen() || Hud::inst().is_background()) return;
 
   if (orbState != OrbState::Off) {
     if (is_reloading()) idle();
     else attack();
   }
-
-  //if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
-  //  if (markedObject) PressKeyAt('E', markedObject->position());
-  //}
 }
 
 void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
-  if (spell_cast->is_attack()) last_attack_time = game_time - 0.1f;
+  if (spell_cast->is_attack()) last_attack_time = game_time - ping() - 0.05f;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-   //PrintMessage<0xFFFFFF>("name: {}", spell_cast->name());
+  // PrintMessage<0xFFFFFF>("addr: {}", last_cast_spell);
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
 
-bool script::can_do_action() {
-  if (game_time < last_action_time + interval) return false;
-  last_action_time = game_time;
-  return true;
-}
-
 bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay(); }
 
-bool script::is_attacking() { return Object::self()->IsCasting() && Object::self()->active_spell()->is_attack(); }
+bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.075f; }
 
 void script::idle() {
-  if (!is_attacking() && can_do_action()) Move2Mouse();
+  if (!is_attacking()) do_action(Move2Mouse);
 }
 
 void script::attack() {
-  if (const auto obj = get_attack_target(); obj && can_attack() && can_do_action()) {
-    AttackObject(obj);
+  if (const auto obj = get_attack_target(); obj && can_attack()) {
+    do_action(AttackObject, obj);
   } else idle();
 }
 
 float script::real_range() { return Object::self()->attack_range() + Object::self()->BonusRadius(); }
+
+// void script::do_action(std::function<void()> action) {
+//   constexpr float interval = 1.f / 20;
+//   static float last_action_time{-FLT_MAX};
+//   if (game_time < last_action_time + interval) return;
+//   action();
+//   last_action_time = game_time;
+// }
 
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {

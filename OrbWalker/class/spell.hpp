@@ -14,7 +14,7 @@ public:
   i16 level();
   float readyTime();
   //SpellInput *spellInput();
-  //uintptr_t spellInfo();
+  uptr spell_info();
 };
 
 class SpellCast : IMEMBER {
@@ -25,9 +25,4 @@ public:
 
   bool is_attack();
   bool is_attack_reset();
-};
-
-class ActiveSpell : IMEMBER {
-public:
-  bool is_attack();
 };

@@ -6,7 +6,7 @@
 __declspec(allocate(".text")) const unsigned char jmp_rbx_0[] = {0xff, 0x23}; // jmp qword ptr[rbx]
 
 template <typename T>
-T Read(auto addr) {
+T &Read(auto addr) {
   return *std::bit_cast<T *>(addr);
 }
 
@@ -56,7 +56,7 @@ struct RiotString16 {
 class IMEMBER {
 protected:
   template <typename Type>
-  Type MEMBER(auto offset) {
+  Type &MEMBER(auto offset) {
     return *std::bit_cast<Type *>(this + offset);
   }
 
@@ -64,6 +64,12 @@ protected:
   Type *pMEMBER(auto offset) {
     return std::bit_cast<Type *>(this + offset);
   }
+};
+
+struct screen_pos {
+  i32 x, y;
+
+  screen_pos(vec2 v) : x(static_cast<i32>(v.x)), y(static_cast<i32>(v.y)) {}
 };
 
 struct Viewport {
@@ -91,16 +97,8 @@ inline float distance(const vec3 &v1, const vec3 &v2) {
   return XMVectorGetX(X);
 }
 
-struct vec2 : DirectX::XMFLOAT2 {
-  using DirectX::XMFLOAT2::XMFLOAT2;
-  vec2() : XMFLOAT2(-1, -1) {}
-
-  bool valid() const {
-    int X = static_cast<int>(x), Y = static_cast<int>(y);
-    return X >= 0 && x <= GetSystemMetrics(SM_CXSCREEN) && Y >= 0 && y <= GetSystemMetrics(SM_CYSCREEN);
-  }
-  void reset() {
-    x = -1.f;
-    y = -1.f;
-  }
-};
+inline std::string vector2imgui(std::vector<std::string> v) {
+  std::string ret;
+  for (auto &s : v) { ret.append(s + '\0'); }
+  return ret;
+}

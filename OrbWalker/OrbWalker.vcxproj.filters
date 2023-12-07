@@ -59,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="class\hud.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="memory\offset.hpp">
@@ -140,14 +143,14 @@
     <ClInclude Include="agent\champion\azir.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
-    <ClInclude Include="agent\champion\akshan.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
     <ClInclude Include="agent\champion\kalista.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
     <ClInclude Include="config\font.hpp">
       <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="class\hud.hpp">
+      <Filter>class</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

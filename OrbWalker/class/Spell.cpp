@@ -8,7 +8,7 @@ float Spell::readyTime() { return MEMBER<float>(0x30); }
 
 // SpellInput *Spell::spellInput() { return MEMBER<SpellInput *>(0x128); }
 //
-// uintptr_t Spell::spellInfo() { return MEMBER<uintptr_t>(0x130); }
+uptr Spell::spell_info() { return MEMBER<uptr>(0x130); }
 //
 // void SpellInput::SetCasterHandle(int32_t index) { *pMEMBER<int32_t>(0x10) = index; }
 //
@@ -35,7 +35,5 @@ bool SpellCast::is_attack_reset() {
     {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("CamilleQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"),
      FNV("KayleE"), FNV("LucianE"), FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
   );
-  return std::ranges::count(reset_attack_spells, FNV(name()));
+  return std::ranges::contains(reset_attack_spells, FNV(name()));
 }
-
-bool ActiveSpell::is_attack() { return MEMBER<bool>(0x11A) || MEMBER<bool>(0x11B); }

@@ -2,14 +2,13 @@
 
 #include "object.hpp"
 
-enum selector : int { health_lowest, health_highest, health_percent_lowest, distance_closest, count };
+#define ENUM(name, ...)                                                                                                \
+  enum name : int { __VA_ARGS__ };                                                                                     \
+  static inline std::vector name##_str = #__VA_ARGS__ | std::views::split(", "sv)                                             \
+                                | std::views::transform([](auto v) { return std::string(v.begin(), v.end()); })        \
+                                | std::ranges::to<std::vector>()
 
-const std::map<int, std::string> selector_map{
-  {health_lowest,         "health_lowest"        },
-  {health_highest,        "health_highest"       },
-  {health_percent_lowest, "health_percent_lowest"},
-  {distance_closest,      "distance_closest"     }
-};
+ENUM(selector, health_lowest, health_highest, health_percent_lowest, distance_closest);
 
 class ObjList : public RiotArray<Object *> {
 public:
@@ -18,6 +17,8 @@ public:
   static ObjList *turrets();
   static ObjList *inhibs();
 
+  std::vector<Object *> all();
   Object *best_object(std::function<bool(Object *)>, Object *specific);
-  static Object *get_object_in(std::initializer_list<ObjectType>, std::function<bool(Object *)>, Object *specific = nullptr);
+  static Object *
+  get_object_in(std::initializer_list<ObjectType>, std::function<bool(Object *)>, Object *specific = nullptr);
 };

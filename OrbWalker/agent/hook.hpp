@@ -5,9 +5,6 @@ public:
   static hook &inst();
   bool install();
 
-  inline static std::mutex mRun;
-  inline static vec2 MousePos;
-
 private:
   hook() = default;
   inline static std::unique_ptr<hook> instance_;
@@ -46,20 +43,20 @@ private:
   void **m_old_vmt{};
 };
 
-template <typename T>
-class mh_hook {
-public:
-  mh_hook(T target) : m_target(target) {
-    std::call_once(init, [] { MH_Initialize(); });
-  }
-  ~mh_hook() { MH_DisableHook(m_target); }
-  template <typename U>
-  void hook() {
-    MH_CreateHook(m_target, U::hooked, reinterpret_cast<LPVOID *>(&U::original));
-    MH_EnableHook(m_target);
-  }
-
-private:
-  T m_target{};
-  inline static std::once_flag init;
-};
+//template <typename T>
+//class mh_hook {
+//public:
+//  mh_hook(T target) : m_target(target) {
+//    std::call_once(init, [] { MH_Initialize(); });
+//  }
+//  ~mh_hook() { MH_DisableHook(m_target); }
+//  template <typename U>
+//  void hook() {
+//    MH_CreateHook(m_target, U::hooked, reinterpret_cast<LPVOID *>(&U::original));
+//    MH_EnableHook(m_target);
+//  }
+//
+//private:
+//  T m_target{};
+//  inline static std::once_flag init;
+//};

@@ -1,8 +1,8 @@
 #pragma once
 
- #include "memory/offset.hpp"
+#include "memory/offset.hpp"
 
 class Graves : public script {
 public:
-  bool is_reloading() override { return false; };
+  bool is_reloading() override { return game_time < last_attack_time + Object::self()->AttackDelay() / 7; };
 };

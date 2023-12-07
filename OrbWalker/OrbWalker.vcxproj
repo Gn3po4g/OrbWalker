@@ -14,6 +14,7 @@
     <ClCompile Include="class\buff.cpp" />
     <ClCompile Include="class\champion.cpp" />
     <ClCompile Include="class\data_stack.cpp" />
+    <ClCompile Include="class\hud.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="class\obj_list.cpp" />
     <ClCompile Include="class\spell.cpp" />
@@ -25,7 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="agent\champion\akshan.hpp" />
     <ClInclude Include="agent\champion\aphelios.hpp" />
     <ClInclude Include="agent\champion\azir.hpp" />
     <ClInclude Include="agent\champion\caitlyn.hpp" />
@@ -41,6 +41,7 @@
     <ClInclude Include="class\buff.hpp" />
     <ClInclude Include="class\champion.hpp" />
     <ClInclude Include="class\data_stack.hpp" />
+    <ClInclude Include="class\hud.hpp" />
     <ClInclude Include="class\object.hpp" />
     <ClInclude Include="class\obj_list.hpp" />
     <ClInclude Include="class\spell.hpp" />

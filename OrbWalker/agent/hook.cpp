@@ -50,7 +50,7 @@ void init_all(IDXGISwapChain *pSwapChain) {
   io.IniFilename = nullptr;
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   auto fonts     = io.Fonts;
-  fonts->AddFontFromMemoryTTF((void *)font_data, font_size, 18, nullptr, fonts->GetGlyphRangesChineseFull());
+  fonts->AddFontFromMemoryTTF((void *)font_data, font_data_size, 18, nullptr, fonts->GetGlyphRangesChineseFull());
   ui::LoadTheme();
 
   ImGui_ImplWin32_Init(window);
@@ -95,18 +95,21 @@ struct on_process_spell {
   inline static decltype(&hooked) original{};
 };
 
-struct get_cursor_pos {
-  static BOOL WINAPI hooked(LPPOINT lpPoint) {
-    auto org = original(lpPoint);
-    if (hook::MousePos.valid()) {
-      lpPoint->x = static_cast<LONG>(hook::MousePos.x);
-      lpPoint->y = static_cast<LONG>(hook::MousePos.y);
-      hook::MousePos.reset();
-    }
-    return org;
-  }
-  inline static decltype(&hooked) original{};
-};
+//struct get_cursor_pos {
+//  static bool valid(POINT &p) { return p.x != -1l && p.y != -1l; }
+//  static void reset(POINT &p) { p = {-1l, -1l}; }
+//
+//  static BOOL WINAPI hooked(LPPOINT lpPoint) {
+//    auto org = original(lpPoint);
+//    if (valid(hook::MousePos)) {
+//      lpPoint->x = hook::MousePos.x;
+//      lpPoint->y = hook::MousePos.y;
+//      reset(hook::MousePos);
+//    }
+//    return org;
+//  }
+//  inline static decltype(&hooked) original{};
+//};
 
 bool hook::install() {
   while (game_state() != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -115,7 +118,5 @@ bool hook::install() {
   swap_chain_hook->hook<present>(8);
   static auto on_process_spell_hook = new vmt_hook(Object::self()->ops_base());
   on_process_spell_hook->hook<on_process_spell>(30);
-  static auto get_cursor_pos_hook = new mh_hook(GetCursorPos);
-  get_cursor_pos_hook->hook<get_cursor_pos>();
   return true;
 }

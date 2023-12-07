@@ -11,8 +11,8 @@
 + Use Visual Studio 2022.
 + Use the following command to install the dependencies in Visual Studio 2022 via [vcpkg](https://github.com/microsoft/vcpkg):
 	```cmd
-	> vcpkg install imgui[core,dx11-binding,win32-binding]:x64-windows-static
-	> vcpkg install minhook:x64-windows-static
+	vcpkg install imgui[core,dx11-binding,win32-binding]:x64-windows-static
+	vcpkg install minhook:x64-windows-static
 	```
 + Build the solution or project.
 + The output file(Hid.dll) is generated at Out directory.

@@ -1,32 +1,34 @@
 #pragma once
 
-template <typename T>
-uptr RVA(T addr) {
+uptr RVA(auto addr) {
   return (uptr)GetModuleHandle(nullptr) + (uptr)addr;
 }
 
-constexpr uptr oGameState        = 0x21F6F80;
-constexpr uptr oGameTime         = 0x21FE6F8;
-constexpr uptr oLocalPlayer      = 0x22118D8;
-constexpr uptr oObjUnderMouse    = 0x21F7138;
-constexpr uptr oHeroList         = 0x21F3FE0;
-constexpr uptr oMinionList       = 0x21F6F40;
-constexpr uptr oTurretList       = 0x21FD970;
-constexpr uptr oInhibList        = 0x2211BB8;
-constexpr uptr oChatClient       = 0x2211A60;
-constexpr uptr oHudInstance      = 0x21F3ED0;
-constexpr uptr oChampionManager  = 0x21F6F70;
-constexpr uptr oViewProjMatrix   = 0x225B2C0;
+constexpr uptr oPingNet          = 0x221C4F0;
+//constexpr uptr oGameState        = 0x221DFF0;
+constexpr uptr oGameTime         = 0x2226D48;
+constexpr uptr oLocalPlayer      = 0x223A0B8;
+constexpr uptr oObjUnderMouse    = 0x221F788;
+constexpr uptr oMouseScreenPos   = 0x221F558;
+constexpr uptr oHeroList         = 0x221C620;
+constexpr uptr oMinionList       = 0x221F590;
+constexpr uptr oTurretList       = 0x2225FC0;
+constexpr uptr oInhibList        = 0x223A3A8;
+constexpr uptr oChatClient       = 0x223A250;
+constexpr uptr oHudInstance      = 0x221C510;
+constexpr uptr oChampionManager  = 0x221F5C0;
+constexpr uptr oViewProjMatrix   = 0x2284710;
+constexpr uptr oGetPing          = 0x4B1860;
+constexpr uptr oPrintChat        = 0x877000;
+constexpr uptr oIssueOrder       = 0x8D94A0;
+constexpr uptr oIssueMove        = 0x8C2630;
+constexpr uptr oAttackDelay      = 0x3D65C0;
+constexpr uptr oDataStackUpdate  = 0x18D9F0;
+constexpr uptr oDataStackPush    = 0x1A3C50;
+constexpr uptr oGetOwner         = 0x208AB0;
+constexpr uptr oTranslateString  = 0xD58690;
+constexpr uptr oMaterialRegistry = 0xEDD810;
 
-constexpr uptr oPrintChat        = 0x86ACB0;
-constexpr uptr oIssueOrder       = 0x8CDE50;
-constexpr uptr oIssueMove        = 0x8B6C50;
-constexpr uptr oAttackDelay      = 0x3CD100;
-constexpr uptr oDataStackUpdate  = 0x18C450;
-constexpr uptr oDataStackPush    = 0x1A2790;
-constexpr uptr oGetOwner         = 0x206C80;
-constexpr uptr oTranslateString  = 0xD35C40;
-constexpr uptr oMaterialRegistry = 0xEB7AB0;
 
 constexpr uptr objIndex       = 0x10;
 constexpr uptr objPosition    = 0x220;

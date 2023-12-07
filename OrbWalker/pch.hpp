@@ -4,6 +4,7 @@
 
 #include <DirectXMath.h>
 #include <Windows.h>
+using vec2 = DirectX::XMFLOAT2;
 using vec3 = DirectX::XMFLOAT3;
 using matrix = DirectX::XMFLOAT4X4;
 

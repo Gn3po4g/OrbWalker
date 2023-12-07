@@ -1,9 +1,7 @@
 #pragma once
 
-#include "class/object.hpp"
 #include "class/obj_list.hpp"
-
-constexpr float interval = 1.f / 30;
+#include "class/object.hpp"
 
 class script {
 public:
@@ -15,7 +13,6 @@ protected:
   script() = default;
 
   virtual bool can_attack();
-  virtual bool can_do_action();
   virtual bool is_reloading();
   virtual bool is_attacking();
   virtual void idle();
@@ -25,11 +22,19 @@ protected:
 
   float game_time{};
   float last_attack_time{-FLT_MAX};
-  float last_action_time{-FLT_MAX};
+  float end_attack_time{-FLT_MAX};
   std::string last_cast_spell;
   Object *markedObject{};
   enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 
+  void do_action(auto fun, auto... args) {
+    constexpr float interval = 1.f / 20;
+    static float last_action_time{-FLT_MAX};
+    if (game_time > last_action_time + interval) {
+      last_action_time = game_time;
+      fun(args...);
+    }
+  };
   void check_marked_object();
   void check_orb_state();
   bool in_skill_range(Object *, float);

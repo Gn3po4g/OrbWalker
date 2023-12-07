@@ -50,11 +50,11 @@ std::string Object::name() { return MEMBER<RiotString16>(objName).str(); }
 
 float Object::AttackDelay() { return call_function<float>(RVA(oAttackDelay), this); }
 
+float Object::AttackWindup() { return call_function<float>(RVA(oAttackDelay - 0x100), this, 0x40); }
+
 float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
 void *Object::ops_base() { return pMEMBER<void *>(0x11B8); }
-
-ActiveSpell *Object::active_spell() { return MEMBER<ActiveSpell*>(0x2A70); }
 
 bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 

@@ -4,6 +4,7 @@
 #include "offset.hpp"
 
 #include "agent/hook.hpp"
+#include "class/hud.hpp"
 #include "config/config.hpp"
 
 namespace function {
@@ -11,57 +12,64 @@ void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegist
 
 float GameTime() { return Read<float>(RVA(oGameTime)); }
 
+float ping() { return call_function<u64>(RVA(oGetPing), Read<uptr>(RVA(oPingNet))) / 1000.f; }
+
 GameState game_state() {
-  auto addr = Read<uptr>(RVA(oGameState));
-  return addr ? Read<GameState>(addr + 0xC) : Loading;
+  // auto addr = Read<uptr>(RVA(oGameState));
+  // return addr ? Read<GameState>(addr + 0xC) : Loading;
+  return GameTime() > 1.f ? Running : Loading;
 }
 
 bool IsChatOpen() { return Read<bool>(Read<uptr>(RVA(oChatClient)) + 0xC90); }
 
-bool IsLeagueInBackground() { return Read<bool>(Read<uptr>(RVA(oHudInstance)) + 0xB9); }
-
-bool CanSendInput() { return Object::self()->IsAlive() && !(IsChatOpen() || IsLeagueInBackground()); }
-
 vec2 WorldToScreen(const vec3 &in) {
-  const auto view_matrix = Read<matrix>(RVA(oViewProjMatrix));
-  const auto proj_matrix = Read<matrix>(RVA(oViewProjMatrix) + 0x40);
-  const auto viewport    = Read<Viewport>(RVA(oViewProjMatrix) + 0x8C);
+  const matrix view_matrix = Read<matrix>(RVA(oViewProjMatrix));
+  const matrix proj_matrix = Read<matrix>(RVA(oViewProjMatrix) + 0x40);
+  const Viewport viewport  = Read<Viewport>(RVA(oViewProjMatrix) + 0x8C);
 
   auto res = viewport.project(in, proj_matrix, view_matrix);
-  return vec2(res.x, res.y);
+  return {res.x, res.y};
 }
 
 void AttackObject(Object *target) {
-  const auto pos = WorldToScreen(target->position());
-  auto hudInput  = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x48);
-  call_function<bool>(
-    RVA(oIssueOrder), hudInput, 2ui8, 0ui8, 0ui8, static_cast<int>(pos.x), static_cast<int>(pos.y), 1ui8
-  );
+  const auto order = Hud::inst().hud_order();
+  const auto pos   = screen_pos(WorldToScreen(target->position()));
+  call_function<void>(RVA(oIssueOrder), order, 0, 2, 0, pos.x, pos.y, 2);
 }
 
 void Move2Mouse() {
-  if (POINT pos; GetCursorPos(&pos)) {
-    auto hudInput              = Read<uptr>(Read<uptr>(RVA(oHudInstance)) + 0x28);
-    *(vec3 *)(hudInput + 0x38) = vec3(0.f, 0.f, 0.f);
-    call_function<bool>(RVA(oIssueMove), hudInput, pos.x, pos.y, 0ui8, 0ui8, config::inst().show_click);
-  }
+  const auto mouse          = Hud::inst().hud_mouse();
+  const screen_pos pos      = mouse->mouse_screen_pos();
+  mouse->mouse_last_world() = {0.f, 0.f, 0.f};
+  call_function<void>(RVA(oIssueMove), mouse, pos.x, pos.y, 0, 0, config::inst().show_click);
 }
 
-void PressKeyAt(WORD key, const vec3 &pos) {
-  auto CreateKeyboardInput = [](WORD vkCode, bool down) {
-    INPUT input{};
-    input.type       = INPUT_KEYBOARD;
-    input.ki.wVk     = vkCode;
-    input.ki.wScan   = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
-    input.ki.dwFlags = KEYEVENTF_SCANCODE | (down ? 0 : KEYEVENTF_KEYUP);
-    return input;
-  };
-  auto PressKey = [&](WORD key) {
-    INPUT inputs[2]{CreateKeyboardInput(key, true), CreateKeyboardInput(key, false)};
-    SendInput(2, inputs, sizeof(INPUT));
-  };
-  hook::MousePos = WorldToScreen(pos);
-   PressKey(key);
+void PressKeyAt(SpellSlot spell_slot, const vec3 &pos) {
+  // auto CreateKeyboardInput = [](WORD vkCode, bool down) {
+  //   INPUT input{};
+  //   input.type       = INPUT_KEYBOARD;
+  //   input.ki.wVk     = vkCode;
+  //   input.ki.wScan   = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
+  //   input.ki.dwFlags = KEYEVENTF_SCANCODE | (down ? 0 : KEYEVENTF_KEYUP);
+  //   return input;
+  // };
+  // auto PressKey = [&](WORD key) {
+  //   INPUT inputs[2]{CreateKeyboardInput(key, true), CreateKeyboardInput(key, false)};
+  //   SendInput(2, inputs, sizeof(INPUT));
+  // };
+  ////221BE78
+  // const auto screen_pos = WorldToScreen(pos);
+  // hook::MousePos        = {static_cast<long>(screen_pos.x), static_cast<long>(screen_pos.y)};
+  // PressKey(key);
+  const auto cast         = Hud::inst().hud_cast();
+  const auto spell_info   = Object::self()->GetSpell(spell_slot)->spell_info();
+  auto &mouse_pos         = Hud::inst().hud_mouse()->mouse_screen_pos();
+  const screen_pos origin = mouse_pos;
+  mouse_pos               = WorldToScreen(pos);
+  call_function<void>(RVA(0x8C5010), cast, spell_info, 0);
+  Read<vec3>((uptr)cast + 0x2C) = pos;
+  call_function<void>(RVA(0x8C5010), cast, spell_info, 1);
+  mouse_pos = origin;
 }
 
 void Draw(std::function<void()> draw_fun) {
@@ -77,8 +85,7 @@ void Draw(std::function<void()> draw_fun) {
 
   draw_fun();
 
-  ImGuiWindow *window = ImGui::GetCurrentWindow();
-  window->DrawList->PushClipRectFullScreen();
+  ImGui::GetWindowDrawList()->PushClipRectFullScreen();
 
   ImGui::End();
   ImGui::PopStyleColor();
@@ -86,7 +93,6 @@ void Draw(std::function<void()> draw_fun) {
 }
 
 void Circle(const vec3 &center, float radius, u32 color, float thickness) {
-  ImGuiWindow *window{ImGui::GetCurrentWindow()};
   const size_t numPoints{314};
   ImVec2 points[numPoints]{};
   float theta{0.f};
@@ -96,6 +102,6 @@ void Circle(const vec3 &center, float radius, u32 color, float thickness) {
     points[i]             = {screen_pos.x, screen_pos.y};
     theta += IM_PI * 2 / numPoints;
   }
-  window->DrawList->AddPolyline(points, numPoints, color, true, thickness);
+  ImGui::GetWindowDrawList()->AddPolyline(points, numPoints, color, true, thickness);
 }
 } // namespace function

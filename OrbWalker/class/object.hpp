@@ -23,9 +23,9 @@ public:
   std::vector<Buff *> buffs();
   std::string name();
   float AttackDelay();
+  float AttackWindup();
   float BonusRadius();
   void *ops_base();
-  ActiveSpell *active_spell();
 
   bool IsAlive();
   bool IsEnemy();
