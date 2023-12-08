@@ -5,7 +5,7 @@ uptr RVA(auto addr) {
 }
 
 constexpr uptr oPingNet          = 0x221C4F0;
-//constexpr uptr oGameState        = 0x221DFF0;
+constexpr uptr oGameState        = 0x221F5D0;
 constexpr uptr oGameTime         = 0x2226D48;
 constexpr uptr oLocalPlayer      = 0x223A0B8;
 constexpr uptr oObjUnderMouse    = 0x221F788;
@@ -26,8 +26,8 @@ constexpr uptr oAttackDelay      = 0x3D65C0;
 constexpr uptr oDataStackUpdate  = 0x18D9F0;
 constexpr uptr oDataStackPush    = 0x1A3C50;
 constexpr uptr oGetOwner         = 0x208AB0;
-constexpr uptr oTranslateString  = 0xD58690;
-constexpr uptr oMaterialRegistry = 0xEDD810;
+constexpr uptr oTranslateString  = 0xD58640;
+constexpr uptr oMaterialRegistry = 0xEDD7C0;
 
 
 constexpr uptr objIndex       = 0x10;

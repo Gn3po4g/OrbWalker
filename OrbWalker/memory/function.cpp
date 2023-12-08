@@ -15,9 +15,8 @@ float GameTime() { return Read<float>(RVA(oGameTime)); }
 float ping() { return call_function<u64>(RVA(oGetPing), Read<uptr>(RVA(oPingNet))) / 1000.f; }
 
 GameState game_state() {
-  // auto addr = Read<uptr>(RVA(oGameState));
-  // return addr ? Read<GameState>(addr + 0xC) : Loading;
-  return GameTime() > 1.f ? Running : Loading;
+   auto addr = Read<uptr>(RVA(oGameState));
+   return addr ? Read<GameState>(addr + 0xC) : Loading;
 }
 
 bool IsChatOpen() { return Read<bool>(Read<uptr>(RVA(oChatClient)) + 0xC90); }
