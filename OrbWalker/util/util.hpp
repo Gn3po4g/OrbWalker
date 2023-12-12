@@ -72,22 +72,6 @@ struct screen_pos {
   screen_pos(vec2 v) : x(static_cast<i32>(v.x)), y(static_cast<i32>(v.y)) {}
 };
 
-struct Viewport {
-  i32 x, y, width, height;
-  float minZ, maxZ;
-
-  vec3 project(const vec3 &p, const matrix &proj, const matrix &view) const {
-    vec3 res;
-    auto v = DirectX::XMVector3Project(
-      DirectX::XMLoadFloat3(&p), static_cast<float>(x), static_cast<float>(y), static_cast<float>(width),
-      static_cast<float>(height), minZ, maxZ, DirectX::XMLoadFloat4x4(&proj), DirectX::XMLoadFloat4x4(&view),
-      DirectX::XMMatrixIdentity()
-    );
-    DirectX::XMStoreFloat3(&res, v);
-    return res;
-  }
-};
-
 inline float distance(const vec3 &v1, const vec3 &v2) {
   using namespace DirectX;
   const XMVECTOR x1 = XMLoadFloat3(&v1);
@@ -95,10 +79,4 @@ inline float distance(const vec3 &v1, const vec3 &v2) {
   const XMVECTOR V  = XMVectorSubtract(x2, x1);
   const XMVECTOR X  = XMVector3Length(V);
   return XMVectorGetX(X);
-}
-
-inline std::string vector2imgui(std::vector<std::string> v) {
-  std::string ret;
-  for (auto &s : v) { ret.append(s + '\0'); }
-  return ret;
 }

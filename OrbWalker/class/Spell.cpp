@@ -33,7 +33,7 @@ bool SpellCast::is_attack() { return MEMBER<bool>(0x112) || MEMBER<bool>(0x113) 
 bool SpellCast::is_attack_reset() {
   static constexpr auto reset_attack_spells = std::to_array<hash_type>(
     {FNV("ApheliosCrescendumAttack"), FNV("AsheQ"), FNV("CamilleQ"), FNV("DariusNoxianTacticsONH"), FNV("JaxW"),
-     FNV("KayleE"), FNV("LucianE"), FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
+     FNV("KayleE"), FNV("KindredQ"), FNV("LucianE"), FNV("SettQ"), FNV("SivirW"), FNV("VayneTumble")}
   );
   return std::ranges::contains(reset_attack_spells, FNV(name()));
 }

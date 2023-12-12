@@ -70,16 +70,16 @@ void script::update() {
 
 void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
-  if (spell_cast->is_attack()) last_attack_time = game_time - ping() - 0.05f;
+  if (spell_cast->is_attack()) last_attack_time = game_time;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
   // PrintMessage<0xFFFFFF>("addr: {}", last_cast_spell);
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
 
-bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay(); }
+bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay() - ping() - 0.05f; }
 
-bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.075f; }
+bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.03f; }
 
 void script::idle() {
   if (!is_attacking()) do_action(Move2Mouse);

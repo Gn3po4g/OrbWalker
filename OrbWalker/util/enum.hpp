@@ -12,6 +12,8 @@ using uptr = uintptr_t;
 
 enum GameState : i32 { Loading, Connecting, Running, Paused, Finished, Exiting };
 
+enum Selector : i32 { HealthLowest, HealthHighest, HealthPercentLowest, DistanceClosest };
+
 enum SpellSlot : i32 {
   SpellSlot_Q,
   SpellSlot_W,

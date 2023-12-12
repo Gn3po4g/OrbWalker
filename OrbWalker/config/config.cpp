@@ -3,7 +3,6 @@
 #include "config.hpp"
 
 #include "agent/ui.hpp"
-#include "class/obj_list.hpp"
 #include "class/object.hpp"
 
 using namespace nlohmann;
@@ -27,7 +26,7 @@ config::config() {
   current_skin      = config_json.value(json::json_pointer("/skin/" + Object::self()->name()), 0);
   show_attack_range = config_json.value("show_attack_range", true);
   show_click        = config_json.value("show_click", true);
-  selector          = config_json.value("selector", health_lowest);
+  selector          = config_json.value("selector", HealthLowest);
   temp_key          = config_json.value("kite_key", ImGuiKey_Space);
   kite_key          = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Space;
   temp_key          = config_json.value("clean_key", ImGuiKey_V);

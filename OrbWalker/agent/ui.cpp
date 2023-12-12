@@ -93,50 +93,84 @@ void Update() {
   static bool show_menu{true};
   if (IsKeyPressed(config::inst().menu_key)) { show_menu ^= true; }
   if (!show_menu) return;
-  window("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing)(
+  window("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoFocusOnAppearing)(
     [] {
+      SetWindowSize({400, 0});
       tab_bar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)([] {
         tab_item("Script")([] {
           auto &config = config::inst();
-          text("Drawing Setting:");
+          separator("Drawing Setting");
           if (Checkbox("Show Attack Range", &config.show_attack_range)) config.save();
           if (Checkbox("Show Click", &config.show_click)) config.save();
-          Separator();
-          text("Selector Setting:");
-          if (Combo("##Current Method", &config.selector, vector2imgui(selector_str).data())) config.save();
-          Separator();
-          text("Key Setting:");
+          separator("Selector Setting");
+          if (BeginTable("##", 2)) {
+            TableNextColumn();
+            if (RadioButton("health lowest", config.selector == HealthLowest)) {
+              config.selector = HealthLowest;
+              config.save();
+            }
+            TableNextColumn();
+            if (RadioButton("health highest", config.selector == HealthHighest)) {
+              config.selector = HealthHighest;
+              config.save();
+            }
+            TableNextColumn();
+            if (RadioButton("health percent lowest", config.selector == HealthPercentLowest)) {
+              config.selector = HealthPercentLowest;
+              config.save();
+            }
+            TableNextColumn();
+            if (RadioButton("distance closest", config.selector == DistanceClosest)) {
+              config.selector = DistanceClosest;
+              config.save();
+            }
+            EndTable();
+          }
+          separator("Key Setting");
           if (hot_key("Kite Key", config.kite_key)) config.save();
           if (hot_key("Clean Lane Key", config.clean_key)) config.save();
         });
         tab_item("Skin")([] {
           auto &config  = config::inst();
           auto &changer = skin::inst();
-          text("Skin Setting:");
+          separator("Skin Setting");
           auto &skins{changer.championSkins};
-          text("Current Skin");
-          if (Combo("##Current Skin", &config.current_skin, vector2imgui(changer.skins_name()).data())) {
-            changer.ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
-            config.save();
-          }
-          if (const auto i = changer.special_skin(); (size_t)i < changer.specialSkins.size()) {
-            const auto stack{Object::self()->dataStack()};
-            auto gear = static_cast<int>(stack->baseSkin.gear);
-            text("Current Gear");
-            if (Combo("##Current Gear", &gear, vector2imgui(changer.specialSkins[i].gears).data())) {
-              stack->baseSkin.gear = static_cast<i8>(gear);
-              stack->update(true);
+          if (BeginCombo("Current Skin", skins[config.current_skin].skinName.data())) {
+            for (int n = 0; n < skins.size(); n++) {
+              bool is_selected = (config.current_skin == n);
+              if (Selectable(skins[n].skinName.data(), is_selected)) {
+                config.current_skin = n;
+                changer.ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
+                config.save();
+              }
+              if (is_selected) SetItemDefaultFocus();
             }
+            EndCombo();
           }
-          Separator();
-          text("Key Setting:");
+          if (const size_t i = changer.special_skin(); i < changer.specialSkins.size()) {
+            const auto stack{Object::self()->dataStack()};
+            auto &gear = stack->baseSkin.gear;
+            auto &gears = changer.specialSkins[i].gears;
+            if (BeginCombo("Current Gear", gears[gear].data())) {
+              for (size_t n = 0; n < gears.size(); n++) {
+                bool is_selected     = (gear == n);
+                if (Selectable(gears[n].data(), is_selected)) {
+                  gear = n;
+                  stack->update(true);
+                }
+                if (is_selected) SetItemDefaultFocus();
+              }
+               EndCombo();
+             }
+          }
+          separator("Key Setting");
           if (hot_key("Previous Skin Key", config.prev_skin_key)) config.save();
           if (hot_key("Next Skin Key", config.next_skin_key)) config.save();
         });
         tab_item("Extras")([] {
           auto &config = config::inst();
           if (hot_key("Menu Key", config.menu_key)) config.save();
-          Separator();
+          separator();
           if (Button("Force Close")) { std::terminate(); }
         });
       });

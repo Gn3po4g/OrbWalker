@@ -23,14 +23,15 @@ Object *ObjList::best_object(std::function<bool(Object *)> fun, Object *specific
   if (ranges::contains(list, specific)) return specific;
   const auto target = ranges::min_element(list, {}, [](Object *obj) {
     const auto &config = config::inst();
-    if (config.selector == health_highest) {
+    if (config.selector == HealthHighest) {
       return -obj->health();
-    } else if (config.selector == distance_closest) {
-      return distance(obj->position(), Object::self()->position());
-    } else if (config.selector == health_percent_lowest) {
+    } else if (config.selector == HealthPercentLowest) {
       return obj->health() / obj->max_health();
+    } else if (config.selector == DistanceClosest) {
+      return distance(obj->position(), Object::self()->position());
+    } else {
+      return obj->health();
     }
-    return obj->health();
   });
   return target == list.end() ? nullptr : *target;
 }

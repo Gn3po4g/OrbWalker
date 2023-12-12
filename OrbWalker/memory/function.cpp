@@ -15,13 +15,29 @@ float GameTime() { return Read<float>(RVA(oGameTime)); }
 float ping() { return call_function<u64>(RVA(oGetPing), Read<uptr>(RVA(oPingNet))) / 1000.f; }
 
 GameState game_state() {
-   auto addr = Read<uptr>(RVA(oGameState));
-   return addr ? Read<GameState>(addr + 0xC) : Loading;
+  auto addr = Read<uptr>(RVA(oGameState));
+  return addr ? Read<GameState>(addr + 0xC) : Loading;
 }
 
 bool IsChatOpen() { return Read<bool>(Read<uptr>(RVA(oChatClient)) + 0xC90); }
 
 vec2 WorldToScreen(const vec3 &in) {
+  struct Viewport {
+    i32 x, y, width, height;
+    float minZ, maxZ;
+
+    vec3 project(const vec3 &p, const matrix &proj, const matrix &view) const {
+      vec3 res;
+      DirectX::XMStoreFloat3(
+        &res, DirectX::XMVector3Project(
+                DirectX::XMLoadFloat3(&p), static_cast<float>(x), static_cast<float>(y), static_cast<float>(width),
+                static_cast<float>(height), minZ, maxZ, DirectX::XMLoadFloat4x4(&proj), DirectX::XMLoadFloat4x4(&view),
+                DirectX::XMMatrixIdentity()
+              )
+      );
+      return res;
+    }
+  };
   const matrix view_matrix = Read<matrix>(RVA(oViewProjMatrix));
   const matrix proj_matrix = Read<matrix>(RVA(oViewProjMatrix) + 0x40);
   const Viewport viewport  = Read<Viewport>(RVA(oViewProjMatrix) + 0x8C);

@@ -6,7 +6,7 @@ public:
 
   bool show_attack_range;
   bool show_click;
-  int selector;
+  Selector selector;
   ImGuiKey kite_key;
   ImGuiKey clean_key;
 

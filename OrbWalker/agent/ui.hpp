@@ -153,7 +153,12 @@ public:
 
 static inline void text(std::string_view text) { ImGui::TextUnformatted(text.data(), text.data() + text.size()); }
 
-static inline bool hot_key(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 0.0f}) {
+static inline void separator(std::string_view text) {
+  ImGui::SeparatorText(text.data());
+}
+static inline void separator() { ImGui::Separator(); }
+
+static inline bool hot_key(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 25.f}) {
   static std::map<ImGuiID, bool> activeMap;
   auto SetToPressedKey = [](ImGuiKey &key) {
     if (IsKeyPressed(ImGuiKey_Escape)) {
@@ -171,7 +176,7 @@ static inline bool hot_key(const char *label, ImGuiKey &key, const ImVec2 &size 
   const auto id = GetID(label);
   AlignTextToFramePadding();
   text(label);
-  SameLine(150.f);
+  SameLine(GetColumnWidth() - size.x);
   if (activeMap[id]) {
     PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
     Button("...", size);
