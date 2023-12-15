@@ -112,6 +112,7 @@ struct on_process_spell {
 //};
 
 bool hook::install() {
+  BaseModuleHandle = (uptr)GetModuleHandle(nullptr);
   while (game_state() != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
   if (!Object::self()) return false;
   static auto swap_chain_hook = new vmt_hook(swap_chain());
