@@ -1,7 +1,9 @@
 #pragma once
 
+static uptr BaseModuleHandle;
+
 uptr RVA(auto addr) {
-  return (uptr)GetModuleHandle(nullptr) + (uptr)addr;
+  return BaseModuleHandle + (uptr)addr;
 }
 
 constexpr uptr oPingNet          = 0x221C4F0;
