@@ -153,9 +153,7 @@ public:
 
 static inline void text(std::string_view text) { ImGui::TextUnformatted(text.data(), text.data() + text.size()); }
 
-static inline void separator(std::string_view text) {
-  ImGui::SeparatorText(text.data());
-}
+static inline void separator(std::string_view text) { ImGui::SeparatorText(text.data()); }
 static inline void separator() { ImGui::Separator(); }
 
 static inline bool hot_key(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 25.f}) {

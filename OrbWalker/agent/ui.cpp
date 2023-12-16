@@ -93,9 +93,9 @@ void Update() {
   static bool show_menu{true};
   if (IsKeyPressed(config::inst().menu_key)) { show_menu ^= true; }
   if (!show_menu) return;
+  SetNextWindowSize({400.f, 0.f});
   window("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoFocusOnAppearing)(
     [] {
-      SetWindowSize({400, 0});
       tab_bar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)([] {
         tab_item("Script")([] {
           auto &config = config::inst();
@@ -129,6 +129,7 @@ void Update() {
           separator("Key Setting");
           if (hot_key("Kite Key", config.kite_key)) config.save();
           if (hot_key("Clean Lane Key", config.clean_key)) config.save();
+          if (hot_key("Reset Target Key", config.reset_key)) config.save();
         });
         tab_item("Skin")([] {
           auto &config  = config::inst();
@@ -149,19 +150,19 @@ void Update() {
           }
           if (const size_t i = changer.special_skin(); i < changer.specialSkins.size()) {
             const auto stack{Object::self()->dataStack()};
-            auto &gear = stack->baseSkin.gear;
-            auto &gears = changer.specialSkins[i].gears;
-            if (BeginCombo("Current Gear", gears[gear].data())) {
+            auto &current_gear = stack->baseSkin.gear;
+            auto &gears        = changer.specialSkins[i].gears;
+            if (BeginCombo("Current Gear", gears[current_gear].data())) {
               for (size_t n = 0; n < gears.size(); n++) {
-                bool is_selected     = (gear == n);
+                bool is_selected = (current_gear == n);
                 if (Selectable(gears[n].data(), is_selected)) {
-                  gear = n;
+                  current_gear = n;
                   stack->update(true);
                 }
                 if (is_selected) SetItemDefaultFocus();
               }
-               EndCombo();
-             }
+              EndCombo();
+            }
           }
           separator("Key Setting");
           if (hot_key("Previous Skin Key", config.prev_skin_key)) config.save();

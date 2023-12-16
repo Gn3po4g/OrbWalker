@@ -93,18 +93,11 @@ void script::attack() {
 
 float script::real_range() { return Object::self()->attack_range() + Object::self()->BonusRadius(); }
 
-// void script::do_action(std::function<void()> action) {
-//   constexpr float interval = 1.f / 20;
-//   static float last_action_time{-FLT_MAX};
-//   if (game_time < last_action_time + interval) return;
-//   action();
-//   last_action_time = game_time;
-// }
-
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
     if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
   }
+  if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
 }
 
 void script::check_orb_state() {

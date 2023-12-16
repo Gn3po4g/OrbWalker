@@ -9,6 +9,7 @@ public:
   Selector selector;
   ImGuiKey kite_key;
   ImGuiKey clean_key;
+  ImGuiKey reset_key;
 
   int current_skin;
   ImGuiKey prev_skin_key;

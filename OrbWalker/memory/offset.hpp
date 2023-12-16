@@ -32,8 +32,10 @@ constexpr uptr oMaterialRegistry = 0xEDD7C0;
 
 constexpr uptr objIndex       = 0x10;
 constexpr uptr objPosition    = 0x220;
+constexpr uptr objVisible        = 0x340;
 constexpr uptr objMana        = 0x370;
 constexpr uptr objTargetable  = 0xEE0;
+constexpr uptr objTargetflag  = 0xEF8;
 constexpr uptr objHealth      = 0x1088;
 constexpr uptr objMaxHealth   = 0x10A0;
 constexpr uptr objSkinId      = 0x127C;

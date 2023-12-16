@@ -13,11 +13,14 @@ u32 Object::team() { return call_virtual<59, u32>(this); }
 
 vec3 Object::position() { return MEMBER<vec3>(objPosition); }
 
-bool Object::visible() { return call_virtual<38, bool>(this); }
+bool Object::visible() { return MEMBER<bool>(objVisible); }
 
 float Object::mana() { return MEMBER<float>(objMana); }
 
-bool Object::targetable() { return MEMBER<bool>(objTargetable); }
+bool Object::targetable() {
+  const auto flag = MEMBER<i32>(objTargetflag);
+  return MEMBER<bool>(objTargetable) && (flag == 4 || flag == 1);
+}
 
 float Object::health() { return MEMBER<float>(objHealth); }
 
