@@ -7,6 +7,7 @@
 #include "agent/script.hpp"
 #include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
+#include "class/chat.hpp"
 #include "config/font.hpp"
 #include "memory/function.hpp"
 #include "memory/offset.hpp"
@@ -56,7 +57,7 @@ void init_all(IDXGISwapChain *pSwapChain) {
   ImGui_ImplWin32_Init(window);
   ImGui_ImplDX11_Init(pDevice, pDeviceContext);
 
-  PrintMessage<0x00FFFF>("Noroby's League of Legends script loaded");
+  Chat::print_message(0x00FFFF, "Noroby's League of Legends script loaded");
 }
 
 void do_in_present() {
@@ -95,21 +96,21 @@ struct on_process_spell {
   inline static decltype(&hooked) original{};
 };
 
-//struct get_cursor_pos {
-//  static bool valid(POINT &p) { return p.x != -1l && p.y != -1l; }
-//  static void reset(POINT &p) { p = {-1l, -1l}; }
+// struct get_cursor_pos {
+//   static bool valid(POINT &p) { return p.x != -1l && p.y != -1l; }
+//   static void reset(POINT &p) { p = {-1l, -1l}; }
 //
-//  static BOOL WINAPI hooked(LPPOINT lpPoint) {
-//    auto org = original(lpPoint);
-//    if (valid(hook::MousePos)) {
-//      lpPoint->x = hook::MousePos.x;
-//      lpPoint->y = hook::MousePos.y;
-//      reset(hook::MousePos);
-//    }
-//    return org;
-//  }
-//  inline static decltype(&hooked) original{};
-//};
+//   static BOOL WINAPI hooked(LPPOINT lpPoint) {
+//     auto org = original(lpPoint);
+//     if (valid(hook::MousePos)) {
+//       lpPoint->x = hook::MousePos.x;
+//       lpPoint->y = hook::MousePos.y;
+//       reset(hook::MousePos);
+//     }
+//     return org;
+//   }
+//   inline static decltype(&hooked) original{};
+// };
 
 bool hook::install() {
   while (game_state() != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));

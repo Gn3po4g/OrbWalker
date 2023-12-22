@@ -13,6 +13,7 @@
     <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
     <ClCompile Include="class\champion.cpp" />
+    <ClCompile Include="class\chat.cpp" />
     <ClCompile Include="class\data_stack.cpp" />
     <ClCompile Include="class\hud.cpp" />
     <ClCompile Include="class\object.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="agent\ui.hpp" />
     <ClInclude Include="class\buff.hpp" />
     <ClInclude Include="class\champion.hpp" />
+    <ClInclude Include="class\chat.hpp" />
     <ClInclude Include="class\data_stack.hpp" />
     <ClInclude Include="class\hud.hpp" />
     <ClInclude Include="class\object.hpp" />

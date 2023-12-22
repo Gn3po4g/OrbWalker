@@ -19,8 +19,6 @@ GameState game_state() {
   return addr ? Read<GameState>(addr + 0xC) : Loading;
 }
 
-bool IsChatOpen() { return Read<bool>(Read<uptr>(RVA(oChatClient)) + 0xC90); }
-
 vec2 WorldToScreen(const vec3 &in) {
   struct Viewport {
     i32 x, y, width, height;

@@ -1,7 +1,8 @@
 #pragma once
 
 uptr RVA(auto addr) {
-  return (uptr)GetModuleHandle(nullptr) + (uptr)addr;
+  static auto base = (uptr)GetModuleHandle(nullptr);
+  return base + (uptr)addr;
 }
 
 constexpr uptr oPingNet          = 0x221C4F0;
@@ -23,16 +24,16 @@ constexpr uptr oPrintChat        = 0x877000;
 constexpr uptr oIssueOrder       = 0x8D94A0;
 constexpr uptr oIssueMove        = 0x8C2630;
 constexpr uptr oAttackDelay      = 0x3D65C0;
+constexpr uptr oTargetableToTeam = 0xA5E770;
 constexpr uptr oDataStackUpdate  = 0x18D9F0;
 constexpr uptr oDataStackPush    = 0x1A3C50;
 constexpr uptr oGetOwner         = 0x208AB0;
 constexpr uptr oTranslateString  = 0xD58640;
 constexpr uptr oMaterialRegistry = 0xEDD7C0;
 
-
 constexpr uptr objIndex       = 0x10;
 constexpr uptr objPosition    = 0x220;
-constexpr uptr objVisible        = 0x340;
+constexpr uptr objVisible     = 0x340;
 constexpr uptr objMana        = 0x370;
 constexpr uptr objTargetable  = 0xEE0;
 constexpr uptr objTargetflag  = 0xEF8;

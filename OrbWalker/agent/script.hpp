@@ -27,14 +27,7 @@ protected:
   Object *markedObject{};
   enum class OrbState { Off, Kite, Clear } orbState{OrbState::Off};
 
-  void do_action(auto fun, auto... args) {
-    constexpr float interval = 1.f / 20;
-    static float last_action_time{-FLT_MAX};
-    if (game_time > last_action_time + interval) {
-      last_action_time = game_time;
-      fun(args...);
-    }
-  };
+  void do_action(std::function<void()> fun);
   void check_marked_object();
   void check_orb_state();
   bool in_skill_range(Object *, float);

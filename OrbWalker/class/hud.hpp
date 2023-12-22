@@ -15,6 +15,7 @@ public:
   HudOrder *hud_order();
   HudCast *hud_cast();
   bool is_background();
+  bool &is_champion_only();
 
 private:
   inline static std::unique_ptr<Hud> instance_;

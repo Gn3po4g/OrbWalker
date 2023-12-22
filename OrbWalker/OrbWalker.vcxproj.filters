@@ -62,6 +62,9 @@
     <ClCompile Include="class\hud.cpp">
       <Filter>class</Filter>
     </ClCompile>
+    <ClCompile Include="class\chat.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="memory\offset.hpp">
@@ -150,6 +153,9 @@
       <Filter>config</Filter>
     </ClInclude>
     <ClInclude Include="class\hud.hpp">
+      <Filter>class</Filter>
+    </ClInclude>
+    <ClInclude Include="class\chat.hpp">
       <Filter>class</Filter>
     </ClInclude>
   </ItemGroup>

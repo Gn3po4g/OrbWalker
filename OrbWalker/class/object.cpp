@@ -17,10 +17,7 @@ bool Object::visible() { return MEMBER<bool>(objVisible); }
 
 float Object::mana() { return MEMBER<float>(objMana); }
 
-bool Object::targetable() {
-  const auto flag = MEMBER<i32>(objTargetflag);
-  return MEMBER<bool>(objTargetable) && (flag == 4 || flag == 1);
-}
+bool Object::targetable() { return MEMBER<bool>(objTargetable) && call_function<bool>(RVA(oTargetableToTeam), this); }
 
 float Object::health() { return MEMBER<float>(objHealth); }
 
@@ -65,7 +62,7 @@ bool Object::IsEnemy() { return team() != self()->team(); }
 
 bool Object::IsValidTarget() {
   const auto flag = visible() && targetable() && IsEnemy() && IsAlive();
-  if (type() != Minion) return flag;
+  if (type() != Minion || FNV(name()) == FNV("Cherry_Plant_Powerup")) return flag;
   else return flag && max_health() > 6.f;
 }
 

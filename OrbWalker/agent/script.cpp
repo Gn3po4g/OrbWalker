@@ -10,6 +10,7 @@
 #include "champion/kalista.hpp"
 #include "champion/sett.hpp"
 #include "champion/zeri.hpp"
+#include "class/chat.hpp"
 #include "class/hud.hpp"
 #include "config/config.hpp"
 #include "memory/function.hpp"
@@ -60,7 +61,7 @@ void script::update() {
     }
   });
 
-  if (!Object::self()->IsAlive() || IsChatOpen() || Hud::inst().is_background()) return;
+  if (!Object::self()->IsAlive() || Chat::inst().is_open() || Hud::inst().is_background()) return;
 
   if (orbState != OrbState::Off) {
     if (is_reloading()) idle();
@@ -72,14 +73,14 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  // PrintMessage<0xFFFFFF>("addr: {}", last_cast_spell);
+  // PrintMessage<0xFFFFFF>("addr: {}", spell_cast->name());
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
 
-bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay() - ping() - 0.05f; }
+bool script::is_reloading() { return game_time < last_attack_time + Object::self()->AttackDelay() - ping() * 2; }
 
-bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup() + 0.03f; }
+bool script::is_attacking() { return game_time < last_attack_time + Object::self()->AttackWindup(); }
 
 void script::idle() {
   if (!is_attacking()) do_action(Move2Mouse);
@@ -87,23 +88,36 @@ void script::idle() {
 
 void script::attack() {
   if (const auto obj = get_attack_target(); obj && can_attack()) {
-    do_action(AttackObject, obj);
+    do_action(std::bind(AttackObject, obj));
   } else idle();
 }
 
 float script::real_range() { return Object::self()->attack_range() + Object::self()->BonusRadius(); }
 
+void script::do_action(std::function<void()> fun) {
+  constexpr float interval = 1.f / 20;
+  static float last_action_time{-FLT_MAX};
+  if (game_time > last_action_time + interval) {
+    last_action_time = game_time;
+    fun();
+  }
+};
+
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
     if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
   }
-  if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
+  if (ImGui::IsKeyPressed(config::inst().reset_key), false) markedObject = nullptr;
 }
 
 void script::check_orb_state() {
-  if (ImGui::IsKeyDown(config::inst().kite_key)) orbState = OrbState::Kite;
-  else if (ImGui::IsKeyDown(config::inst().clean_key)) orbState = OrbState::Clear;
+  if (ImGui::IsKeyDown(config::inst().kite_key)) {
+    orbState                       = OrbState::Kite;
+    Hud::inst().is_champion_only() = true;
+  } else if (ImGui::IsKeyDown(config::inst().clean_key)) orbState = OrbState::Clear;
   else orbState = OrbState::Off;
+
+  if (ImGui::IsKeyReleased(config::inst().kite_key)) Hud::inst().is_champion_only() = false;
 }
 
 Object *script::get_attack_target() {
