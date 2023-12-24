@@ -1,10 +1,5 @@
 #pragma once
 
-uptr RVA(auto addr) {
-  static auto base = (uptr)GetModuleHandle(nullptr);
-  return base + (uptr)addr;
-}
-
 constexpr uptr oPingNet          = 0x221C4F0;
 constexpr uptr oGameState        = 0x221F5D0;
 constexpr uptr oGameTime         = 0x2226D48;

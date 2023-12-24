@@ -2,8 +2,6 @@
 
 #include "buff.hpp"
 
-#include "memory/offset.hpp"
-
 std::string Buff::name() {
   const auto name = MEMBER<RiotArray<const char> *>(0x10);
   return std::string(name->data, name->size);

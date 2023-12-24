@@ -2,9 +2,6 @@
 
 #include "object.hpp"
 
-#include "memory/function.hpp"
-#include "memory/offset.hpp"
-
 Object *Object::self() { return Read<Object *>(RVA(oLocalPlayer)); }
 
 Object *Object::obj_under_mouse() { return Read<Object *>(Read<uptr>(RVA(oObjUnderMouse)) + 0x18); }

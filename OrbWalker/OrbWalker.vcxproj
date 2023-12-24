@@ -7,21 +7,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="agent\hook.cpp" />
+    <ClCompile Include="agent\config.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\skinchanger.cpp" />
     <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
     <ClCompile Include="class\champion.cpp" />
-    <ClCompile Include="class\chat.cpp" />
     <ClCompile Include="class\data_stack.cpp" />
-    <ClCompile Include="class\hud.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="class\obj_list.cpp" />
     <ClCompile Include="class\spell.cpp" />
-    <ClCompile Include="config\config.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="memory\function.cpp" />
+    <ClCompile Include="hook.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -35,38 +32,32 @@
     <ClInclude Include="agent\champion\kalista.hpp" />
     <ClInclude Include="agent\champion\sett.hpp" />
     <ClInclude Include="agent\champion\zeri.hpp" />
-    <ClInclude Include="agent\hook.hpp" />
+    <ClInclude Include="agent\config.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />
     <ClInclude Include="agent\ui.hpp" />
     <ClInclude Include="class\buff.hpp" />
     <ClInclude Include="class\champion.hpp" />
-    <ClInclude Include="class\chat.hpp" />
     <ClInclude Include="class\data_stack.hpp" />
-    <ClInclude Include="class\hud.hpp" />
     <ClInclude Include="class\object.hpp" />
     <ClInclude Include="class\obj_list.hpp" />
     <ClInclude Include="class\spell.hpp" />
-    <ClInclude Include="config\config.hpp" />
-    <ClInclude Include="config\font.hpp" />
-    <ClInclude Include="memory\function.hpp" />
-    <ClInclude Include="memory\offset.hpp" />
-    <ClInclude Include="memory\spoof_call.h" />
     <ClInclude Include="pch.hpp" />
+    <ClInclude Include="spoof_call.h" />
     <ClInclude Include="util\enum.hpp" />
     <ClInclude Include="util\encryption.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
+    <ClInclude Include="util\function.hpp" />
     <ClInclude Include="util\json.hpp" />
-    <ClInclude Include="util\util.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="memory\spoofer.asm" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="spoofer.asm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -2,28 +2,45 @@
 
 #include <d3d11.h>
 
-#include "hook.hpp"
-
 #include "agent/script.hpp"
 #include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
-#include "class/chat.hpp"
-#include "config/font.hpp"
-#include "memory/function.hpp"
-#include "memory/offset.hpp"
+#include "res/font.hpp"
 
-hook &hook::inst() {
-  static std::once_flag singleton;
-  std::call_once(singleton, [&] { instance_.reset(new hook); });
-  return *instance_;
-}
+class vmt_hook {
+public:
+  vmt_hook(void *base) : m_base((void ***)base) {
+    m_old_vmt = *m_base;
+    size_t size{};
+    while (m_old_vmt[size] && !IsBadCodePtr((FARPROC)m_old_vmt[size])) { ++size; }
+    m_new_vmt = (new void *[size + 1]) + 1;
+    std::copy_n(m_old_vmt - 1, size + 1, m_new_vmt - 1);
+    *m_base = m_new_vmt;
+  }
+
+  //~vmt_hook() {
+  //  *m_base = m_old_vmt;
+  //  delete[] (m_new_vmt - 1);
+  //}
+
+  template <typename T>
+  void hook(size_t idx) {
+    m_new_vmt[idx] = (void *)(&T::hooked);
+    T::original    = reinterpret_cast<decltype(T::original)>(m_old_vmt[idx]);
+  }
+
+private:
+  void ***m_base{};
+  void **m_new_vmt{};
+  void **m_old_vmt{};
+};
 
 HWND window{};
 WNDPROC oWndProc{};
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 
-LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-  if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) { return true; }
+static LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+  if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) return true;
   return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
@@ -31,7 +48,7 @@ ID3D11Device *pDevice{};
 ID3D11DeviceContext *pDeviceContext{};
 ID3D11RenderTargetView *pRenderTargetView{};
 
-void init_all(IDXGISwapChain *pSwapChain) {
+static void init_all(IDXGISwapChain *pSwapChain) {
   pSwapChain->GetDevice(IID_PPV_ARGS(&pDevice));
   if (!pDevice) throw std::exception();
   pDevice->GetImmediateContext(&pDeviceContext);
@@ -52,7 +69,6 @@ void init_all(IDXGISwapChain *pSwapChain) {
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   auto fonts     = io.Fonts;
   fonts->AddFontFromMemoryTTF((void *)font_data, font_data_size, 18, nullptr, fonts->GetGlyphRangesChineseFull());
-  ui::LoadTheme();
 
   ImGui_ImplWin32_Init(window);
   ImGui_ImplDX11_Init(pDevice, pDeviceContext);
@@ -60,13 +76,12 @@ void init_all(IDXGISwapChain *pSwapChain) {
   Chat::print_message(0x00FFFF, "Noroby's League of Legends script loaded");
 }
 
-void do_in_present() {
+static void do_in_present() {
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 
-  ui::Update();
-
+  ui::inst().update();
   script::inst().update();
   skin::inst().update();
 
@@ -96,28 +111,12 @@ struct on_process_spell {
   inline static decltype(&hooked) original{};
 };
 
-// struct get_cursor_pos {
-//   static bool valid(POINT &p) { return p.x != -1l && p.y != -1l; }
-//   static void reset(POINT &p) { p = {-1l, -1l}; }
-//
-//   static BOOL WINAPI hooked(LPPOINT lpPoint) {
-//     auto org = original(lpPoint);
-//     if (valid(hook::MousePos)) {
-//       lpPoint->x = hook::MousePos.x;
-//       lpPoint->y = hook::MousePos.y;
-//       reset(hook::MousePos);
-//     }
-//     return org;
-//   }
-//   inline static decltype(&hooked) original{};
-// };
+uptr base{};
 
-bool hook::install() {
+void Hook() {
+  base = (uptr)GetModuleHandle(nullptr);
   while (game_state() != Running) std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  if (!Object::self()) return false;
-  static auto swap_chain_hook = new vmt_hook(swap_chain());
-  swap_chain_hook->hook<present>(8);
-  static auto on_process_spell_hook = new vmt_hook(Object::self()->ops_base());
-  on_process_spell_hook->hook<on_process_spell>(30);
-  return true;
+  if (!Object::self()) return;
+  vmt_hook(swap_chain()).hook<present>(8);
+  vmt_hook(Object::self()->ops_base()).hook<on_process_spell>(30);
 }

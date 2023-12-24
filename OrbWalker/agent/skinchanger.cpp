@@ -1,13 +1,10 @@
 #include "pch.hpp"
 
 #include "skinchanger.hpp"
+#include "config.hpp"
 
 #include "class/champion.hpp"
-#include "config/config.hpp"
-#include "memory/offset.hpp"
-
-#include "memory/function.hpp"
-#include <class/obj_list.hpp>
+#include "class/obj_list.hpp"
 
 using namespace std;
 

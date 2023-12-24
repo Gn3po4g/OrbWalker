@@ -110,11 +110,17 @@ inline std::map<ImGuiKey, std::string> keyMap = {
   {ImGuiKey_MouseX2,        "MouseX2"       }
 };
 
-namespace ui {
-using namespace ImGui;
-void LoadTheme();
+class ui {
+public:
+  static ui &inst();
 
-void Update();
+  void update();
+
+private:
+  ui();
+  inline static bool show_menu{true};
+  inline static std::unique_ptr<ui> instance_;
+};
 
 class wrapper {
 public:
@@ -130,24 +136,24 @@ protected:
 
 class window : public wrapper {
 public:
-  window(const char *name, bool *p_open = nullptr, ImGuiWindowFlags flags = 0) : wrapper(Begin(name, p_open, flags)) {}
-  ~window() { End(); }
+  window(const char *name, bool *p_open = nullptr, ImGuiWindowFlags flags = 0) : wrapper(ImGui::Begin(name, p_open, flags)) {}
+  ~window() { ImGui::End(); }
 };
 
 class tab_bar : public wrapper {
 public:
-  tab_bar(const char *str_id, ImGuiTabBarFlags flags = 0) : wrapper(BeginTabBar(str_id, flags)) {}
+  tab_bar(const char *str_id, ImGuiTabBarFlags flags = 0) : wrapper(ImGui::BeginTabBar(str_id, flags)) {}
   ~tab_bar() {
-    if (m_ok) EndTabBar();
+    if (m_ok) ImGui::EndTabBar();
   }
 };
 
 class tab_item : public wrapper {
 public:
   tab_item(const char *label, bool *p_open = nullptr, ImGuiTabItemFlags flags = 0)
-      : wrapper(BeginTabItem(label, p_open, flags)) {}
+      : wrapper(ImGui::BeginTabItem(label, p_open, flags)) {}
   ~tab_item() {
-    if (m_ok) EndTabItem();
+    if (m_ok) ImGui::EndTabItem();
   }
 };
 
@@ -159,33 +165,32 @@ static inline void separator() { ImGui::Separator(); }
 static inline bool hot_key(const char *label, ImGuiKey &key, const ImVec2 &size = {100.0f, 25.f}) {
   static std::map<ImGuiID, bool> activeMap;
   auto SetToPressedKey = [](ImGuiKey &key) {
-    if (IsKeyPressed(ImGuiKey_Escape)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
       key = ImGuiKey_None;
       return true;
     }
     for (const auto &key_in_map : keyMap | std::views::keys) {
-      if (IsKeyPressed(key_in_map)) {
+      if (ImGui::IsKeyPressed(key_in_map)) {
         key = key_in_map;
         return true;
       }
     }
     return false;
   };
-  const auto id = GetID(label);
-  AlignTextToFramePadding();
+  const auto id = ImGui::GetID(label);
+  ImGui::AlignTextToFramePadding();
   text(label);
-  SameLine(GetColumnWidth() - size.x);
+  ImGui::SameLine(ImGui::GetColumnWidth() - size.x);
   if (activeMap[id]) {
-    PushStyleColor(ImGuiCol_Button, GetColorU32(ImGuiCol_ButtonActive));
-    Button("...", size);
-    PopStyleColor();
-    if ((!IsItemHovered() && GetIO().MouseClicked[0]) || SetToPressedKey(key)) {
+    ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
+    ImGui::Button("...", size);
+    ImGui::PopStyleColor();
+    if ((!ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0]) || SetToPressedKey(key)) {
       activeMap[id] = false;
       return true;
     }
-  } else if (Button(keyMap[key].data(), size)) {
+  } else if (ImGui::Button(keyMap[key].data(), size)) {
     activeMap[id] = true;
   }
   return false;
 }
-} // namespace ui

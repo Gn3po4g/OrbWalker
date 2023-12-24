@@ -1,5 +1,6 @@
 #include "pch.hpp"
 
+#include "config.hpp"
 #include "script.hpp"
 
 #include "champion/aphelios.hpp"
@@ -10,10 +11,6 @@
 #include "champion/kalista.hpp"
 #include "champion/sett.hpp"
 #include "champion/zeri.hpp"
-#include "class/chat.hpp"
-#include "class/hud.hpp"
-#include "config/config.hpp"
-#include "memory/function.hpp"
 
 class Akshan : public script {
   bool is_attacking() override { return game_time < last_attack_time + Object::self()->AttackWindup() * 1.75 + 0.175; }
@@ -49,7 +46,7 @@ script &script::inst() {
 }
 
 void script::update() {
-  game_time = GameTime();
+  game_time = ::game_time();
 
   check_orb_state();
   check_marked_object();
@@ -107,7 +104,7 @@ void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
     if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
   }
-  if (ImGui::IsKeyPressed(config::inst().reset_key), false) markedObject = nullptr;
+  if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
 }
 
 void script::check_orb_state() {

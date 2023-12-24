@@ -1,14 +1,14 @@
 #include "pch.hpp"
 
+#include "config.hpp"
+#include "skinchanger.hpp"
 #include "ui.hpp"
 
-#include "agent/skinchanger.hpp"
-#include "class/obj_list.hpp"
 #include "class/object.hpp"
-#include "config/config.hpp"
 
-namespace ui {
-void LoadTheme() {
+using namespace ImGui;
+
+ui::ui() {
   ImVec4 *colors                         = GetStyle().Colors;
   colors[ImGuiCol_Text]                  = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
   colors[ImGuiCol_TextDisabled]          = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
@@ -89,8 +89,13 @@ void LoadTheme() {
   style.TabRounding       = 4;
 }
 
-void Update() {
-  static bool show_menu{true};
+ui &ui::inst() {
+  static std::once_flag singleton;
+  std::call_once(singleton, [&] { instance_.reset(new ui); });
+  return *instance_;
+}
+
+void ui::update() {
   if (IsKeyPressed(config::inst().menu_key)) { show_menu ^= true; }
   if (!show_menu) return;
   SetNextWindowSize({400.f, 0.f});
@@ -156,7 +161,7 @@ void Update() {
               for (size_t n = 0; n < gears.size(); n++) {
                 bool is_selected = (current_gear == n);
                 if (Selectable(gears[n].data(), is_selected)) {
-                  current_gear = n;
+                  current_gear = (i8)n;
                   stack->update(true);
                 }
                 if (is_selected) SetItemDefaultFocus();
@@ -177,13 +182,4 @@ void Update() {
       });
     }
   );
-
-  // if (ImGui::BeginTabItem("Infos")) {
-  //   for (const auto minion : std::span(minions->data, minions->size)) {
-  //       if (minion->position()-self->position() < 300.f)
-  //       ImGui::Text(minion->name().data());
-  //   }
-  //   ImGui::EndTabItem();
-  // }
 }
-} // namespace ui

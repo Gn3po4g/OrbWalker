@@ -10,28 +10,16 @@
     <Filter Include="class">
       <UniqueIdentifier>{2d4aa31f-1a47-4148-87c2-72ca3089edd6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="config">
-      <UniqueIdentifier>{039e533d-57af-4c17-abe6-86290b04fae2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="memory">
-      <UniqueIdentifier>{69a3290e-f86c-43f3-a311-67e2e07d9de3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="util">
       <UniqueIdentifier>{1ebc6793-e221-4816-8994-cf4f987d43b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="config\config.cpp">
-      <Filter>config</Filter>
-    </ClCompile>
     <ClCompile Include="class\object.cpp">
       <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\champion.cpp">
       <Filter>class</Filter>
-    </ClCompile>
-    <ClCompile Include="memory\function.cpp">
-      <Filter>memory</Filter>
     </ClCompile>
     <ClCompile Include="class\buff.cpp">
       <Filter>class</Filter>
@@ -45,9 +33,6 @@
     <ClCompile Include="class\spell.cpp">
       <Filter>class</Filter>
     </ClCompile>
-    <ClCompile Include="agent\hook.cpp">
-      <Filter>agent</Filter>
-    </ClCompile>
     <ClCompile Include="agent\script.cpp">
       <Filter>agent</Filter>
     </ClCompile>
@@ -59,26 +44,12 @@
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="class\hud.cpp">
-      <Filter>class</Filter>
-    </ClCompile>
-    <ClCompile Include="class\chat.cpp">
-      <Filter>class</Filter>
+    <ClCompile Include="hook.cpp" />
+    <ClCompile Include="agent\config.cpp">
+      <Filter>agent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="memory\offset.hpp">
-      <Filter>memory</Filter>
-    </ClInclude>
-    <ClInclude Include="memory\spoof_call.h">
-      <Filter>memory</Filter>
-    </ClInclude>
-    <ClInclude Include="util\util.hpp">
-      <Filter>util</Filter>
-    </ClInclude>
-    <ClInclude Include="config\config.hpp">
-      <Filter>config</Filter>
-    </ClInclude>
     <ClInclude Include="util\enum.hpp">
       <Filter>util</Filter>
     </ClInclude>
@@ -87,9 +58,6 @@
     </ClInclude>
     <ClInclude Include="util\json.hpp">
       <Filter>util</Filter>
-    </ClInclude>
-    <ClInclude Include="memory\function.hpp">
-      <Filter>memory</Filter>
     </ClInclude>
     <ClInclude Include="class\buff.hpp">
       <Filter>class</Filter>
@@ -108,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="class\obj_list.hpp">
       <Filter>class</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\hook.hpp">
-      <Filter>agent</Filter>
     </ClInclude>
     <ClInclude Include="agent\script.hpp">
       <Filter>agent</Filter>
@@ -149,22 +114,18 @@
     <ClInclude Include="agent\champion\kalista.hpp">
       <Filter>agent\champion</Filter>
     </ClInclude>
-    <ClInclude Include="config\font.hpp">
-      <Filter>config</Filter>
+    <ClInclude Include="spoof_call.h" />
+    <ClInclude Include="util\function.hpp">
+      <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="class\hud.hpp">
-      <Filter>class</Filter>
+    <ClInclude Include="agent\config.hpp">
+      <Filter>agent</Filter>
     </ClInclude>
-    <ClInclude Include="class\chat.hpp">
-      <Filter>class</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="memory\spoofer.asm">
-      <Filter>memory</Filter>
-    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="spoofer.asm" />
   </ItemGroup>
 </Project>

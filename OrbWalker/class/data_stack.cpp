@@ -2,9 +2,6 @@
 
 #include "data_stack.hpp"
 
-#include "memory/function.hpp"
-#include "memory/offset.hpp"
-
 void DataStack::update(bool change) { call_function<void>(RVA(oDataStackUpdate), this, change); }
 
 void DataStack::push(std::string_view model, int32_t skin) {
