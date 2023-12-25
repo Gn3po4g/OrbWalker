@@ -4,9 +4,6 @@
     <Filter Include="agent">
       <UniqueIdentifier>{67edf1eb-9aff-4950-95a8-4e28b8af4c3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="agent\champion">
-      <UniqueIdentifier>{e4cc1269-c0ad-46e5-87f5-d01572f444b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="class">
       <UniqueIdentifier>{2d4aa31f-1a47-4148-87c2-72ca3089edd6}</UniqueIdentifier>
     </Filter>
@@ -86,34 +83,10 @@
     <ClInclude Include="agent\ui.hpp">
       <Filter>agent</Filter>
     </ClInclude>
-    <ClInclude Include="agent\champion\cassiopeia.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\graves.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\zeri.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
     <ClInclude Include="util\encryption.hpp">
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="agent\champion\aphelios.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\sett.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\caitlyn.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\azir.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
-    <ClInclude Include="agent\champion\kalista.hpp">
-      <Filter>agent\champion</Filter>
-    </ClInclude>
     <ClInclude Include="spoof_call.h" />
     <ClInclude Include="util\function.hpp">
       <Filter>util</Filter>

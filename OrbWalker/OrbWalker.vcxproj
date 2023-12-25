@@ -24,14 +24,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="agent\champion\aphelios.hpp" />
-    <ClInclude Include="agent\champion\azir.hpp" />
-    <ClInclude Include="agent\champion\caitlyn.hpp" />
-    <ClInclude Include="agent\champion\cassiopeia.hpp" />
-    <ClInclude Include="agent\champion\graves.hpp" />
-    <ClInclude Include="agent\champion\kalista.hpp" />
-    <ClInclude Include="agent\champion\sett.hpp" />
-    <ClInclude Include="agent\champion\zeri.hpp" />
     <ClInclude Include="agent\config.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\skinchanger.hpp" />

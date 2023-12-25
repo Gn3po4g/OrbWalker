@@ -3,18 +3,7 @@
 #include "config.hpp"
 #include "script.hpp"
 
-#include "champion/aphelios.hpp"
-#include "champion/azir.hpp"
-#include "champion/caitlyn.hpp"
-#include "champion/cassiopeia.hpp"
-#include "champion/graves.hpp"
-#include "champion/kalista.hpp"
-#include "champion/sett.hpp"
-#include "champion/zeri.hpp"
-
-class Akshan : public script {
-  bool is_attacking() override { return game_time < last_attack_time + Object::self()->AttackWindup() * 1.75 + 0.175; }
-};
+#include "res/script_impl.hpp"
 
 script &script::inst() {
   static std::once_flag singleton;

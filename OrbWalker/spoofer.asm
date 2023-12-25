@@ -1,6 +1,3 @@
-
-PUBLIC _spoofer_stub
-     
 .code
      
 _spoofer_stub PROC
