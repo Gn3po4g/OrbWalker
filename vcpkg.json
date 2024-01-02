@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "dependencies": [
+    {
+      "name": "imgui",
+      "features": ["core", "dx11-binding", "win32-binding"],
+      "triplet": "x64-windows-static"
+    },
+    {
+      "name": "glm",
+      "triplet": "x64-windows-static"
+    }
+  ]
+}
