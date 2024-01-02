@@ -7,54 +7,70 @@
 
 using namespace nlohmann;
 
-std::string file_name = "setting.json"s;
-json config_json      = json::object();
+constexpr auto file_name = "setting.json"s;
+
+void to_json(json &j, const config &cfg) {
+  j = json{
+    {"general",
+     {
+       {"show_attack_range", cfg.show_attack_range},
+       {"show_click", cfg.show_click},
+       {"selector", cfg.selector},
+     }                   },
+    {"key",
+     {
+       {"menu_key", cfg.menu_key},
+       {"kite_key", cfg.kite_key},
+       {"clean_key", cfg.clean_key},
+       {"reset_key", cfg.reset_key},
+       {"prev_skin_key", cfg.prev_skin_key},
+       {"next_skin_key", cfg.next_skin_key},
+     }                   },
+    {"skin",    cfg.skins}
+  };
+}
+
+void from_json(const json &j, ImGuiKey &key) {
+  const auto k = (ImGuiKey)j.get<int>();
+  if (keyMap.contains(k)) key = k;
+  else key = ImGuiKey_None;
+}
+
+void from_json(const json &j, config &cfg) {
+  j.at("skin").get_to(cfg.skins);
+  j.at("general").at("show_attack_range").get_to(cfg.show_attack_range);
+  j.at("general").at("show_click").get_to(cfg.show_click);
+  j.at("general").at("selector").get_to(cfg.selector);
+  j.at("key").at("menu_key").get_to(cfg.menu_key);
+  j.at("key").at("kite_key").get_to(cfg.kite_key);
+  j.at("key").at("clean_key").get_to(cfg.clean_key);
+  j.at("key").at("reset_key").get_to(cfg.reset_key);
+  j.at("key").at("prev_skin_key").get_to(cfg.prev_skin_key);
+  j.at("key").at("next_skin_key").get_to(cfg.next_skin_key);
+}
 
 config &config::inst() {
   static std::once_flag singleton;
-  std::call_once(singleton, [&] { instance_.reset(new config); });
+  std::call_once(singleton, [] {
+    try {
+      instance_.reset(new config);
+      std::ifstream file(file_name);
+      json::parse(file).get_to(*instance_);
+      file.close();
+      instance_->current_skin = instance_->skins[Object::self()->name()];
+    } catch (...) { instance_.reset(new config); }
+  });
   return *instance_;
 }
 
-config::config() {
-  auto in = std::ifstream(file_name);
-  if (in.good()) {
-    const json j = json::parse(in, nullptr, false, true);
-    if (!j.is_discarded()) config_json = j;
-  }
-  ImGuiKey temp_key = ImGuiKey( - 1);
-  current_skin      = config_json.value(json::json_pointer("/skin/" + Object::self()->name()), 0);
-  show_attack_range = config_json.value("show_attack_range", true);
-  show_click        = config_json.value("show_click", true);
-  selector          = config_json.value("selector", HealthLowest);
-  temp_key          = config_json.value("kite_key", ImGuiKey(-1));
-  kite_key          = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Space;
-  temp_key          = config_json.value("clean_key", ImGuiKey(-1));
-  clean_key         = keyMap.contains(temp_key) ? temp_key : ImGuiKey_V;
-  temp_key          = config_json.value("reset_key", ImGuiKey(-1));
-  reset_key         = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Tab;
-  temp_key          = config_json.value("prev_skin_key", ImGuiKey(-1));
-  prev_skin_key     = keyMap.contains(temp_key) ? temp_key : ImGuiKey_PageUp;
-  temp_key          = config_json.value("next_skin_key", ImGuiKey(-1));
-  next_skin_key     = keyMap.contains(temp_key) ? temp_key : ImGuiKey_PageDown;
-  temp_key          = config_json.value("menu_key", ImGuiKey(-1));
-  menu_key          = keyMap.contains(temp_key) ? temp_key : ImGuiKey_Insert;
-  in.close();
-}
+config::config()
+    : skins({}), show_attack_range(true), show_click(true), selector(HealthLowest), kite_key(ImGuiKey_Space),
+      clean_key(ImGuiKey_V), reset_key(ImGuiKey_Tab), current_skin(0), prev_skin_key(ImGuiKey_PageUp),
+      next_skin_key(ImGuiKey_PageDown), menu_key(ImGuiKey_Insert) {}
 
 void config::save() {
-  auto out = std::ofstream(file_name);
-  if (!out.good()) return;
-  config_json["skin"][Object::self()->name()] = current_skin;
-  config_json["show_attack_range"]            = show_attack_range;
-  config_json["show_click"]                   = show_click;
-  config_json["kite_key"]                     = kite_key;
-  config_json["clean_key"]                    = clean_key;
-  config_json["reset_key"]                    = reset_key;
-  config_json["prev_skin_key"]                = prev_skin_key;
-  config_json["next_skin_key"]                = next_skin_key;
-  config_json["menu_key"]                     = menu_key;
-  config_json["selector"]                     = selector;
-  out << config_json.dump(2);
-  out.close();
+  skins[Object::self()->name()] = current_skin;
+  std::ofstream file(file_name);
+  file << json(*this).dump(2);
+  file.close();
 }

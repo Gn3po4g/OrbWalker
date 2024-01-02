@@ -3,6 +3,7 @@
 class config {
 public:
   static config &inst();
+  std::map<std::string, int> skins;
 
   bool show_attack_range;
   bool show_click;

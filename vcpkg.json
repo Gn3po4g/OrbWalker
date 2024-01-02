@@ -3,12 +3,13 @@
   "dependencies": [
     {
       "name": "imgui",
-      "features": ["core", "dx11-binding", "win32-binding"],
-      "triplet": "x64-windows-static"
+      "default-features": false,
+      "features": ["dx11-binding", "win32-binding"],
+      "platform": "x64 & windows & static"
     },
     {
       "name": "glm",
-      "triplet": "x64-windows-static"
+      "platform": "x64 & windows & static"
     }
   ]
 }

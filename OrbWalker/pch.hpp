@@ -26,8 +26,6 @@ using namespace std::string_view_literals;
 #include <imgui_impl_win32.h>
 #include <imgui_internal.h>
 
-#include <glm/geometric.hpp>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 using mat4 = glm::mat4;
 using vec3 = glm::vec3;
