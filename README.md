@@ -9,10 +9,7 @@
 # Build:
 
 + Use Visual Studio 2022.
-+ Use the following command to install the dependencies in Visual Studio 2022 via [vcpkg](https://github.com/microsoft/vcpkg):
-```cmd
-vcpkg install
-```
++ Install [vcpkg](https://github.com/microsoft/vcpkg#user-content-quick-start-windows) for VS2022.
 + Build the solution or project.
 + The output file(Hid.dll) is generated at Out directory.
 
