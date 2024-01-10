@@ -25,6 +25,7 @@ using namespace std::string_view_literals;
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 #include <imgui_internal.h>
+#include <nlohmann/json.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 using mat4 = glm::mat4;
@@ -38,4 +39,3 @@ using scrn = glm::i32vec2;
 #include "util/enum.hpp"
 #include "util/fnvhash.hpp"
 #include "util/function.hpp"
-#include "util/json.hpp"

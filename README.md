@@ -1,7 +1,12 @@
-<h1 align="center">Supported Version: 13.24</h1>
+<h1 align="center">Supported Version: 14.1</h1>
+
+# Current Issues
++ Skin changer breaks.
++ Varus(or more) will cause crash when using E.
+
 
 # Feature
-1. Skin Changer(thanks to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
+1. Skin changer(thanks to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
 2. Show attack range.
 3. Hold space to attack champions, hold v to clean line(configurable).
 4. Left-click to lock on target.

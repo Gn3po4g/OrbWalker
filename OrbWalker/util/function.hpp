@@ -2,7 +2,7 @@
 
 template <typename T>
 struct RiotArray {
-  uintptr_t unused;
+  uptr unused;
   T *data;
   i32 size;
   i32 capacity;
@@ -26,7 +26,7 @@ struct RiotString16 {
 
   std::string str() const {
     if (m_size >= 16) return std::string(p_str, m_size);
-    else return std::string(m_str, m_size);
+    else return std::string((char*)this, m_size);
   }
 };
 
@@ -124,13 +124,13 @@ inline float distance(const vec3 &p1, const vec3 &p2) { return glm::distance(p1,
 
 inline void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1C0); }
 
-inline float game_time() { return Read<float>(RVA(oGameTime)); }
+inline float get_game_time() { return Read<float>(RVA(oGameTime)); }
 
 inline float ping() { return call_function<u64>(RVA(oGetPing), Read<uptr>(RVA(oPingNet))) / 1000.f; }
 
-inline GameState game_state() {
+inline std::optional<GameState> game_state() {
   auto addr = Read<uptr>(RVA(oGameState));
-  return addr ? Read<GameState>(addr + 0xC) : Loading;
+  return addr ? std::optional<GameState>(Read<GameState>(addr + 0xC)) : std::nullopt;
 }
 
 inline vec2 WorldToScreen(const vec3 &in) {
@@ -138,7 +138,7 @@ inline vec2 WorldToScreen(const vec3 &in) {
   const mat4 proj_matrix      = Read<mat4>(RVA(oViewProjMatrix) + 0x40);
   const glm::u32vec4 viewport = Read<glm::u32vec4>(RVA(oViewProjMatrix) + 0x8C);
   const mat4 adjust           = glm::scale(mat4(1.f), {1.f, -1.f, 1.f});
-  vec3 projected              = glm::project(in, view_matrix, adjust * proj_matrix, viewport);
+  vec3 projected              = glm::project(in, proj_matrix * view_matrix, adjust, viewport);
   return projected;
 }
 

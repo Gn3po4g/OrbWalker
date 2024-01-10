@@ -8,26 +8,29 @@ class Akshan : public script {
 /// Aphelios
 class Aphelios : public script {
   bool in_attack_range(Object *obj) override {
-    return distance(obj->position(), Object::self()->position())
-        <= (obj->has_buff("ApheliosCalibrumBonusRangeDebuff"_FNV) ? 1800.f : Object ::self()->attack_range())
-             + Object::self()->BonusRadius() + obj->BonusRadius();
+    if (obj->has_buff("ApheliosCalibrumBonusRangeDebuff"_FNV)) {
+      return distance(obj->position(), Object::self()->position())
+          <= 1800.f + Object::self()->BonusRadius() + obj->BonusRadius();
+    }
+    return distance(obj->position(), Object::self()->position()) <= real_range() + obj->BonusRadius();
   }
 };
 
 /// Azir
 class Azir : public script {
   bool in_attack_range(Object *obj) override {
-    auto soldiers = ObjList::minions()->all() | std::views::filter([](Object *soldier) {
-                      return soldier->name() == "AzirSoldier" && soldier->IsAlive()
-                          && distance(soldier->position(), Object::self()->position())
-                               <= Object::self()->BonusRadius() + 660.f + soldier->BonusRadius();
-                    })
-                  | std::ranges::to<std::vector>();
-    return distance(obj->position(), Object::self()->position())
-          <= Object::self()->attack_range() + Object::self()->BonusRadius() + obj->BonusRadius()
-        || obj->type() != Turret && obj->type() != Inhibitor && std::ranges::any_of(soldiers, [obj](Object *soldier) {
-             return distance(soldier->position(), obj->position()) <= soldier->attack_range();
-           });
+    return distance(obj->position(), Object::self()->position()) <= real_range() + obj->BonusRadius()
+        || obj->type() != Turret && obj->type() != Inhibitor
+             && std::ranges::any_of(
+               ObjList::minions()->all() | std::views::filter([](Object *soldier) {
+                 return soldier->name() == "AzirSoldier" && soldier->IsAlive()
+                     && distance(soldier->position(), Object::self()->position())
+                          <= Object::self()->BonusRadius() + 660.f + soldier->BonusRadius();
+               }),
+               [obj](Object *soldier) {
+                 return distance(soldier->position(), obj->position()) <= soldier->attack_range();
+               }
+             );
   }
 };
 
@@ -38,8 +41,7 @@ class Caitlyn : public script {
       return distance(obj->position(), Object::self()->position())
           <= 1300.f + Object::self()->BonusRadius() + obj->BonusRadius();
     } else {
-      return distance(obj->position(), Object::self()->position())
-          <= Object::self()->attack_range() + Object::self()->BonusRadius() + obj->BonusRadius();
+      return distance(obj->position(), Object::self()->position()) <= real_range() + obj->BonusRadius();
     }
   }
 };

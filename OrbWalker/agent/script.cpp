@@ -35,7 +35,7 @@ script &script::inst() {
 }
 
 void script::update() {
-  game_time = ::game_time();
+  game_time = get_game_time();
 
   check_orb_state();
   check_marked_object();
@@ -47,7 +47,7 @@ void script::update() {
     }
   });
 
-  if (!Object::self()->IsAlive() || Chat::inst().is_open() || Hud::inst().is_background()) return;
+  if (Chat::inst().is_open() || Hud::inst().is_background()) return;
 
   if (orbState != OrbState::Off) {
     if (is_reloading()) idle();
@@ -59,7 +59,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  // PrintMessage<0xFFFFFF>("addr: {}", spell_cast->name());
+  // Chat::print_message(0xFFFFFF,std::format("addr: {:X}", (uptr)spell_cast));
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
@@ -131,8 +131,7 @@ Object *script::get_skill_target(float range) {
 }
 
 bool script::in_attack_range(Object *obj) {
-  return distance(obj->position(), Object::self()->position())
-      <= Object::self()->attack_range() + Object::self()->BonusRadius() + obj->BonusRadius();
+  return distance(obj->position(), Object::self()->position()) <= real_range() + obj->BonusRadius();
 }
 
 bool script::in_skill_range(Object *obj, float range) {

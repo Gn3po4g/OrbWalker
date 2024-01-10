@@ -1,4 +1,8 @@
-.clang-format
-Out/
+// Visual Studio
 .vs/
-.idea/
+
+// build
+Out/
+
+// vcpkg
+vcpkg_installed/

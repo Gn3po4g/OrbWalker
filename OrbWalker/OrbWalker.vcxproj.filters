@@ -53,9 +53,6 @@
     <ClInclude Include="util\fnvhash.hpp">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="util\json.hpp">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="class\buff.hpp">
       <Filter>class</Filter>
     </ClInclude>

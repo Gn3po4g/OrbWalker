@@ -40,7 +40,6 @@
     <ClInclude Include="util\encryption.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\function.hpp" />
-    <ClInclude Include="util\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\README.md" />
