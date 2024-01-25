@@ -26,11 +26,6 @@ ActionState Object::state() { return MEMBER<ActionState>(objActionState); }
 
 ObjectType Object::type() { return Read<ObjectType>(call_virtual<1, uptr>(this) + 0x8); }
 
-DataStack *Object::dataStack() {
-  if (type() == Inhibitor) return nullptr;
-  return pMEMBER<DataStack>(objDataStack);
-}
-
 std::vector<Buff *> Object::buffs() {
   if (type() == Inhibitor) return {};
   auto begin = MEMBER<Buff *>(objBuff), end = MEMBER<Buff *>(objBuff + 0x8);
@@ -51,7 +46,7 @@ float Object::AttackWindup() { return call_function<float>(RVA(oAttackDelay - 0x
 
 float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
-void *Object::ops_base() { return pMEMBER<void *>(0x11B8); }
+void *Object::ops_base() { return pMEMBER<void *>(0x11C0); }
 
 bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 
@@ -63,7 +58,7 @@ bool Object::IsValidTarget() {
   else return flag && max_health() > 6.f;
 }
 
-bool Object::IsCasting() { return call_virtual<248, bool>(this); }
+bool Object::IsCasting() { return call_virtual<249, bool>(this); }
 
 float Object::get_mana_cost(SpellSlot slot) {
   if (slot > SpellSlot_R) return 0.f;
@@ -73,5 +68,3 @@ float Object::get_mana_cost(SpellSlot slot) {
 bool Object::has_buff(hash_type name) { return call_virtual<58, bool>(this, 0, name); }
 
 Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }
-
-Object *Object::GetOwner() { return call_function<Object *>(RVA(oGetOwner), this); }

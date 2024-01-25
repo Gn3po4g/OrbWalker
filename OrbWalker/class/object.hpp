@@ -1,7 +1,6 @@
 #pragma once
 
 #include "buff.hpp"
-#include "data_stack.hpp"
 #include "spell.hpp"
 
 class Object : IMEMBER {
@@ -19,7 +18,6 @@ public:
   float attack_range();
   ActionState state();
   ObjectType type();
-  DataStack *dataStack();
   std::vector<Buff *> buffs();
   std::string name();
   float AttackDelay();
@@ -35,5 +33,4 @@ public:
   float get_mana_cost(SpellSlot);
   bool has_buff(hash_type);
   Spell *GetSpell(SpellSlot);
-  Object *GetOwner();
 };

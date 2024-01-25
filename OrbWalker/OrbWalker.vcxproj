@@ -9,11 +9,8 @@
   <ItemGroup>
     <ClCompile Include="agent\config.cpp" />
     <ClCompile Include="agent\script.cpp" />
-    <ClCompile Include="agent\skinchanger.cpp" />
     <ClCompile Include="agent\ui.cpp" />
     <ClCompile Include="class\buff.cpp" />
-    <ClCompile Include="class\champion.cpp" />
-    <ClCompile Include="class\data_stack.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="class\obj_list.cpp" />
     <ClCompile Include="class\spell.cpp" />
@@ -26,18 +23,14 @@
   <ItemGroup>
     <ClInclude Include="agent\config.hpp" />
     <ClInclude Include="agent\script.hpp" />
-    <ClInclude Include="agent\skinchanger.hpp" />
     <ClInclude Include="agent\ui.hpp" />
     <ClInclude Include="class\buff.hpp" />
-    <ClInclude Include="class\champion.hpp" />
-    <ClInclude Include="class\data_stack.hpp" />
     <ClInclude Include="class\object.hpp" />
     <ClInclude Include="class\obj_list.hpp" />
     <ClInclude Include="class\spell.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="spoof_call.h" />
     <ClInclude Include="util\enum.hpp" />
-    <ClInclude Include="util\encryption.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
     <ClInclude Include="util\function.hpp" />
   </ItemGroup>

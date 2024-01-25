@@ -26,7 +26,7 @@ struct RiotString16 {
 
   std::string str() const {
     if (m_size >= 16) return std::string(p_str, m_size);
-    else return std::string((char*)this, m_size);
+    else return std::string(m_str, m_size);
   }
 };
 

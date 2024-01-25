@@ -15,25 +15,16 @@
     <ClCompile Include="class\object.cpp">
       <Filter>class</Filter>
     </ClCompile>
-    <ClCompile Include="class\champion.cpp">
-      <Filter>class</Filter>
-    </ClCompile>
     <ClCompile Include="class\buff.cpp">
       <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="class\obj_list.cpp">
       <Filter>class</Filter>
     </ClCompile>
-    <ClCompile Include="class\data_stack.cpp">
-      <Filter>class</Filter>
-    </ClCompile>
     <ClCompile Include="class\spell.cpp">
       <Filter>class</Filter>
     </ClCompile>
     <ClCompile Include="agent\script.cpp">
-      <Filter>agent</Filter>
-    </ClCompile>
-    <ClCompile Include="agent\skinchanger.cpp">
       <Filter>agent</Filter>
     </ClCompile>
     <ClCompile Include="agent\ui.cpp">
@@ -56,12 +47,6 @@
     <ClInclude Include="class\buff.hpp">
       <Filter>class</Filter>
     </ClInclude>
-    <ClInclude Include="class\champion.hpp">
-      <Filter>class</Filter>
-    </ClInclude>
-    <ClInclude Include="class\data_stack.hpp">
-      <Filter>class</Filter>
-    </ClInclude>
     <ClInclude Include="class\object.hpp">
       <Filter>class</Filter>
     </ClInclude>
@@ -74,14 +59,8 @@
     <ClInclude Include="agent\script.hpp">
       <Filter>agent</Filter>
     </ClInclude>
-    <ClInclude Include="agent\skinchanger.hpp">
-      <Filter>agent</Filter>
-    </ClInclude>
     <ClInclude Include="agent\ui.hpp">
       <Filter>agent</Filter>
-    </ClInclude>
-    <ClInclude Include="util\encryption.hpp">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="spoof_call.h" />

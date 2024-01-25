@@ -1,18 +1,11 @@
-<h1 align="center">Supported Version: 14.1</h1>
-
-# Current Issues
-+ Skin changer breaks.
-+ Varus(or more) will cause crash when using E.
-
+<h1 align="center">Supported Version: 14.2</h1>
 
 # Feature
-1. Skin changer(thanks to [R3nzSkin](https://github.com/R3nzTheCodeGOD/R3nzSkin)).
-2. Show attack range.
-3. Hold space to attack champions, hold v to clean line(configurable).
-4. Left-click to lock on target.
+1. Show attack range.
+2. Hold space to attack champions, hold v to clean line(configurable).
+3. Left-click to lock on target.
 
 # Build:
-
 + Use Visual Studio 2022.
 + Install [vcpkg](https://github.com/microsoft/vcpkg#user-content-quick-start-windows) for VS2022.
 + Build the solution or project.

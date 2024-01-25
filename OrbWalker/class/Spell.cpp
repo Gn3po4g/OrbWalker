@@ -28,7 +28,7 @@ i32 SpellCast::slot() { return MEMBER<i32>(0x11C); }
 
 std::string SpellCast::name() { return Read<RiotString16>(Read<uptr>(this) + 0x28).str(); }
 
-bool SpellCast::is_attack() { return MEMBER<bool>(0x12A) || MEMBER<bool>(0x12B) || MEMBER<bool>(0x12C); }
+bool SpellCast::is_attack() { return MEMBER<bool>(0x12a) || MEMBER<bool>(0x12b) || MEMBER<bool>(0x12c); }
 
 hash_type reset_attack_spells[]{
   "AatroxE"_FNV,
@@ -92,7 +92,6 @@ hash_type reset_attack_spells[]{
   FNV("VorpalSpikes"),
   FNV("XinZhaoQ"),
   FNV("YorickQ"),
-  FNV("ZacQ"),
-  FNV("ZeriE")};
+  FNV("ZacQ")};
 
 bool SpellCast::is_attack_reset() { return std::ranges::contains(reset_attack_spells, FNV(name())); }

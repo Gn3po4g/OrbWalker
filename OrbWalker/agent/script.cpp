@@ -91,7 +91,9 @@ void script::do_action(std::function<void()> fun) {
 
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
+
+    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy())
+      markedObject = obj;
   }
   if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
 }

@@ -3,7 +3,6 @@
 #include <d3d11.h>
 
 #include "agent/script.hpp"
-#include "agent/skinchanger.hpp"
 #include "agent/ui.hpp"
 #include "res/font.hpp"
 
@@ -83,7 +82,6 @@ static void do_in_present() {
 
   ui::inst().update();
   script::inst().update();
-  skin::inst().update();
 
   ImGui::Render();
 
@@ -104,7 +102,7 @@ struct present {
 };
 
 struct on_process_spell {
-  static void __fastcall hooked(uintptr_t thisptr, int arg, SpellCast *spell_cast, Object *obj) {
+  static void __fastcall hooked(uptr thisptr, i32 arg, SpellCast *spell_cast, Object *obj) {
     if (arg == 0xC) script::inst().run(spell_cast, obj);
     return original(thisptr, arg, spell_cast, obj);
   }

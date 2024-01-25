@@ -1,7 +1,6 @@
 #include "pch.hpp"
 
 #include "config.hpp"
-#include "skinchanger.hpp"
 #include "ui.hpp"
 
 #include "class/object.hpp"
@@ -135,43 +134,6 @@ void ui::update() {
           if (hot_key("Kite Key", config.kite_key)) config.save();
           if (hot_key("Clean Lane Key", config.clean_key)) config.save();
           if (hot_key("Reset Target Key", config.reset_key)) config.save();
-        });
-        tab_item("Skin")([] {
-          auto &config  = config::inst();
-          auto &changer = skin::inst();
-          separator("Skin Setting");
-          auto &skins{changer.championSkins};
-          if (BeginCombo("Current Skin", skins[config.current_skin].skinName.data())) {
-            for (int n = 0; n < skins.size(); n++) {
-              bool is_selected = (config.current_skin == n);
-              if (Selectable(skins[n].skinName.data(), is_selected)) {
-                config.current_skin = n;
-                changer.ChangeSkin(skins[config.current_skin].modelName, skins[config.current_skin].skinId);
-                config.save();
-              }
-              if (is_selected) SetItemDefaultFocus();
-            }
-            EndCombo();
-          }
-          if (const size_t i = changer.special_skin(); i < changer.specialSkins.size()) {
-            const auto stack{Object::self()->dataStack()};
-            auto &current_gear = stack->baseSkin.gear;
-            auto &gears        = changer.specialSkins[i].gears;
-            if (BeginCombo("Current Gear", gears[current_gear].data())) {
-              for (size_t n = 0; n < gears.size(); n++) {
-                bool is_selected = (current_gear == n);
-                if (Selectable(gears[n].data(), is_selected)) {
-                  current_gear = (i8)n;
-                  stack->update(true);
-                }
-                if (is_selected) SetItemDefaultFocus();
-              }
-              EndCombo();
-            }
-          }
-          separator("Key Setting");
-          if (hot_key("Previous Skin Key", config.prev_skin_key)) config.save();
-          if (hot_key("Next Skin Key", config.next_skin_key)) config.save();
         });
         tab_item("Extras")([] {
           auto &config = config::inst();

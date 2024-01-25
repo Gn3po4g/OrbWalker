@@ -35,7 +35,6 @@ using scrn = glm::i32vec2;
 
 #include "spoof_call.h"
 
-#include "util/encryption.hpp"
 #include "util/enum.hpp"
 #include "util/fnvhash.hpp"
 #include "util/function.hpp"
