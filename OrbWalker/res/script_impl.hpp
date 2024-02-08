@@ -18,19 +18,34 @@ class Aphelios : public script {
 
 /// Azir
 class Azir : public script {
-  bool in_attack_range(Object *obj) override {
-    return distance(obj->position(), Object::self()->position()) <= real_range() + obj->BonusRadius()
-        || obj->type() != Turret && obj->type() != Inhibitor
-             && std::ranges::any_of(
-               ObjList::minions()->all() | std::views::filter([](Object *soldier) {
-                 return soldier->name() == "AzirSoldier" && soldier->IsAlive()
-                     && distance(soldier->position(), Object::self()->position())
-                          <= Object::self()->BonusRadius() + 660.f + soldier->BonusRadius();
-               }),
-               [obj](Object *soldier) {
-                 return distance(soldier->position(), obj->position()) <= soldier->attack_range();
-               }
-             );
+  Object *get_attack_target() override {
+    using std::placeholders::_1;
+    if (orbState == OrbState::Kite) {
+      const auto obj = ObjList::get_object_in(hero, std::bind(&Azir::in_skill_range, this, _1, 660.f), markedObject);
+      if (obj) return obj;
+      return ObjList::get_object_in(hero, std::bind(&Azir::in_attack_range, this, _1), markedObject);
+    }
+    if (orbState == OrbState::Clear) {
+      const auto obj =
+        ObjList::get_object_in(minion | turret | inhibitor, std::bind(&Azir::in_skill_range, this, _1, 660.f));
+      if (obj) return obj;
+      return ObjList::get_object_in(minion | turret | inhibitor, std::bind(&Azir::in_attack_range, this, _1));
+    }
+    return nullptr;
+  }
+
+  bool in_skill_range(Object *obj, float range) override {
+    return obj->type() != Turret && obj->type() != Inhibitor
+        && std::ranges::any_of(
+             ObjList::minions()->all() | std::views::filter([range](Object *soldier) {
+               return soldier->name() == "AzirSoldier" && soldier->IsAlive()
+                   && distance(soldier->position(), Object::self()->position())
+                        <= Object::self()->BonusRadius() + range + soldier->BonusRadius();
+             }),
+             [obj](Object *soldier) {
+               return distance(soldier->position(), obj->position()) <= soldier->attack_range();
+             }
+        );
   }
 };
 

@@ -33,11 +33,11 @@ Object *ObjList::best_object(std::function<bool(Object *)> fun, Object *specific
   return target == list.end() ? nullptr : *target;
 }
 
-Object *ObjList::get_object_in(initializer_list<ObjectType> types, function<bool(Object *)> fun, Object *specific) {
+Object *ObjList::get_object_in(u8 type, function<bool(Object *)> fun, Object *specific) {
   Object *ret{};
-  if (ranges::contains(types, Hero)) { ret = heros()->best_object(fun, specific); }
-  if (!ret && ranges::contains(types, Minion)) { ret = minions()->best_object(fun, nullptr); }
-  if (!ret && ranges::contains(types, Turret)) { ret = turrets()->best_object(fun, nullptr); }
-  if (!ret && ranges::contains(types, Inhibitor)) { ret = inhibs()->best_object(fun, nullptr); }
+  if (type == hero) { return heros()->best_object(fun, specific); }
+  if (!ret && (type & minion)) { ret = minions()->best_object(fun, nullptr); }
+  if (!ret && (type & turret)) { ret = turrets()->best_object(fun, nullptr); }
+  if (!ret && (type & inhibitor)) { ret = inhibs()->best_object(fun, nullptr); }
   return ret;
 }

@@ -2,6 +2,8 @@
 
 #include "object.hpp"
 
+enum type : u8 { hero = 0, minion = 1 << 0, turret = 1 << 1, inhibitor = 1 << 2 };
+
 class ObjList : public RiotArray<Object *> {
 public:
   static ObjList *heros();
@@ -11,6 +13,5 @@ public:
 
   std::vector<Object *> all();
   Object *best_object(std::function<bool(Object *)>, Object *specific);
-  static Object *
-  get_object_in(std::initializer_list<ObjectType>, std::function<bool(Object *)>, Object *specific = nullptr);
+  static Object *get_object_in(u8, std::function<bool(Object *)>, Object *specific = nullptr);
 };

@@ -92,8 +92,7 @@ void script::do_action(std::function<void()> fun) {
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
 
-    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy())
-      markedObject = obj;
+    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
   }
   if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
 }
@@ -109,25 +108,23 @@ void script::check_orb_state() {
 }
 
 Object *script::get_attack_target() {
+  using std::placeholders::_1;
   if (orbState == OrbState::Kite) {
-    return ObjList::get_object_in(
-      {Hero}, [&](Object *obj) { return in_attack_range(obj); }, markedObject
-    );
+    return ObjList::get_object_in(hero, std::bind(&script::in_attack_range, this, _1), markedObject);
   }
   if (orbState == OrbState::Clear) {
-    return ObjList::get_object_in({Minion, Turret, Inhibitor}, [&](Object *obj) { return in_attack_range(obj); });
+    return ObjList::get_object_in(minion | turret | inhibitor, std::bind(&script::in_attack_range, this, _1));
   }
   return nullptr;
 }
 
 Object *script::get_skill_target(float range) {
+  using std::placeholders::_1;
   if (orbState == OrbState::Kite) {
-    return ObjList::get_object_in(
-      {Hero}, [&](Object *obj) { return in_skill_range(obj, range); }, markedObject
-    );
+    return ObjList::get_object_in(hero, std::bind(&script::in_skill_range, this, _1, range), markedObject);
   }
   if (orbState == OrbState::Clear) {
-    return ObjList::get_object_in({Minion}, [&](Object *obj) { return in_skill_range(obj, range); });
+    return ObjList::get_object_in(minion, std::bind(&script::in_skill_range, this, _1, range));
   }
   return nullptr;
 }
