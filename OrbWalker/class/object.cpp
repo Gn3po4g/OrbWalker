@@ -26,15 +26,18 @@ ActionState Object::state() { return MEMBER<ActionState>(objActionState); }
 
 ObjectType Object::type() { return Read<ObjectType>(call_virtual<1, uptr>(this) + 0x8); }
 
-std::vector<Buff *> Object::buffs() {
-  if (type() == Inhibitor) return {};
-  auto begin = MEMBER<Buff *>(objBuff), end = MEMBER<Buff *>(objBuff + 0x8);
-  std::vector<Buff *> res;
-  for (auto i = begin; i < end; i += 2) { res.push_back(i); }
-  return res;
-}
+//std::vector<Buff *> Object::buffs() {
+//  if (type() == Inhibitor) return {};
+//  auto begin = MEMBER<Buff *>(objBuff), end = MEMBER<Buff *>(objBuff + 0x8);
+//  std::vector<Buff *> res;
+//  for (auto i = begin; i < end; i += 2) { res.push_back(i); }
+//  return res;
+//}
 
-std::string Object::name() { return MEMBER<RiotString16>(objName).str(); }
+std::string Object::name() { 
+  //return MEMBER<RiotString16>(objName).str();
+  return MEMBER<std::string>(objName);
+}
 
 // float Object::attackdamage() {
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
@@ -46,7 +49,7 @@ float Object::AttackWindup() { return call_function<float>(RVA(oAttackDelay - 0x
 
 float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
-void *Object::ops_base() { return pMEMBER<void *>(0x11C0); }
+void *Object::ops_base() { return pMEMBER<void *>(objOPSBase); }
 
 bool Object::IsAlive() { return call_virtual<134, bool>(this); }
 
@@ -62,7 +65,7 @@ bool Object::IsCasting() { return call_virtual<249, bool>(this); }
 
 float Object::get_mana_cost(SpellSlot slot) {
   if (slot > SpellSlot_R) return 0.f;
-  return MEMBER<float>(objManaCost + slot * 0x18ull);
+  return MEMBER<float>(objManaCost + slot * 0x28ull);
 }
 
 bool Object::has_buff(hash_type name) { return call_virtual<58, bool>(this, 0, name); }

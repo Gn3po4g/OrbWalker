@@ -8,14 +8,6 @@ struct RiotArray {
   i32 capacity;
 };
 
-struct RiotString8 {
-  const char *m_str;
-  i32 m_size;
-  i32 m_capacity;
-
-  std::string str() const { return std::string(m_str, m_size); }
-};
-
 struct RiotString16 {
   union {
     const char *p_str;
@@ -80,7 +72,7 @@ public:
     std::call_once(singleton, [&] { instance_.reset(Read<Chat *>(RVA(oChatClient))); });
     return *instance_;
   }
-  bool is_open() { return MEMBER<bool>(0x660); }
+  bool is_open() { return MEMBER<bool>(0x598); }
   static void print_message(u32 color, std::string_view msg) {
     const auto wrapped = std::format("<font color=#{:0>6x}>{}</font>", color & 0xFFFFFF, msg);
     call_function<void>(RVA(oPrintChat), RVA(oChatClient), wrapped.data(), 1u);
@@ -178,7 +170,7 @@ inline void Draw(std::function<void()> draw_fun) {
 }
 
 inline void Circle(const vec3 &center, float radius, u32 color, float thickness) {
-  const size_t numPoints{314};
+  const auto numPoints{size_t(IM_PI * 100)};
   ImVec2 points[numPoints]{};
   for (size_t i{0}; auto p : points) {
     const auto angle = 2 * IM_PI * i / numPoints;

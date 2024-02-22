@@ -72,7 +72,7 @@ static void init_all(IDXGISwapChain *pSwapChain) {
   ImGui_ImplWin32_Init(window);
   ImGui_ImplDX11_Init(pDevice, pDeviceContext);
 
-  Chat::print_message(0x00FFFF, "Noroby's League of Legends script loaded");
+  Chat::print_message(0x00FFFF, "script loaded");
 }
 
 static void do_in_present() {
