@@ -1,6 +1,5 @@
 #pragma once
 
-#include "buff.hpp"
 #include "spell.hpp"
 
 class Object : IMEMBER {
@@ -18,7 +17,6 @@ public:
   float attack_range();
   ActionState state();
   ObjectType type();
-  //std::vector<Buff *> buffs();
   std::string name();
   float AttackDelay();
   float AttackWindup();

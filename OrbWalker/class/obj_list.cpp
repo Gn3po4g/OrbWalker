@@ -2,6 +2,9 @@
 
 #include "obj_list.hpp"
 
+#include "agent/config.hpp"
+#include "res/offset.hpp"
+
 using namespace std;
 
 ObjList *ObjList::heros() { return Read<ObjList *>(RVA(oHeroList)); }

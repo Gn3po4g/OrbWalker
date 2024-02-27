@@ -2,6 +2,8 @@
 
 #include "object.hpp"
 
+#include "res/offset.hpp"
+
 Object *Object::self() { return Read<Object *>(RVA(oLocalPlayer)); }
 
 Object *Object::obj_under_mouse() { return Read<Object *>(Read<uptr>(RVA(oObjUnderMouse)) + 0x18); }
@@ -26,18 +28,7 @@ ActionState Object::state() { return MEMBER<ActionState>(objActionState); }
 
 ObjectType Object::type() { return Read<ObjectType>(call_virtual<1, uptr>(this) + 0x8); }
 
-//std::vector<Buff *> Object::buffs() {
-//  if (type() == Inhibitor) return {};
-//  auto begin = MEMBER<Buff *>(objBuff), end = MEMBER<Buff *>(objBuff + 0x8);
-//  std::vector<Buff *> res;
-//  for (auto i = begin; i < end; i += 2) { res.push_back(i); }
-//  return res;
-//}
-
-std::string Object::name() { 
-  //return MEMBER<RiotString16>(objName).str();
-  return MEMBER<std::string>(objName);
-}
+std::string Object::name() { return MEMBER<std::string>(objName); }
 
 // float Object::attackdamage() {
 //   return prop<float>(0x166C) + prop<float>(0x15D8);

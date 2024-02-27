@@ -15,9 +15,6 @@
     <ClCompile Include="class\object.cpp">
       <Filter>class</Filter>
     </ClCompile>
-    <ClCompile Include="class\buff.cpp">
-      <Filter>class</Filter>
-    </ClCompile>
     <ClCompile Include="class\obj_list.cpp">
       <Filter>class</Filter>
     </ClCompile>
@@ -36,6 +33,9 @@
     <ClCompile Include="agent\config.cpp">
       <Filter>agent</Filter>
     </ClCompile>
+    <ClCompile Include="class\function.cpp">
+      <Filter>class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util\enum.hpp">
@@ -43,9 +43,6 @@
     </ClInclude>
     <ClInclude Include="util\fnvhash.hpp">
       <Filter>util</Filter>
-    </ClInclude>
-    <ClInclude Include="class\buff.hpp">
-      <Filter>class</Filter>
     </ClInclude>
     <ClInclude Include="class\object.hpp">
       <Filter>class</Filter>
@@ -64,11 +61,14 @@
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="spoof_call.h" />
-    <ClInclude Include="util\function.hpp">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="agent\config.hpp">
       <Filter>agent</Filter>
+    </ClInclude>
+    <ClInclude Include="util\helper.hpp">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="class\function.hpp">
+      <Filter>class</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

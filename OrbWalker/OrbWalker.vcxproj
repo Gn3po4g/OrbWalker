@@ -10,7 +10,7 @@
     <ClCompile Include="agent\config.cpp" />
     <ClCompile Include="agent\script.cpp" />
     <ClCompile Include="agent\ui.cpp" />
-    <ClCompile Include="class\buff.cpp" />
+    <ClCompile Include="class\function.cpp" />
     <ClCompile Include="class\object.cpp" />
     <ClCompile Include="class\obj_list.cpp" />
     <ClCompile Include="class\spell.cpp" />
@@ -24,7 +24,7 @@
     <ClInclude Include="agent\config.hpp" />
     <ClInclude Include="agent\script.hpp" />
     <ClInclude Include="agent\ui.hpp" />
-    <ClInclude Include="class\buff.hpp" />
+    <ClInclude Include="class\function.hpp" />
     <ClInclude Include="class\object.hpp" />
     <ClInclude Include="class\obj_list.hpp" />
     <ClInclude Include="class\spell.hpp" />
@@ -32,7 +32,7 @@
     <ClInclude Include="spoof_call.h" />
     <ClInclude Include="util\enum.hpp" />
     <ClInclude Include="util\fnvhash.hpp" />
-    <ClInclude Include="util\function.hpp" />
+    <ClInclude Include="util\helper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\README.md" />

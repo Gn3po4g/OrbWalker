@@ -5,6 +5,7 @@
 #include "agent/script.hpp"
 #include "agent/ui.hpp"
 #include "res/font.hpp"
+#include "class/function.hpp"
 
 class vmt_hook {
 public:

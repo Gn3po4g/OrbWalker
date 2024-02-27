@@ -4,6 +4,7 @@
 #include "script.hpp"
 
 #include "res/script_impl.hpp"
+#include "class/function.hpp"
 
 script &script::inst() {
   static std::once_flag singleton;

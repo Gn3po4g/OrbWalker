@@ -27,7 +27,6 @@ i32 SpellCast::type() { return MEMBER<i32>(0x10); }
 i32 SpellCast::slot() { return MEMBER<i32>(0x11C); }
 
 std::string SpellCast::name() {
-   //return Read<RiotString16>(Read<uptr>(this) + 0x28).str();
   return Read<std::string>(Read<uptr>(this) + 0x28);
 }
 

@@ -20,7 +20,6 @@
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
-// #include <MinHook.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
@@ -33,8 +32,6 @@ using vec3 = glm::vec3;
 using vec2 = glm::vec2;
 using scrn = glm::i32vec2;
 
-#include "spoof_call.h"
-
 #include "util/enum.hpp"
 #include "util/fnvhash.hpp"
-#include "util/function.hpp"
+#include "util/helper.hpp"
