@@ -1,9 +1,21 @@
-<h1 align="center">Supported Version: 14.4</h1>
+<div align="center">
+  <h1>Supported Version: 14.5</h1>
+  <p>
 
-# Feature
-1. Show attack range.
-2. Hold space to attack champions, hold v to clean line(configurable).
-3. Left-click to lock on target.
+  ![GitHub License](https://img.shields.io/github/license/Gn3po4g/OrbWalker)
+  ![GitHub Repo stars](https://img.shields.io/github/stars/Gn3po4g/OrbWalker?style=flat&color=0x654321)
+  [![imgui Version](https://img.shields.io/vcpkg/v/imgui?label=imgui)](https://github.com/ocornut/imgui)
+  [![glm Version](https://img.shields.io/vcpkg/v/glm?label=glm)](https://github.com/g-truc/glm)
+  [![Vcpkg Version](https://img.shields.io/vcpkg/v/nlohmann-json?label=nlohmann-json)](https://github.com/nlohmann/json)
+
+  </p>
+</div>
+
+# Features
++ The keys for all functions are configurable.
++ Show/Hide attack range and mouse clicks.
++ Attack champions only, or attack minions.
++ Lock the currently selected target.
 
 # Build:
 + Use Visual Studio 2022.
