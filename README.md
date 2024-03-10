@@ -2,8 +2,7 @@
   <h1>Supported Version: 14.5</h1>
   <p>
 
-  ![GitHub License](https://img.shields.io/github/license/Gn3po4g/OrbWalker)
-  ![GitHub Repo stars](https://img.shields.io/github/stars/Gn3po4g/OrbWalker?style=flat&color=0x654321)
+  [![GitHub License](https://img.shields.io/github/license/Gn3po4g/OrbWalker)](https://mit-license.org/)
   [![imgui Version](https://img.shields.io/vcpkg/v/imgui?label=imgui)](https://github.com/ocornut/imgui)
   [![glm Version](https://img.shields.io/vcpkg/v/glm?label=glm)](https://github.com/g-truc/glm)
   [![Vcpkg Version](https://img.shields.io/vcpkg/v/nlohmann-json?label=nlohmann-json)](https://github.com/nlohmann/json)
@@ -17,12 +16,11 @@
 + Attack champions only, or attack minions.
 + Lock the currently selected target.
 
-# Build:
+# Build
 + Use Visual Studio 2022.
 + Install [vcpkg](https://github.com/microsoft/vcpkg#user-content-quick-start-windows) for VS2022.
 + Build the solution or project.
 + The output file(Hid.dll) is generated at Out directory.
 
-# Usage:
-
+# Usage
 Download or build Hid.dll and put it into your Game folder(e.g. xx\Riot Games\League of Legends\Game).

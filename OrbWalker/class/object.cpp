@@ -54,11 +54,11 @@ bool Object::IsValidTarget() {
 
 bool Object::IsCasting() { return call_virtual<249, bool>(this); }
 
-float Object::get_mana_cost(SpellSlot slot) {
-  if (slot > SpellSlot_R) return 0.f;
-  return MEMBER<float>(objManaCost + slot * 0x28ull);
-}
+//float Object::get_mana_cost(SpellSlot slot) {
+//  if (slot > SpellSlot_R) return 0.f;
+//  return MEMBER<float>(objManaCost + slot * 0x28ull);
+//}
 
 bool Object::has_buff(hash_type name) { return call_virtual<58, bool>(this, 0, name); }
 
-Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }
+//Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }

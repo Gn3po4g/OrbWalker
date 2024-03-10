@@ -3,8 +3,8 @@
 #include "config.hpp"
 #include "script.hpp"
 
-#include "res/script_impl.hpp"
 #include "class/function.hpp"
+#include "res/script_impl.hpp"
 
 script &script::inst() {
   static std::once_flag singleton;
@@ -18,16 +18,12 @@ script &script::inst() {
       return instance_.reset(new Azir);
     case "Caitlyn"_FNV:
       return instance_.reset(new Caitlyn);
-    // case "Cassiopeia"_FNV:
-    //   return instance_.reset(new Cassiopeia);
     case "Graves"_FNV:
       return instance_.reset(new Graves);
     case "Kalista"_FNV:
       return instance_.reset(new Kalista);
     case "Sett"_FNV:
       return instance_.reset(new Sett);
-    // case "Zeri"_FNV:
-    //   return instance_.reset(new Zeri);
     default:
       return instance_.reset(new script);
     }
@@ -60,7 +56,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  // Chat::print_message(0xFFFFFF,std::format("addr: {:X}", (uptr)spell_cast));
+  //Chat::print_message(0xFFFFFF, std::format("name: {}", spell_cast->name()));
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }

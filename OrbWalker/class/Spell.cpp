@@ -27,7 +27,12 @@ i32 SpellCast::type() { return MEMBER<i32>(0x10); }
 i32 SpellCast::slot() { return MEMBER<i32>(0x11C); }
 
 std::string SpellCast::name() {
-  return Read<std::string>(Read<uptr>(this) + 0x28);
+  struct riot_string {
+    char *data;
+    i32 size, capacity;
+  };
+  const auto name = Read<riot_string>(Read<uptr>(this) + 0x28);
+  return std::string(name.data, name.size);
 }
 
 bool SpellCast::is_attack() { return MEMBER<bool>(0x12a) || MEMBER<bool>(0x12b) || MEMBER<bool>(0x12c); }

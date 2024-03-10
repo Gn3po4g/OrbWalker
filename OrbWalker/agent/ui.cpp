@@ -98,7 +98,7 @@ void ui::update() {
   if (IsKeyPressed(config::inst().menu_key)) { show_menu ^= true; }
   if (!show_menu) return;
   SetNextWindowSize({400.f, 0.f});
-  window("Settings", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoFocusOnAppearing)(
+  window("Settings", &show_menu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoFocusOnAppearing)(
     [] {
       tab_bar("TabBar", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)([] {
         tab_item("Script")([] {

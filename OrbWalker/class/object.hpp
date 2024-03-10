@@ -28,7 +28,7 @@ public:
   bool IsValidTarget();
   bool IsCasting();
 
-  float get_mana_cost(SpellSlot);
+  //float get_mana_cost(SpellSlot);
   bool has_buff(hash_type);
-  Spell *GetSpell(SpellSlot);
+  //Spell *GetSpell(SpellSlot);
 };
