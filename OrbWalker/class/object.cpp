@@ -8,7 +8,7 @@ Object *Object::self() { return Read<Object *>(RVA(oLocalPlayer)); }
 
 Object *Object::obj_under_mouse() { return Read<Object *>(Read<uptr>(RVA(oObjUnderMouse)) + 0x18); }
 
-u32 Object::team() { return call_virtual<59, u32>(this); }
+u32 Object::team() { return MEMBER<u32>(objTeam); }
 
 vec3 Object::position() { return MEMBER<vec3>(objPosition); }
 
@@ -34,7 +34,7 @@ std::string Object::name() { return MEMBER<std::string>(objName); }
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
 // }
 
-float Object::AttackDelay() { return call_function<float>(RVA(oAttackDelay), this); }
+float Object::AttackDelay() { return  call_function<float>(RVA(oAttackDelay), this); }
 
 float Object::AttackWindup() { return call_function<float>(RVA(oAttackDelay - 0x100), this, 0x40); }
 
@@ -42,7 +42,7 @@ float Object::BonusRadius() { return call_virtual<37, float>(this); }
 
 void *Object::ops_base() { return pMEMBER<void *>(objOPSBase); }
 
-bool Object::IsAlive() { return call_virtual<134, bool>(this); }
+bool Object::IsAlive() { return call_virtual<135, bool>(this); }
 
 bool Object::IsEnemy() { return team() != self()->team(); }
 
@@ -52,7 +52,7 @@ bool Object::IsValidTarget() {
   else return flag && max_health() > 6.f;
 }
 
-bool Object::IsCasting() { return call_virtual<249, bool>(this); }
+bool Object::IsCasting() { return call_virtual<250, bool>(this); }
 
 //float Object::get_mana_cost(SpellSlot slot) {
 //  if (slot > SpellSlot_R) return 0.f;

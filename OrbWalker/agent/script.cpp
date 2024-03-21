@@ -56,7 +56,7 @@ void script::run(SpellCast *spell_cast, Object *obj) {
   last_cast_spell = spell_cast->name();
   if (spell_cast->is_attack()) last_attack_time = game_time;
   if (spell_cast->is_attack_reset()) last_attack_time = -FLT_MAX;
-  //Chat::print_message(0xFFFFFF, std::format("name: {}", spell_cast->name()));
+  // Chat::print_message(0xFFFFFF, std::format("name: {}", spell_cast->name()));
 }
 
 bool script::can_attack() { return Object::self()->state() & CanAttack && !Object::self()->IsCasting(); }
@@ -88,8 +88,9 @@ void script::do_action(std::function<void()> fun) {
 
 void script::check_marked_object() {
   if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-
-    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) markedObject = obj;
+    if (const auto obj = Object::obj_under_mouse(); obj && obj->type() == Hero && obj->IsEnemy()) {
+      markedObject = obj;
+    }
   }
   if (ImGui::IsKeyPressed(config::inst().reset_key)) markedObject = nullptr;
 }
