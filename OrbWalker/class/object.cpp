@@ -34,7 +34,7 @@ std::string Object::name() { return MEMBER<std::string>(objName); }
 //   return prop<float>(0x166C) + prop<float>(0x15D8);
 // }
 
-float Object::AttackDelay() { return  call_function<float>(RVA(oAttackDelay), this); }
+float Object::AttackDelay() { return call_function<float>(RVA(oAttackDelay), this); }
 
 float Object::AttackWindup() { return call_function<float>(RVA(oAttackDelay - 0x100), this, 0x40); }
 
@@ -52,13 +52,13 @@ bool Object::IsValidTarget() {
   else return flag && max_health() > 6.f;
 }
 
-bool Object::IsCasting() { return call_virtual<250, bool>(this); }
+bool Object::IsCasting() { return call_virtual<253, bool>(this); }
 
-//float Object::get_mana_cost(SpellSlot slot) {
-//  if (slot > SpellSlot_R) return 0.f;
-//  return MEMBER<float>(objManaCost + slot * 0x28ull);
-//}
+// float Object::get_mana_cost(SpellSlot slot) {
+//   if (slot > SpellSlot_R) return 0.f;
+//   return MEMBER<float>(objManaCost + slot * 0x28ull);
+// }
 
 bool Object::has_buff(hash_type name) { return call_virtual<58, bool>(this, 0, name); }
 
-//Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }
+// Spell *Object::GetSpell(SpellSlot slot) { return pMEMBER<Spell *>(objSpell)[slot]; }

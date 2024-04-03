@@ -53,7 +53,7 @@ private:
 
 inline float distance(const vec3 &p1, const vec3 &p2) { return glm::distance(p1, p2); }
 
-inline void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1C0); }
+inline void *swap_chain() { return Read<void *>(call_function<uptr>(RVA(oMaterialRegistry)) + 0x1D0); }
 
 inline float get_game_time() { return Read<float>(RVA(oGameTime)); }
 

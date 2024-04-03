@@ -1,25 +1,25 @@
 #pragma once
 
-constexpr uptr oPingNet          = 0x232F998;
-constexpr uptr oGameState        = 0x2345BF8;
-constexpr uptr oGameTime         = 0x233E7E8;
-constexpr uptr oLocalPlayer      = 0x23524A8;
-constexpr uptr oObjUnderMouse    = 0x23350E0;
-constexpr uptr oMouseScreenPos   = 0x2334EA8;
-constexpr uptr oHeroList         = 0x232FAC0;
-constexpr uptr oMinionList       = 0x2334EE0;
-constexpr uptr oTurretList       = 0x2338490;
-constexpr uptr oInhibList        = 0x2354078;
-constexpr uptr oChatClient       = 0x2352698;
-constexpr uptr oHudInstance      = 0x232F9B8;
-constexpr uptr oViewProjMatrix   = 0x23A4170;
-constexpr uptr oGetPing          = 0x50E430;
-constexpr uptr oPrintChat        = 0x8DF2C0;
-constexpr uptr oIssueOrder       = 0x980E70;
-constexpr uptr oIssueMove        = 0x96AC10;
-constexpr uptr oAttackDelay      = 0x40F520;
-constexpr uptr oTargetableToTeam = 0xB06210;
-constexpr uptr oMaterialRegistry = 0xFD4400;
+constexpr uptr oPingNet          = 0x229C2D8;
+constexpr uptr oGameState        = 0x22B28A8;
+constexpr uptr oGameTime         = 0x22AB1B8;
+constexpr uptr oLocalPlayer      = 0x22BE9D8;
+constexpr uptr oObjUnderMouse    = 0x22A1AB0;
+constexpr uptr oMouseScreenPos   = 0x22A1878;
+constexpr uptr oHeroList         = 0x229C400;
+constexpr uptr oMinionList       = 0x22A18B0;
+constexpr uptr oTurretList       = 0x22A4E60;
+constexpr uptr oInhibList        = 0x22C1010;
+constexpr uptr oChatClient       = 0x22BF878;
+constexpr uptr oHudInstance      = 0x229C2F8;
+constexpr uptr oViewProjMatrix   = 0x2311B70;
+constexpr uptr oGetPing          = 0x50A2E0;
+constexpr uptr oPrintChat        = 0x8C8B90;
+constexpr uptr oIssueOrder       = 0x96A7F0;
+constexpr uptr oIssueMove        = 0x955040;
+constexpr uptr oAttackDelay      = 0x407C50;
+constexpr uptr oTargetableToTeam = 0xAEFB20;
+constexpr uptr oMaterialRegistry = 0xF42160;
 
 constexpr uptr objIndex       = 0x10;
 constexpr uptr objTeam        = 0x3C;
