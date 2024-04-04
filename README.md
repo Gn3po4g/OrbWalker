@@ -5,7 +5,7 @@
   [![GitHub License](https://img.shields.io/github/license/Gn3po4g/OrbWalker)](https://mit-license.org/)
   [![imgui Version](https://img.shields.io/vcpkg/v/imgui?label=imgui)](https://github.com/ocornut/imgui)
   [![glm Version](https://img.shields.io/vcpkg/v/glm?label=glm)](https://github.com/g-truc/glm)
-  [![Vcpkg Version](https://img.shields.io/vcpkg/v/nlohmann-json?label=nlohmann-json)](https://github.com/nlohmann/json)
+  [![nlohmann-json Version](https://img.shields.io/vcpkg/v/nlohmann-json?label=nlohmann-json)](https://github.com/nlohmann/json)
 
   </p>
 </div>
@@ -17,10 +17,18 @@
 + Lock the currently selected target.
 
 # Build
-+ Use Visual Studio 2022.
++ Install Visual Studio 2022 and c++ components(msbuild).
 + Install [vcpkg](https://github.com/microsoft/vcpkg#user-content-quick-start-windows) for VS2022.
-+ Build the solution or project.
-+ The output file(Hid.dll) is generated at Out directory.
++ Run the command in `Developer PowerShell for VS 2022`.
+
+  ```cmd
+	git clone https://github.com/Gn3po4g/OrbWalker.git
+	cd OrbWalker
+	msbuild -p:Configuration=Release
+  ```
+  
+  Or you can open `OrbWalker.sln` and use GUI to build.
++ The output file(Hid.dll) is generated at `Out` directory.
 
 # Usage
-Download or build Hid.dll and put it into your Game folder(e.g. xx\Riot Games\League of Legends\Game).
+Download or build `Hid.dll` and put it into your Game folder(e.g. xx\Riot Games\League of Legends\Game).

@@ -31,7 +31,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ github.ref }}
         name: ${{ github.ref_name }}
-        body: v${{ github.ref_name }} update.
+        body: \#\#\# v${{ github.ref_name }} update.
         draft: false
         prerelease: false
         files: |
