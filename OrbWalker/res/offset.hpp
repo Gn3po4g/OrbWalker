@@ -25,7 +25,6 @@ constexpr uptr objIndex       = 0x10;
 constexpr uptr objTeam        = 0x3C;
 constexpr uptr objPosition    = 0x220;
 constexpr uptr objVisible     = 0x348;
-constexpr uptr objMana        = 0x378;
 constexpr uptr objTargetable  = 0x1018;
 constexpr uptr objTargetflag  = 0x1040;
 constexpr uptr objHealth      = 0x11E0;

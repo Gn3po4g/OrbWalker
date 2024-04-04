@@ -10,7 +10,6 @@ public:
   u32 team();
   vec3 position();
   bool visible();
-  float mana();
   bool targetable();
   float health();
   float max_health();
@@ -28,7 +27,5 @@ public:
   bool IsValidTarget();
   bool IsCasting();
 
-  //float get_mana_cost(SpellSlot);
   bool has_buff(hash_type);
-  //Spell *GetSpell(SpellSlot);
 };
