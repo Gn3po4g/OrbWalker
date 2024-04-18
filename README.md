@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Supported Version: 14.7</h1>
+  <h1>Supported Version: 14.8</h1>
   <p>
 
   [![GitHub License](https://img.shields.io/github/license/Gn3po4g/OrbWalker)](https://mit-license.org/)

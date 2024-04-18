@@ -28,7 +28,8 @@ Object *ObjList::best_object(std::function<bool(Object *)> fun, Object *specific
     } else if (config.selector == HealthPercentLowest) {
       return obj->health() / obj->max_health();
     } else if (config.selector == DistanceClosest) {
-      return distance(obj->position(), Object::self()->position());
+      const auto a = obj->position(), b = Object::self()->position();
+      return distance(a, b);
     } else {
       return obj->health();
     }
