@@ -32,4 +32,4 @@ constexpr uptr objMaxHealth   = 0x1208;
 constexpr uptr objOPSBase     = 0x13D0;
 constexpr uptr objActionState = 0x1620;
 constexpr uptr objAttackRange = 0x1974;
-constexpr uptr objName        = 0x43D8;
+constexpr uptr objName        = 0x4400;
