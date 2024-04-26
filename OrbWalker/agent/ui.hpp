@@ -118,7 +118,7 @@ public:
 
 private:
   ui();
-  inline static bool show_menu{true};
+  inline static bool show_menu{false};
   inline static std::unique_ptr<ui> instance_;
 };
 
